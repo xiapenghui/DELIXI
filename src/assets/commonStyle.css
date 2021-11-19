@@ -1,0 +1,16 @@
+.ant-picker{
+    width: 100%;
+}
+
+/* //新增编辑表格布局排列  */
+.boxTbale .ant-form .ant-row:nth-child(even){
+  width: 48%;
+  float: left;
+}
+.boxTbale .ant-form .ant-row:nth-child(odd){
+  width: 48%;
+  float: right;
+}
+.boxTbale .ant-form .ant-space{
+  width: 100%;
+}

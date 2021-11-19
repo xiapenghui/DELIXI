@@ -1,0 +1,97 @@
+@import '~antd/es/style/themes/default.less';
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+.main___2rucS{
+  width: 470px !important;
+  padding: 30px;
+  background-color: rgba(0,0,0,0.8);
+  border-radius: 10px;
+
+}
+
+.ant-picker,
+.ant-input-number{
+  width: 100% !important;
+}
+
+.sysName{
+  font-size: 28px;
+  text-align: center;
+  line-height: 1;
+  margin-bottom: 20px;
+  color: #8fcca8;
+  font-weight: 700;
+}
+
+.sysNameCn{
+  margin-bottom: 30px;
+}
+
+
+
+
+// 兼容IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}
+
+
+.ant-input[disabled] {
+  color: rgba(0, 0, 0, 1) !important;
+}
+
+.ant-menu-dark .ant-menu-inline.ant-menu-sub {
+  background: #005831 !important;
+}
+
+.ant-table-tbody{
+  height:51vh;
+}

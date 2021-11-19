@@ -1,0 +1,14 @@
+.formStyle{
+    background: #fff;
+    padding: 0 20px;
+    padding-top: 24px;
+    margin-bottom: 20px;
+} 
+
+.formStyle .ant-advanced-search-form{
+    padding:0;   
+    background: transparent;
+    border: none;
+}
+ 
+ 
