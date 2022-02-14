@@ -21,36 +21,37 @@ const RouterModel = {
         icon: "ClusterOutlined",
         routes: [
           {
-            path: "/information/department",
+            path: "/information/materialInfo",
             name: "物料信息管理",
             icon: "smile",
-            component: "../pages/information/department",
+            component: "../pages/information/materialInfo",
           },
+          
           {
-            path: "/information/personnel",
+            path: "/information/templateinfo",
             name: "模板信息管理",
             icon: "smile",
-            component: "../pages/information/personnel",
+            component: "../pages/information/templateinfo",
           },
           {
-            path: "/information/timeMaintain",
+            path: "/information/printInfo",
             name: "打印信息管理",
             icon: "smile",
-            component: "../pages/information/timeMaintain",
+            component: "../pages/information/printInfo",
           },
 
           {
-            path: "/information/classMaintain",
+            path: "/information/printRecord",
             name: "打印信息记录",
             icon: "smile",
-            component: "../pages/information/classMaintain",
+            component: "../pages/information/printRecord",
           },
 
           {
-            path: '/information/timeInfo',
+            path: '/information/materialAllo',
             name: '物料分配管理',
             icon: 'smile',
-            component: '../pages/information/timeInfo',
+            component: '../pages/information/materialAllo',
           },
         ],
       },
@@ -72,20 +73,17 @@ const RouterModel = {
             icon: "smile",
             component: "../pages/authorityManagement/userInfo",
           },
-          {
-            path: "/authorityManagement/roleInfo",
-            name: "角色管理",
-            icon: "smile",
-            component: "../pages/authorityManagement/roleInfo",
-          },
-
-         
+          // {
+          //   path: "/authorityManagement/roleInfo",
+          //   name: "角色管理",
+          //   icon: "smile",
+          //   component: "../pages/authorityManagement/roleInfo",
+          // },
         ],
       },
     ],
     // menuData: JSON.parse(localStorage.getItem("user_menu")) == null ? [] : JSON.parse(localStorage.getItem("user_menu")),
     userData: null,
-    // menuData: localStorage.getItem("user_menu") == null ? [] : localStorage.getItem("user_menu"),
   },
   effects: {
     // *getMenuListByUserId(_, { call, put }) {
