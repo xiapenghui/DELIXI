@@ -1,4 +1,4 @@
-import { PlusOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Button, message, DatePicker, Form, Input } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -29,28 +29,24 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
-  const [isInput, setIsInput] = useState(false);
-
 
   const getColumns = () => [
     {
-      title: "物料编码",
-      dataIndex: "shiftname",
+      title: "编号",
+      dataIndex: "number",
       valueType: "text",
       align: "center",
       width: 120,
-      render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
-      }
+      initialValue: IsUpdate ? UpdateDate.number : "",
     },
 
     {
-      title: "物料名称",
-      dataIndex: "shiftclass",
-      valueType: "digit",
+      title: "名称",
+      dataIndex: "name",
+      valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.shiftclass : "",
+      initialValue: IsUpdate ? UpdateDate.name : "",
       formItemProps: {
         rules: [
           {
@@ -62,162 +58,39 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
     },
 
     {
-      title: "英文描述",
-      dataIndex: "remark",
-      valueType: "textarea",
+      title: "模板类型",
+      dataIndex: "templateType",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.templateType : "",
     },
 
     {
-      title: "物料型号",
-      dataIndex: "remark",
-      valueType: "textarea",
+      title: "尺寸",
+      dataIndex: "size",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "型号描述",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-      render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
-      }
-    },
-
-    {
-      title: "盒标签描述",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "基础数量",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.size : "",
     },
 
     {
       title: "单位",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "unit",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "重量",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "重量单位",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "箱盒数量",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "盒标签描述",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "箱EAN13码",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "盒EAN13码",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "箱ITF14码",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "盒ITF14码",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "所属工厂代码",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.unit : "",
     },
 
     {
       title: "备注",
       dataIndex: "remark",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
@@ -225,74 +98,27 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
     },
 
     {
-      title: "执行标准",
-      dataIndex: "remark",
-      valueType: "textarea",
+      title: "操作",
+      dataIndex: "option",
+      valueType: "option",
       align: "center",
+      fixed: "right",
       width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      render: (_, record) => (
+        <>
+          <a
+            onClick={() => {
+              setIsUpdate(true);
+              setUpdateDate({ ...record });
+              handleUpdateModalVisible(true);
+            }}
+          >
+            编辑
+          </a>
+        </>
+      ),
     },
-
-    {
-      title: "检验员",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "系统编号",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
-      title: "打印标识",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    // {
-    //   title: '操作',
-    //   dataIndex: 'option',
-    //   valueType: 'option',
-    //   align: 'center',
-    //   fixed:'right',
-    //   width:120,
-    //   render: (_, record) => (
-    //     <>
-    //       <a onClick={() => {
-    //         setIsUpdate(true)
-    //         setUpdateDate({ ...record });
-    //         handleUpdateModalVisible(true);
-    //       }}
-    //       >编辑</a>
-    //     </>
-    //   ),
-    // },
   ];
-
-
-
-  const changIpu = (index) => {
-    console.log(index)
-  }
-
-
-
-
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
@@ -304,7 +130,26 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
     return TableList.then(function (value) {
       return {
         data: value.list,
-        // data: [],
+        data: [
+          {
+            number: "01",
+            name: "70X40盒模板",
+            templateType: "标签",
+            size: "70*40",
+            unit: "mm",
+            remark: "备注",
+            changeMark: "无",
+          },
+          {
+            number: "02",
+            name: "80X40盒模板",
+            templateType: "标签",
+            size: "70*40",
+            unit: "mm",
+            remark: "备注",
+            changeMark: "无",
+          },
+        ],
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -424,24 +269,8 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Form.Item
-            style={{ marginBottom: "0px", marginRight: "40px" }}
-            label="打印日期:"
-            name="打印日期:"
-          >
-            <DatePicker />
-          </Form.Item>,
-
-          <Form.Item
-            style={{ marginBottom: "0px", }}
-            label="打印张数:"
-            name="打印张数:"
-          >
-            <Input style={{ width: '70%' }} />
-          </Form.Item>,
-
           <Button type="primary" onClick={() => handleModalVisible(true)}>
-            <ArrowDownOutlined /> 打印条码
+            <PlusOutlined /> 新建
           </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
