@@ -16,7 +16,7 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
-} from "@/services/information/templateinfo";
+} from "@/services/authorityManagement/templateinfo";
 
 const templateinfoComponent = ({ templateinfo, dispatch }) => {
   const { TableList, typeList, riskList, isNoList } = templateinfo;

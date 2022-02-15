@@ -6,7 +6,7 @@ import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-import CreateForm from "./components/CreateForm";
+import PrintForm from "./components/PrintForm";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
 import ExportJsonExcel from "js-export-excel";
@@ -39,21 +39,12 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
   const getColumns = () => [
 
     {
-      title: '测试',
-      dataIndex: 'shiftname',
-      valueType: 'text',
-      align: 'center',
-      width: 120,
-    },
-
-
-
-    {
       title: '序号编号',
       dataIndex: 'serialNumber',
       valueType: 'text',
       align: 'center',
       width: 120,
+      fixed: 'left',
     },
 
     {
@@ -79,7 +70,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'chineseName',
       valueType: 'text',
       align: 'center',
-      width: 120,
+      ellipsis: true,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.chineseName : '',
       formItemProps: {
@@ -97,7 +89,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'englishName',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
+      ellipsis: true,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.englishName : '',
       formItemProps: {
@@ -111,11 +104,13 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     },
 
     {
-      title: '物料型号',
+      title: (a,b,c)=>{
+        return <a style={{color:'red'}}>物料型号</a>
+     },
       dataIndex: 'materialModel',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 200,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.materialModel : '',
       formItemProps: {
@@ -136,7 +131,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'materialDesc',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
+      ellipsis: true,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.materialDesc : '',
       formItemProps: {
@@ -207,11 +203,13 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
 
 
     {
-      title: '装盒数量',
+      title: (a,b,c)=>{
+        return <a style={{color:'red'}}>装盒数量</a>
+     },
       dataIndex: 'cartonsNumber',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.cartonsNumber : '',
       formItemProps: {
@@ -223,7 +221,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
         ],
       },
       render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
+        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center',width:'100px' }}></input>
       }
     },
 
@@ -304,7 +302,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'EAN13',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.EAN13 : '',
       formItemProps: {
@@ -322,7 +320,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'caseITF14',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.caseITF14 : '',
       formItemProps: {
@@ -339,7 +337,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'boxITF14',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.boxITF14 : '',
       formItemProps: {
@@ -358,7 +356,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'factory',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
+      ellipsis: true,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.factory : '',
       formItemProps: {
@@ -375,7 +374,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'productionPlant',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
+      ellipsis: true,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.productionPlant : '',
       formItemProps: {
@@ -392,7 +392,8 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       dataIndex: 'adress',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      ellipsis: true,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.adress : '',
       formItemProps: {
@@ -410,6 +411,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       valueType: 'textarea',
       align: 'center',
       width: 120,
+      ellipsis: true,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.remarks : '',
       formItemProps: {
@@ -473,11 +475,13 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       },
     },
     {
-      title: '箱重量',
+      title: (a,b,c)=>{
+        return <a style={{color:'red'}}>箱重量</a>
+     },
       dataIndex: 'boxWeight',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.boxWeight : '',
       formItemProps: {
@@ -489,15 +493,17 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
         ],
       },
       render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
+        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' ,width:'100px'}}></input>
       }
     },
     {
-      title: '装箱数量',
+      title: (a,b,c)=>{
+        return <a style={{color:'red'}}>装箱数量</a>
+     },
       dataIndex: 'packingQuantity',
       valueType: 'textarea',
       align: 'center',
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.packingQuantity : '',
       formItemProps: {
@@ -509,7 +515,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
         ],
       },
       render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
+        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' ,width:'100px'}}></input>
       }
     },
     {
@@ -530,7 +536,9 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       },
     },
     {
-      title: '3C',
+      title: (a,b,c)=>{
+        return <a style={{color:'red'}}>3C</a>
+     },
       dataIndex: 'threeC',
       valueType: 'textarea',
       align: 'center',
@@ -546,7 +554,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
         ],
       },
       render: (text) => {
-        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center' }}></input>
+        return <input style={{ color: 'red' }} defaultValue={text} style={{ border: 'none', color: 'red', textAlign: 'center',width:'100px' }}></input>
       }
     },
 
@@ -603,8 +611,39 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     });
     return TableList.then(function (value) {
       return {
-        data: value.list,
-        // data: [],
+        // data: value.list,
+        data: [
+          {
+            serialNumber:'001',
+            supplierName:'601601',
+            chineseName:'配电箱',
+            englishName:'DISTRIBUTION  BOX  ENCLOSURE',
+            materialModel:'CDPZ3024DRHHDMZC',
+            materialDesc:'PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采',
+            series:'领航者',
+            cartonQuantity:'1',
+            bagUnit:'只',
+            cartonsNumber:'1',
+            boxUnit:'个',
+            boxWeight:'1000',
+            weightUnit:'千克',
+            boxesNumber:'10',
+            EAN13:'6903185007533',
+            caseITF14:'5690385007538',
+            boxITF14:'5690385007538',
+            factory:'大明电气',
+            productionPlant:'德力西电气有限公司',
+            adress:'浙江省乐清市柳市镇德力西高科技工业园区',
+            remarks:'备注',
+            standard:'GB/T 14048.2',
+            examination:'检07',
+            sign:'否',
+            boxWeight:'8.95',
+            packingQuantity:'20',
+            date:'2022-02-15',
+            threeC:'1'
+          }
+        ],
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -771,7 +810,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       )}
 
 
-      <CreateForm
+      <PrintForm
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
         printNo={printNo}
@@ -779,7 +818,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
         picker={picker}
         title="打印条码"
       >
-      </CreateForm>
+      </PrintForm>
 
 
 

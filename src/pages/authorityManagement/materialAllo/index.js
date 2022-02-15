@@ -16,7 +16,7 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
-} from '@/services/information/materialAllo';
+} from '@/services/authorityManagement/materialAllo';
 
 const materialAlloComponent = ({
   materialAllo,

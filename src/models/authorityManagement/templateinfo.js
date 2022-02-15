@@ -6,7 +6,7 @@ import {
   deleted,
   getAddDropDownInit,
   addPost,
-} from '@/services/information/templateinfo';
+} from '@/services/authorityManagement/templateinfo';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
@@ -23,7 +23,7 @@ const Model = {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname == `/information/${TableName}`) {
+        if (location.pathname == `/authorityManagement/${TableName}`) {
           dispatch({
             type: 'getShif',
             payload: {}

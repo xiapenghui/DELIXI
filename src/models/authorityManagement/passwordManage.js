@@ -1,31 +1,31 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
-  getShif,
+  getDepartement,
   postListInit,
   deleted,
   getAddDropDownInit,
   addPost,
-} from '@/services/information/materialAllo';
+} from '@/services/authorityManagement/passwordManage';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 import { resolve } from 'path';
 
-const TableName = 'materialAllo'
+const TableName = 'passwordManage'
 const Model = {
   namespace: TableName,
   state: {
     TableList: [],
-    timeList: {}
+    departmentList:{}
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname == `/information/${TableName}`) {
+        if (location.pathname == `/authorityManagement/${TableName}`) {
           dispatch({
-            type: 'getShif',
+            type: 'getDepartement',
             payload: {}
           })
         }
@@ -35,20 +35,22 @@ const Model = {
   effects: {
     /**
      *
-     * @param {getShif} 查询初始化
+     * @param {getDepartement} 查询初始化
      * @param {query} 查询
      */
-    * getShif({
+    * getDepartement({
       payload,
     }, { call, put, select }) {
-      const data = yield call(getShif)
+      const data = yield call(getDepartement)
       if (data.status !== '200') {
+        
         return message.error(data.message);
       } else if (data.status == '200') {
+        
         yield put({
           type: 'querySuccessed',
           payload: {
-            type: 'getShif',
+            type: 'getDepartement',
             data: data.list,
           }
         })
@@ -61,8 +63,10 @@ const Model = {
     }, { call, put, select }) {
       const data = yield call(postListInit, payload)
       if (data.status !== '200') {
+        
         return message.error(data.message);
       } else if (data.status == '200') {
+        
         yield put({
           type: 'querySuccessed',
           payload: {
@@ -76,15 +80,16 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      if (payload.type === 'getShif') {
+      if (payload.type === 'getDepartement') {
         return {
           ...state, ...payload,
-          timeList: payload.data
+          departmentList: payload.data
         }
       } else if (payload.type === 'postListInit') {
         return {
           ...state,
           TableList: new Promise(resolve => {
+            
             resolve({
               data: payload.data.list,
               current: payload.data.pageNum,

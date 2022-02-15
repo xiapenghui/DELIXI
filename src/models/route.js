@@ -26,13 +26,7 @@ const RouterModel = {
             icon: "smile",
             component: "../pages/information/materialInfo",
           },
-          
-          {
-            path: "/information/templateinfo",
-            name: "模板信息管理",
-            icon: "smile",
-            component: "../pages/information/templateinfo",
-          },
+         
           {
             path: "/information/printInfo",
             name: "打印信息管理",
@@ -46,18 +40,12 @@ const RouterModel = {
             icon: "smile",
             component: "../pages/information/printRecord",
           },
-
-          {
-            path: '/information/materialAllo',
-            name: '物料分配管理',
-            icon: 'smile',
-            component: '../pages/information/materialAllo',
-          },
+ 
         ],
       },
       {
         path: "/authorityManagement",
-        name: "角色管理",
+        name: "参数管理",
         icon: "SettingOutlined",
         routes: [
           {
@@ -72,6 +60,25 @@ const RouterModel = {
             name: "用户管理",
             icon: "smile",
             component: "../pages/authorityManagement/userInfo",
+          },
+          
+          {
+            path: "/authorityManagement/templateinfo",
+            name: "模板信息管理",
+            icon: "smile",
+            component: "../pages/authorityManagement/templateinfo",
+          },
+          {
+            path: '/authorityManagement/materialAllo',
+            name: '物料分配管理',
+            icon: 'smile',
+            component: '../pages/authorityManagement/materialAllo',
+          },
+          {
+            path: '/authorityManagement/passwordManage',
+            name: '密码规则管理',
+            icon: 'smile',
+            component: '../pages/authorityManagement/passwordManage',
           },
           // {
           //   path: "/authorityManagement/roleInfo",

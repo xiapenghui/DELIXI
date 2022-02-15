@@ -1,3 +1,7 @@
 .ant-modal-body .ant-table-tbody{
     height: auto !important; 
 }
+
+.pintCode{
+    float: right;
+}
