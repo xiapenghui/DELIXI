@@ -1,15 +1,15 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, message, TimePicker, DatePicker, Input } from 'antd';
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, connect } from 'umi';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import ProTable from '@ant-design/pro-table';
-import moment from 'moment'
-import ProDescriptions from '@ant-design/pro-descriptions';
-import CreateForm from './components/CreateForm';
-import UpdateForm from './components/UpdateForm';
-import '../../../../src/assets/commonStyle.css';
-import ExportJsonExcel from 'js-export-excel';
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, message, TimePicker, DatePicker, Input } from "antd";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, connect } from "umi";
+import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
+import ProTable from "@ant-design/pro-table";
+import moment from "moment";
+import ProDescriptions from "@ant-design/pro-descriptions";
+import CreateForm from "./components/CreateForm";
+import UpdateForm from "./components/UpdateForm";
+import "../../../../src/assets/commonStyle.css";
+import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
   postListInit,
@@ -17,49 +17,40 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
-  GetShiftNO
-} from '@/services/information/printRecord';
+  GetShiftNO,
+} from "@/services/information/printRecord";
 
-const printRecordComponent = ({
-  printRecord,
-  dispatch
-}) => {
-  const {
-    TableList,
-    typeList,
-    riskList,
-    isNoList, } = printRecord
+const printRecordComponent = ({ printRecord, dispatch }) => {
+  const { TableList, typeList, riskList, isNoList } = printRecord;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
   /**
-    * 编辑初始化
-    */
+   * 编辑初始化
+   */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
   const [shiftNO, setShiftNO] = useState();
   const getColumns = () => [
-
     {
-      title: '打印时间从',
-      dataIndex: 'tsdateStart',
+      title: "打印时间从",
+      dataIndex: "tsdateStart",
       // valueType: 'dateTime',
-      valueType: 'date',
-      align: 'center',
+      valueType: "date",
+      align: "center",
       width: 120,
       hideInTable: true,
       initialValue: new Date(),
       initialValue: moment(UpdateDate.tsdateStart),
     },
 
-
     {
-      title: '打印时间至',
-      dataIndex: 'tsdateEnd',
+      title: "打印时间至",
+      dataIndex: "tsdateEnd",
       // valueType: 'dateTime',
-      valueType: 'date',
-      align: 'center',
+      valueType: "date",
+      align: "center",
       width: 120,
       hideInTable: true,
       initialValue: new Date(),
@@ -92,156 +83,127 @@ const printRecordComponent = ({
     //   },
     // },
 
-
-
     {
-      title: '物料编码',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
+      title: "打印批次",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
-      title: '物料名称',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
+      title: "是否上传",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
-  
     {
-      title: '物料型号',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
+      title: "上传时间",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
     {
-      title: '物料型号描述',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      title: "只码",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
+
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
-    
     {
-      title: '箱条码',
-      dataIndex: 'shiftname',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      initialValue: IsUpdate ? UpdateDate.shiftname : '',
+      title: "盒码",
+      dataIndex: "shiftname",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      initialValue: IsUpdate ? UpdateDate.shiftname : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: '班别名称不能为空!',
+            message: "班别名称不能为空!",
           },
         ],
       },
     },
 
-
     {
-      title: '装箱数',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
-    },
+      title: "箱码",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
 
-    
-    {
-      title: '装盒数',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
-      title: '所属工厂代码',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      title: "物料编号",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
-    
     {
-      title: '箱条码',
-      dataIndex: 'shiftname',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      initialValue: IsUpdate ? UpdateDate.shiftname : '',
+      title: "物料型号",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
+    },
+
+    {
+      title: "型号描述",
+      dataIndex: "shiftname",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.shiftname : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: '班别名称不能为空!',
+            message: "班别名称不能为空!",
           },
         ],
       },
     },
 
-
     {
-      title: '盒条码',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
+      title: "打印时间",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
-      title: '成品条码',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
+      title: "	打印人员",
+      dataIndex: "shiftdec",
+      valueType: "text",
+      align: "center",
+      width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
+      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
-
-    {
-      title: '打印数量',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
-    },
-    {
-      title: '操作人',
-      dataIndex: 'shiftdec',
-      valueType: 'text',
-      align: 'center',
-      width:120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : '',
-    },
-
 
     // {
     //   title: '操作',
@@ -266,10 +228,10 @@ const printRecordComponent = ({
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      shiftname: params.shiftname == null ? '' : params.shiftname,
+      shiftname: params.shiftname == null ? "" : params.shiftname,
       PageIndex: params.current,
-      PageSize: params.pageSize
-    })
+      PageSize: params.pageSize,
+    });
     return TableList.then(function (value) {
       return {
         // data: value.list,
@@ -277,23 +239,20 @@ const printRecordComponent = ({
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
-        total: value.total
-      }
+        total: value.total,
+      };
     });
-
-
-
-  }
+  };
   /**
    * 添加节点
    * @param fields
    */
 
   const handleAdd = async (fields) => {
-    const hide = message.loading('正在添加');
+    const hide = message.loading("正在添加");
     try {
       let data = await addPost(fields);
-      if (data.status == '200') {
+      if (data.status == "200") {
         hide();
         message.success(data.message);
         return true;
@@ -302,7 +261,7 @@ const printRecordComponent = ({
         return false;
       }
     } catch (error) {
-      message.error('添加失败请重试！');
+      message.error("添加失败请重试！");
       return false;
     }
   };
@@ -311,13 +270,12 @@ const printRecordComponent = ({
    * @param handleUpdate 编辑保存
    */
 
-
   const handleUpdate = async (fields) => {
-    const hide = message.loading('正在编辑');
-    console.log('handleUpdate', fields)
+    const hide = message.loading("正在编辑");
+    console.log("handleUpdate", fields);
     try {
       let data = await updatePut({ shiftID: UpdateDate.shiftID, ...fields });
-      if (data.status == '200') {
+      if (data.status == "200") {
         hide();
         message.success(data.message);
         return true;
@@ -326,7 +284,7 @@ const printRecordComponent = ({
         return false;
       }
     } catch (error) {
-      message.error('编辑失败请重试！');
+      message.error("编辑失败请重试！");
       return false;
     }
   };
@@ -336,7 +294,7 @@ const printRecordComponent = ({
    */
 
   const handleRemove = async (selectedRows) => {
-    const hide = message.loading('正在删除');
+    const hide = message.loading("正在删除");
     if (!selectedRows) return true;
 
     try {
@@ -344,7 +302,7 @@ const printRecordComponent = ({
         shiftIDs: selectedRows.map((row) => row.shiftID),
       });
 
-      if (data.status == '200') {
+      if (data.status == "200") {
         hide();
         message.success(data.message);
         return true;
@@ -352,30 +310,26 @@ const printRecordComponent = ({
         message.error(data.message);
         return false;
       }
-
     } catch (error) {
       hide();
-      message.error('删除失败，请重试');
+      message.error("删除失败，请重试");
       return false;
     }
   };
-
 
   //新增班别编号
   const handleModalVisible1 = async () => {
     try {
       let data = await GetShiftNO();
-      if (data.status == '200') {
+      if (data.status == "200") {
         setShiftNO(data.list);
         handleModalVisible(true);
       }
     } catch (error) {
-      message.error('编辑失败请重试！');
+      message.error("编辑失败请重试！");
       return false;
     }
   };
-
-
 
   return (
     <PageContainer>
@@ -386,7 +340,6 @@ const printRecordComponent = ({
         rowKey="shiftID"
         search={{
           labelWidth: 120,
-
         }}
         toolBarRender={() => [
           // <Button type="primary" onClick={() => handleModalVisible1(true)}>
@@ -403,18 +356,16 @@ const printRecordComponent = ({
         <FooterToolbar
           extra={
             <div>
-              已选择{' '}
+              已选择{" "}
               <a
                 style={{
                   fontWeight: 600,
                 }}
               >
                 {selectedRowsState.length}
-              </a>{' '}
+              </a>{" "}
               项&nbsp;&nbsp;
-              <span>
-
-              </span>
+              <span></span>
             </div>
           }
         >
@@ -430,10 +381,9 @@ const printRecordComponent = ({
         </FooterToolbar>
       )}
       <CreateForm
-        
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
-        title='新建'
+        title="新建"
       >
         <ProTable
           className="boxTbale"
@@ -455,25 +405,24 @@ const printRecordComponent = ({
       </CreateForm>
       {UpdateDate && Object.keys(UpdateDate).length ? (
         <UpdateForm
-         width={700}
+          width={700}
           onCancel={() => {
             setUpdateDate({}); //编辑modal一旦关闭就必须setUpdateDate
-            setIsUpdate(false)
-            handleUpdateModalVisible(false)
-          }
-          }
+            setIsUpdate(false);
+            handleUpdateModalVisible(false);
+          }}
           modalVisible={updateModalVisible}
-          title='编辑'
+          title="编辑"
         >
           <ProTable
-           className="boxTbale"
+            className="boxTbale"
             onSubmit={async (value) => {
               const success = await handleUpdate(value);
 
               if (success) {
                 handleUpdateModalVisible(false);
                 setUpdateDate({});
-                setIsUpdate(false)
+                setIsUpdate(false);
                 if (actionRef.current) {
                   actionRef.current.reload();
                 }
@@ -482,17 +431,13 @@ const printRecordComponent = ({
             rowKey="shiftID"
             type="form"
             columns={getColumns()}
-
           />
         </UpdateForm>
       ) : null}
-
     </PageContainer>
   );
 };
 
-export default connect(({ printRecord }) => ({ printRecord }))(printRecordComponent);
-
-
-
-
+export default connect(({ printRecord }) => ({ printRecord }))(
+  printRecordComponent
+);

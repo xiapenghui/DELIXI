@@ -26,7 +26,7 @@ const RouterModel = {
             icon: "smile",
             component: "../pages/information/materialInfo",
           },
-         
+
           {
             path: "/information/printInfo",
             name: "打印信息管理",
@@ -40,7 +40,6 @@ const RouterModel = {
             icon: "smile",
             component: "../pages/information/printRecord",
           },
- 
         ],
       },
       {
@@ -50,18 +49,18 @@ const RouterModel = {
         routes: [
           {
             path: "/authorityManagement/factoryInfo",
-            name: "工厂管理",
+            name: "工厂信息管理",
             icon: "smile",
             component: "../pages/authorityManagement/factoryInfo",
           },
-          
+
           {
             path: "/authorityManagement/userInfo",
-            name: "用户管理",
+            name: "用户信息管理",
             icon: "smile",
             component: "../pages/authorityManagement/userInfo",
           },
-          
+
           {
             path: "/authorityManagement/templateinfo",
             name: "模板信息管理",
@@ -69,23 +68,23 @@ const RouterModel = {
             component: "../pages/authorityManagement/templateinfo",
           },
           {
-            path: '/authorityManagement/materialAllo',
-            name: '物料分配管理',
-            icon: 'smile',
-            component: '../pages/authorityManagement/materialAllo',
+            path: "/authorityManagement/materialAllo",
+            name: "物料分配管理",
+            icon: "smile",
+            component: "../pages/authorityManagement/materialAllo",
           },
           {
-            path: '/authorityManagement/passwordManage',
-            name: '密码规则管理',
-            icon: 'smile',
-            component: '../pages/authorityManagement/passwordManage',
+            path: "/authorityManagement/passwordManage",
+            name: "密码规则管理",
+            icon: "smile",
+            component: "../pages/authorityManagement/passwordManage",
           },
-          // {
-          //   path: "/authorityManagement/roleInfo",
-          //   name: "角色管理",
-          //   icon: "smile",
-          //   component: "../pages/authorityManagement/roleInfo",
-          // },
+          {
+            path: "/authorityManagement/roleInfo",
+            name: "角色信息管理",
+            icon: "smile",
+            component: "../pages/authorityManagement/roleInfo",
+          },
         ],
       },
     ],

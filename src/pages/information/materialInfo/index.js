@@ -31,7 +31,7 @@ const materialInfoComponent = ({ materialInfo, dispatch }) => {
 
   const getColumns = () => [
     {
-      title: "序号编号",
+      title: "物料编号",
       dataIndex: "serialNumber",
       valueType: "text",
       align: "center",
