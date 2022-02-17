@@ -38,21 +38,14 @@ export async function getShiftType() {
 /**
  * 查询
  */
-// export async function postListInit(params) {
-//   return request(`${ip}/WebAPI/api/OrgEmployee/List`, {
-//     method: 'POST',
-//     data: { ...params },
-//   });
-// }
-
-// 代替
 export async function postListInit(params) {
-  return request(`${ip}/WebAPI/api/OrgRelaxtype/List`, {
-    method: "POST",
+  return request(`${ip}/WebAPI/api/OrgEmployee/List`, {
+    method: 'POST',
     data: { ...params },
   });
 }
 
+ 
 /**
  * 新建保存
  */

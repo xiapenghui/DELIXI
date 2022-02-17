@@ -134,6 +134,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
     }
 
     const TableList = postListInit({
+      
       employeeno: params.employeeno == null ? "" : params.employeeno,
       employeename: params.employeename == null ? "" : params.employeename,
       departmentid: Number(params.departmentid),
@@ -144,6 +145,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
       PageSize: params.pageSize,
     });
     return TableList.then(function (value) {
+      debugger
       return {
         // data: value.list,
         data: [],

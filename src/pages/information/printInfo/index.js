@@ -642,6 +642,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
   };
 
   const query = async (params, sorter, filter) => {
+    
     const TableList = postListInit({
       shiftname: params.shiftname == null ? "" : params.shiftname,
       shiftclass: Number(params.shiftclass),

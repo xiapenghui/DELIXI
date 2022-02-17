@@ -245,7 +245,6 @@ const CreateForm = (props) => {
     >
       <div style={{ height: "40px" }}>
         <span>
-          {" "}
           批次号： <Tag color="red">202202151200</Tag>
         </span>
         <span>
@@ -256,20 +255,10 @@ const CreateForm = (props) => {
           打印条码
         </Button>
 
-        <Button
-          type="primary"
-          className="pintRight"
-          hidden={zhiCode}
-          onClick={zhiPint}
-        >
+        <Button type="primary" className="pintRight" hidden={zhiCode} onClick={zhiPint}>
           <Tag color="volcano"> 只码模板:</Tag>成品条码
         </Button>
-        <Button
-          type="primary"
-          className="pintRight"
-          hidden={heCode}
-          onClick={hePint}
-        >
+        <Button type="primary" className="pintRight" hidden={heCode} onClick={hePint} >
           <Tag color="volcano"> 盒码模板:</Tag>40x60
         </Button>
         <Button type="primary" className="pintRight" hidden={boxCode}>

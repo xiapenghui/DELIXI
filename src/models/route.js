@@ -35,6 +35,13 @@ const RouterModel = {
           },
 
           {
+            path: '/information/printMake',
+            name: '打印记录补打',
+            icon: 'smile',
+            component: '../pages/information/printMake',
+          },
+          
+          {
             path: "/information/printRecord",
             name: "打印信息记录",
             icon: "smile",
@@ -84,7 +91,8 @@ const RouterModel = {
             name: "角色信息管理",
             icon: "smile",
             component: "../pages/authorityManagement/roleInfo",
-          },
+          }
+           
         ],
       },
     ],

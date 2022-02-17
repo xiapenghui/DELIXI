@@ -151,10 +151,10 @@ const Model = {
     }, { call, put, select }) {
       const data = yield call(postListInit, payload)
       if (data.status !== '200') {
-
+     
         return message.error(data.message);
       } else if (data.status == '200') {
-
+          
         yield put({
           type: 'querySuccessed',
           payload: {
@@ -198,6 +198,7 @@ const Model = {
 
 
       else if (payload.type === 'postListInit') {
+        
         return {
           ...state,
           TableList: new Promise(resolve => {
