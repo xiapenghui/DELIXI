@@ -14,7 +14,7 @@ import {
   message,
 } from "antd";
 import globalConfig from "../../../../../config/defaultSettings";
-import DraggableAntdModal from 'draggable-antd-modal';
+// import DraggableAntdModal from 'draggable-antd-modal';
 const maskStyles = globalConfig.modal.maskStyles;
 const formItemLayout = globalConfig.table.formItemLayout;
 // const actionRef = useRef();
@@ -90,7 +90,7 @@ const CreateForm = (props) => {
   console.log("CreateForm-rex", data.record);
   return (
     <div>
-      <DraggableAntdModal
+      <Modal
         draggable 
         destroyOnClose
         title="新建"
@@ -194,7 +194,7 @@ const CreateForm = (props) => {
           </Form.Item>
         </Form>
        
-      </DraggableAntdModal>
+      </Modal>
     </div>
   );
 };

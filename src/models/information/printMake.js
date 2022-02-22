@@ -2,10 +2,8 @@ import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
   getDropDownInit,
-  postListInit,
-  deleted,
-  getAddDropDownInit,
-  addPost,
+  tankSearch,
+  tankSearch1
 } from '@/services/information/printMake';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -16,19 +14,45 @@ const TableName = 'printMake'
 const Model = {
   namespace: TableName,
   state: {
-    TableList: [],
-    customerList: {},
-    isNoList:{}
+    TableData1: [],
+    TableData2: []
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname == `/time/${TableName}`) {
+        if (location.pathname == `/information/${TableName}`) {
           dispatch({
             type: 'getDropDownInit',
             payload: {}
           })
+
+          //储罐库存
+          dispatch({
+            type: 'tankSearch',
+            payload: {
+              data: {
+                // sdate1: moment().subtract(1, "years").format(globalConfig.form.onlyDateFormat),
+                // sdate2: moment().endOf('day').format(globalConfig.form.onlyDateFormat)
+              },
+              // pageNum: Number(globalConfig.table.paginationConfig.PageIndex), //当前页数,
+              // pageSize: Number(globalConfig.table.paginationConfig.PageSize),// 表格每页显示多少条数据
+            }
+          });
+
+           //储罐库存
+           dispatch({
+            type: 'tankSearch1',
+            payload: {
+              data: {
+                // sdate1: moment().subtract(1, "years").format(globalConfig.form.onlyDateFormat),
+                // sdate2: moment().endOf('day').format(globalConfig.form.onlyDateFormat)
+              },
+              // pageNum: Number(globalConfig.table.paginationConfig.PageIndex), //当前页数,
+              // pageSize: Number(globalConfig.table.paginationConfig.PageSize),// 表格每页显示多少条数据
+            }
+          });
+
         }
       })
     },
@@ -47,7 +71,7 @@ const Model = {
         return message.error(data.message);
       } else if (data.status == '200') {
         yield put({
-          type: 'querySuccessed',
+          type: 'querySuccess',
           payload: {
             type: 'getDropDownInit',
             data: data.list,
@@ -57,44 +81,69 @@ const Model = {
       }
     },
 
-    * query({
+    //  桶装货品
+    * tankSearch({
       payload,
     }, { call, put, select }) {
-      const data = yield call(postListInit, payload)
-      if (data.status !== '200') {
+      const data = yield call(tankSearch, payload)
+      if (data.status != '200') {
         return message.error(data.message);
       } else if (data.status == '200') {
         yield put({
-          type: 'querySuccessed',
+          type: 'querySuccess',
           payload: {
-            type: 'postListInit',
-            data: data.list
-          }
+            type: 'tankSearch',
+            data: data.list,
+          },
         })
-        return message.success(data.message);
+        // return message.success(data.message);
+      } else {
+        throw data
       }
     },
+
+
+      //  桶装货品
+      * tankSearch1({
+      payload,
+    }, { call, put, select }) {
+      const data = yield call(tankSearch1, payload)
+      if (data.status != '200') {
+        return message.error(data.message);
+      } else if (data.status == '200') {
+        yield put({
+          type: 'querySuccess',
+          payload: {
+            type: 'tankSearch1',
+            data: data.list,
+          },
+        })
+        // return message.success(data.message);
+      } else {
+        throw data
+      }
+    },
+
+    
+
   },
   reducers: {
-    querySuccessed(state, { payload }) {
+    querySuccess(state, { payload }) {
       if (payload.type === 'getDropDownInit') {
         return {
           ...state, ...payload,
           customerList: payload.data.customerList,
-          isNoList:payload.data.isNoList
+          isNoList: payload.data.isNoList
         }
-      } else if (payload.type === 'postListInit') {
+      } else if (payload.type === 'tankSearch') {
         return {
-          ...state,
-          TableList: new Promise(resolve => {
-            resolve({
-              data: payload.data.list,
-              current: payload.data.pageNum,
-              pageSize: payload.data.pageSize,
-              success: true,
-              total: payload.data.total
-            })
-          })
+          ...state, ...payload,
+          TableData1: payload.data,
+        };
+      }else if (payload.type === 'tankSearch1') {
+        return {
+          ...state, ...payload,
+          TableData2: payload.data,
         };
       }
 

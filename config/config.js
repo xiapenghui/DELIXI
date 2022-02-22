@@ -59,28 +59,6 @@ export default defineConfig({
               icon: 'smile',
               component: './Welcome',
             },
-            // {
-            //   path: '/echarts',
-            //   name: '数据分析',
-            //   icon: 'smile',
-            //   component: '../pages/echarts',
-            // },
-            // {
-            //   path: '/admin',
-            //   name: 'admin',
-            //   icon: 'crown',
-            //   component: './Admin',
-            //   authority: ['admin'],
-            //   routes: [
-            //     {
-            //       path: '/admin/sub-page',
-            //       name: 'sub-page',
-            //       icon: 'smile',
-            //       component: './Welcome',
-            //       authority: ['admin'],
-            //     },
-            //   ],
-            // },
 
             {
               path: '/information',
@@ -88,76 +66,83 @@ export default defineConfig({
               icon: 'ClusterOutlined',
               routes: [
                 {
-                  path: '/information/department',
-                  name: '部门管理',
+                  path: '/information/materialInfo',
+                  name: '物料信息管理',
                   icon: 'smile',
-                  component: '../pages/information/department',
+                  component: '../pages/information/materialInfo',
                 },
+              
+                
                 {
-                  path: '/information/personnel',
-                  name: '员工管理',
+                  path: '/information/printInfo',
+                  name: '打印信息管理',
                   icon: 'smile',
-                  component: '../pages/information/personnel',
+                  component: '../pages/information/printInfo',
                 },
+
+
                 {
-                  path: '/information/timeMaintain',
-                  name: '班次信息',
+                  path: '/information/printMake',
+                  name: '打印记录补打',
                   icon: 'smile',
-                  component: '../pages/information/timeMaintain',
+                  component: '../pages/information/printMake',
                 },
 
                 {
-                  path: '/information/classMaintain',
-                  name: '班别信息',
+                  path: '/information/printRecord',
+                  name: '打印信息记录',
                   icon: 'smile',
-                  component: '../pages/information/classMaintain',
+                  component: '../pages/information/printRecord',
                 },
 
-                {
-                  path: '/information/timeInfo',
-                  name: '时间信息',
-                  icon: 'smile',
-                  component: '../pages/information/timeInfo',
-                },
 
-                {
-                  path: '/information/holidayMain',
-                  name: '休假选项维护',
-                  icon: 'smile',
-                  component: '../pages/information/holidayMain',
-                },
-
-                {
-                  path: '/information/personnelOk',
-                  name: '员工确认',
-                  icon: 'smile',
-                  component: '../pages/information/personnelOk',
-                },
+               
               ],
             },
             {
               path: '/authorityManagement',
-              name: '角色管理',
+              name: '参数管理',
               icon: 'SettingOutlined',
               routes: [
                 {
-                  path: '/authorityManagement/userInfo',
-                  name: '用户管理',
-                  icon: 'smile',
-                  component: '../pages/authorityManagement/userInfo',
-                },
-                {
-                  path: '/authorityManagement/roleInfo',
-                  name: '角色管理',
-                  icon: 'smile',
-                  component: '../pages/authorityManagement/roleInfo',
-                },
-                {
                   path: "/authorityManagement/factoryInfo",
-                  name: "工厂管理",
+                  name: "工厂信息管理",
                   icon: "smile",
                   component: "../pages/authorityManagement/factoryInfo",
                 },
+                {
+                  path: '/authorityManagement/userInfo',
+                  name: '用户信息管理',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/userInfo',
+                },
+
+                {
+                  path: '/authorityManagement/templateinfo',
+                  name: '模板信息管理',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/templateinfo',
+                },
+
+                {
+                  path: '/authorityManagement/materialAllo',
+                  name: '物料分配管理',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/materialAllo',
+                },
+                {
+                  path: '/authorityManagement/passwordManage',
+                  name: '密码规则管理',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/passwordManage',
+                },
+                {
+                  path: '/authorityManagement/roleInfo',
+                  name: '角色信息管理',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/roleInfo',
+                },
+ 
               ],
             },
             {

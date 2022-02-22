@@ -12,7 +12,8 @@ import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
-  postListInit,
+  tankSearch,
+  tankSearch1,
   deleted,
   getAddDropDownInit,
   addPost,
@@ -21,10 +22,16 @@ import {
 } from "@/services/information/printMake";
 
 const printMakeComponent = ({ printMake, dispatch }) => {
+
+
   const { TabPane } = Tabs;
-  const [form] = Form.useForm();
+  const [form1] = Form.useForm();
+  const [form2] = Form.useForm();
+  const [form3] = Form.useForm();
   const formItemLayout = globalConfig.table.formItemLayout
   const columns1 = [
+ 
+
     {
       title: "打印批次",
       dataIndex: "printBatch",
@@ -77,7 +84,8 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
   ];
 
-  const dataSource1 = [
+
+  const [dataSource1, setDataSource1] = useState([
     {
       key: "1",
       printBatch: "202202151200",
@@ -100,9 +108,35 @@ const printMakeComponent = ({ printMake, dispatch }) => {
       printTime: "2022-02-15 12:00:00",
       PrinterPer: "张三",
     },
-  ];
+  ])
+  const [dataSource2, setDataSource2] = useState([
+    {
+      key: "1",
+      printBatch: "202202151200",
+      barcodeType: "盒",
+      barCode: "2uybM0327491062640",
+      materialNo: "32749",
+      materialModel: "CDPZ3024DRHHDMZC",
+      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
+      printTime: "2022-02-15 12:00:00",
+      PrinterPer: "张三",
+    },
+    {
+      key: "2",
+      printBatch: "202202151200",
+      barcodeType: "盒",
+      barCode: "2uybM0327491062639",
+      materialNo: "32749",
+      materialModel: "CDPZ3024DRHHDMZC",
+      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
+      printTime: "2022-02-15 12:00:00",
+      PrinterPer: "张三",
+    },
+  ])
+
 
   const columns2 = [
+   
     {
       title: "打印批次",
       dataIndex: "printBatch",
@@ -154,32 +188,11 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
   ];
 
-  const dataSource2 = [
-    {
-      key: "1",
-      printBatch: "202202151200",
-      barcodeType: "盒",
-      barCode: "2uybM0327491062640",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-    {
-      key: "2",
-      printBatch: "202202151200",
-      barcodeType: "盒",
-      barCode: "2uybM0327491062639",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-  ];
+
 
   const columns3 = [
+
+
     {
       title: "打印批次",
       dataIndex: "printBatch",
@@ -262,16 +275,57 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     console.log(key);
   }
 
+  useEffect(() => {
+    // setDataSource1(printMake.TableData1)
+    // setDataSource2(printMake.TableData2.detail)
+  }, [])
+
+  
+  //   @param 只条码 handleSearch 搜索
+  const zhiSearch = (e) => {
+    form1
+      .validateFields()
+      .then(async (values) => {
+        let data = await tankSearch(
+          {
+            tsdateStart: moment(values.tsdateStart).format(globalConfig.form.dateFormat).substring(0, 10),
+            tsdateEnd: moment(values.tsdateEnd).format(globalConfig.form.dateFormat).substring(0, 10)
+          }
+        );
+        if (data.status === '200') {
+          setDataSource1(data.list)
+        }
+      })
+  }
+
+  //盒条码查询
+  const heSearch = (e) => {
+    form2
+      .validateFields()
+      .then(async (values) => {
+        let data = await tankSearch1(
+          {
+            tsdateStart: moment(values.tsdateStart).format(globalConfig.form.dateFormat).substring(0, 10),
+            tsdateEnd: moment(values.tsdateEnd).format(globalConfig.form.dateFormat).substring(0, 10)
+          }
+        );
+        if (data.status === '200') {
+          setDataSource2(data.list.detail)
+        }
+      })
+  }
+
+
+
+
   return (
     <PageContainer>
       <Tabs onChange={callback} type="card" style={{ background: "#fff" }}>
         <TabPane tab="只条码" key="1">
 
           <Form
-            className="ant-advanced-search-form"
-            // onFinish={(e) => handleSearch(e, 'tankSearch')}
-            // onFinish={handleSearch}
-            form={form}
+            onFinish={zhiSearch}
+            form={form1}
             name="form_in_modal"
             initialValues={{
               // sdate1: moment().subtract(1, "years"),
@@ -282,7 +336,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate1"
+                  name="tsdateStart"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout}
@@ -294,7 +348,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate2"
+                  name="tsdateEnd"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout}
@@ -356,21 +410,21 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
           </Form>
 
-          <Table dataSource={dataSource1} columns={columns1} scroll={{ y: 450 }}  pagination={false} />
-          <Pagination
+          <Table dataSource={dataSource1} columns={columns1} scroll={{ y: 450 }} />
+          {/* <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
             defaultPageSize={20}
             defaultCurrent={1}
-            style={{textAlign:'right',padding:'15px'}}
-          />
+            style={{ textAlign: 'right', padding: '15px' }}
+          /> */}
         </TabPane>
         <TabPane tab="盒条码" key="2">
           <Form
             className="ant-advanced-search-form"
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
-            // onFinish={handleSearch}
-            form={form}
+            onFinish={heSearch}
+            form={form2}
             name="form_in_modal"
             initialValues={{
               // sdate1: moment().subtract(1, "years"),
@@ -380,7 +434,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             <Row gutter={40}>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate1"
+                  name="tsdateStart"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout}
@@ -392,7 +446,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate2"
+                  name="tsdateEnd"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout}
@@ -455,14 +509,14 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns2} scroll={{ y: 450 }} pagination={false} />
-          <Pagination
+          <Table dataSource={dataSource2} columns={columns2} scroll={{ y: 450 }} />
+          {/* <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
             defaultPageSize={20}
             defaultCurrent={1}
-            style={{textAlign:'right',padding:'15px'}}
-          />
+            style={{ textAlign: 'right', padding: '15px' }}
+          /> */}
 
         </TabPane>
         <TabPane tab="箱条码" key="3">
@@ -470,7 +524,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             className="ant-advanced-search-form"
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
             // onFinish={handleSearch}
-            form={form}
+            form={form3}
             name="form_in_modal"
             initialValues={{
               // sdate1: moment().subtract(1, "years"),
@@ -555,13 +609,13 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns3} scroll={{ y: 450 }}  pagination={false} />
+          <Table dataSource={dataSource3} columns={columns3} scroll={{ y: 450 }} pagination={false} />
           <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
             defaultPageSize={20}
             defaultCurrent={1}
-            style={{textAlign:'right',padding:'15px'}}
+            style={{ textAlign: 'right', padding: '15px' }}
           />
 
         </TabPane>

@@ -145,7 +145,6 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
       PageSize: params.pageSize,
     });
     return TableList.then(function (value) {
-      debugger
       return {
         // data: value.list,
         data: [],
