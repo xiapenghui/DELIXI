@@ -336,9 +336,11 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        scroll={{ y: 500 }}
+        scroll={{ y: 430 }}
         rowKey="shiftID"
         search={{
+          collapsed:false,
+          collapseRender:false,
           labelWidth: 120,
         }}
         toolBarRender={() => [

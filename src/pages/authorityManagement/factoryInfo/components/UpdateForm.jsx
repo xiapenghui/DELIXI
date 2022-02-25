@@ -13,11 +13,7 @@ const UpdateForm = (props) => {
       footer={null}
       width={700}
     >
-      <Row gutter={16}>
-        <Col className="gutter-row  boxTbale" span={24}>
-          {props.children}
-        </Col>
-      </Row>
+      {props.children}
     </Modal>
   );
 };

@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined , FileWordOutlined } from "@ant-design/icons";
 import { Button, message, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -7,6 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
+import ImportForm from "./components/ImportForm";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
@@ -21,6 +22,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
   const { departmentList, areaList, lineList, shiftTypeList } = factoryInfo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
   /**
@@ -161,6 +163,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
    */
 
   const handleAdd = async (fields) => {
+    debugger
     const hide = message.loading("正在添加");
     try {
       let newState;
@@ -318,6 +321,9 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
+            <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+           <FileWordOutlined /> 导入
+          </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
@@ -404,6 +410,34 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
           />
         </UpdateForm>
       ) : null}
+
+    
+      {/* 导入  */}
+      <ImportForm
+        onCancel={() => handleImportModalVisible(false)}
+        modalVisible={importModalVisible}
+        title="导入"
+      >
+        {/* <ProTable
+          onSubmit={async (value) => {
+            const success = await handleAdd(value);
+
+            if (success) {
+              handleModalVisible(false);
+
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }
+          }}
+          rowKey="employeeid"
+          type="form"
+          columns={getColumns()}
+        /> */}
+        
+      </ImportForm>
+
+
     </PageContainer>
   );
 };

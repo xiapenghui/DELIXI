@@ -137,6 +137,11 @@ const CreateForm = (props) => {
   const [zhiCode, setZhiCode] = useState(false);
   const [heCode, setHeCode] = useState(true);
   const [boxCode, setBoxCode] = useState(true);
+  const [loading1 ,setLoading1]  = useState(false);
+  const [loading2 ,setLoading2]  = useState(false);
+  const [loading3 ,setLoading3]  = useState(false);
+  const [erCode, setErCode]=useState([172, 154, 175, 197])
+
   const [arr, setArr] = useState([
     "22345678905",
     "12345678901",
@@ -179,40 +184,11 @@ const CreateForm = (props) => {
 
   //只条码打印
   const zhiPint = () => {
-    CreatePrintPage();
+  
     LODOP.PRINT_DESIGN();
     // LODOP = getLodop();
-    function CreatePrintPage() {
-      LODOP.PRINT_INITA(10, 10, 1653, 905, "打印控件功能演示_Lodop功能");
-      LODOP.ADD_PRINT_RECT(166, 74, 506, 201, 0, 1);
-      LODOP.ADD_PRINT_TEXT(170, 75, 62, 190, "\r\n防\r\n伪\r\n查\r\n询");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 22);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.ADD_PRINT_TEXT(325, 439, 138, 40, "400828008");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_BARCODE(172, 154, 175, 197, "QRCode", "123456789012");
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-      LODOP.ADD_PRINT_TEXT(259, 399, 174, 45, "222222222222222222");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(
-        178,
-        388,
-        192,
-        55,
-        "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
-      );
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(179, 331, 55, 30, "S/N:");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.ADD_PRINT_TEXT(260, 327, 70, 35, "DATE：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-      LODOP.ADD_PRINT_TEXT(326, 324, 111, 39, "服务热线：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    }
+    LODOP.ADD_PRINT_BARCODE(172, 154, 175, 197, "QRCode", "123456789012");
+ 
   };
 
   //盒码
@@ -265,12 +241,14 @@ const CreateForm = (props) => {
           <Tag color="volcano"> 箱码模板:</Tag>60x80
         </Button>
       </div>
-      <Tabs defaultActiveKey="1" onChange={callback} type="card">
+      <Tabs defaultActiveKey="1" onChange={callback} type="card" >
+     
         <TabPane tab="只" key="1">
           <Table
             dataSource={dataSource1}
             columns={columns}
             pagination={false}
+            loading={loading1}
           />
         </TabPane>
         <TabPane tab="盒" key="2">
@@ -278,6 +256,7 @@ const CreateForm = (props) => {
             dataSource={dataSource2}
             columns={columns}
             pagination={false}
+            loading={loading2}
           />
         </TabPane>
         <TabPane tab="箱" key="3">
@@ -285,6 +264,7 @@ const CreateForm = (props) => {
             dataSource={dataSource3}
             columns={columns}
             pagination={false}
+            loading={loading3}
           />
         </TabPane>
       </Tabs>

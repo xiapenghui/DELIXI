@@ -43,108 +43,136 @@ const Component = ({ userInfo, dispatch }) => {
   const getColumns = () => [
     {
       title: "编号",
-      dataIndex: "code",
-      // valueEnum: customerList.length == 0 ? {} : customerList,
-      initialValue: IsUpdate ? UpdateDate.code : "",
+      dataIndex: "userNo",
+      valueType: "text",
+      align: "center",
+      initialValue: IsUpdate ? UpdateDate.userNo : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "编号不能为空!",
+          },
+        ],
+      },
     },
-    // {
-    //   title: '用户',
-    //   dataIndex: 'name',
-    //   // valueEnum: userList.length == 0 ? {} : userList,
-    //   initialValue: IsUpdate ? UpdateDate.name : '',
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: '用户不能为空!',
-    //       },
-    //     ],
-    //   },
-    // },
     {
       title: "姓名",
-      dataIndex: "cname",
+      dataIndex: "userName",
       valueType: "text",
-      initialValue: IsUpdate ? UpdateDate.cname : "",
+      align: "center",
+      initialValue: IsUpdate ? UpdateDate.userName : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "中文名不能为空!",
+            message: "姓名不能为空!",
           },
         ],
       },
     },
     {
-      title: "姓别",
-      dataIndex: "cname",
+      title: "性别",
+      dataIndex: "userSex",
       valueType: "text",
+      align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.cname : "",
+      initialValue: IsUpdate ? UpdateDate.userSex : "",
+      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+      //   if (type === "form" || type === "table") {
+      //     // 返回新的组件
+      //     let newList = [];
+      //     for (let [key, value] of Object.entries(shiftTypeList)) {
+      //       newList.push({ key: key, label: value.text });
+      //     }
+      //     return (
+      //       <Select allowClear showSearch optionFilterProp="children">
+      //         {newList.map(function (item, index) {
+      //           return (
+      //             <Select.Option key={index} value={item.key}>
+      //               {item.label}
+      //             </Select.Option>
+      //           );
+      //         })}
+      //       </Select>
+      //     );
+      //   }
+      //   return defaultRender(_);
+      // },
+
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "中文名不能为空!",
+            message: "性别不能为空!",
           },
         ],
       },
     },
-    // {
-    //   title: '部门',
-    //   dataIndex: 'department',
-    //   valueType: 'text',
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.department : '',
-    // },
     {
       title: "职位",
-      dataIndex: "title",
+      dataIndex: "position",
       valueType: "text",
+      align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.title : "",
+      initialValue: IsUpdate ? UpdateDate.position : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "姓别不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "所属工厂",
-      dataIndex: "title",
+      dataIndex: "factoryId",
       valueType: "text",
+      align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.title : "",
+      initialValue: IsUpdate ? UpdateDate.factoryId : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "所属工厂不能为空!",
+          },
+        ],
+      },
     },
     {
       title: "所属角色",
-      dataIndex: "title",
+      dataIndex: "state",
       valueType: "text",
+      align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.title : "",
+      initialValue: IsUpdate ? UpdateDate.state : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "所属角色不能为空!",
+          },
+        ],
+      },
     },
     {
       title: "备注",
-      dataIndex: "title",
+      dataIndex: "remarks",
       valueType: "text",
+      align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.title : "",
+      initialValue: IsUpdate ? UpdateDate.remarks : "",
+      
     },
 
-    // {
-    //   title: '级别',
-    //   dataIndex: 'level',
-    //   valueType: 'text',
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.level : '',
-    // },
-    // {
-    //   title: '密码',
-    //   dataIndex: 'password',
-    //   valueType: 'text',
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.password : '',
-    // },
     {
       title: "操作",
       dataIndex: "option",
       valueType: "option",
+      align: "center",
       render: (_, record) => (
         <>
           <Popconfirm
@@ -186,8 +214,7 @@ const Component = ({ userInfo, dispatch }) => {
     });
     return TableList.then(function (value) {
       return {
-        // data: value.data.list,
-        data: [],
+        data: value.data.list,
         current: value.data.pageNum,
         pageSize: value.data.pageSize,
         success: true,

@@ -1,5 +1,5 @@
 import { PlusOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination } from "antd";
+import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -30,7 +30,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
   const [form3] = Form.useForm();
   const formItemLayout = globalConfig.table.formItemLayout
   const columns1 = [
- 
+
 
     {
       title: "打印批次",
@@ -40,8 +40,8 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
     {
       title: "条码类型",
-      dataIndex: "barcodeType",
-      key: "barcodeType",
+      dataIndex: "barType",
+      key: "barType",
       align: "center",
     },
     {
@@ -49,6 +49,15 @@ const printMakeComponent = ({ printMake, dispatch }) => {
       dataIndex: "barCode",
       key: "barCode",
       align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: barCode => (
+        <Tooltip placement="topLeft" title={barCode}>
+          {barCode}
+        </Tooltip>
+      ),
     },
     {
       title: "物料编号",
@@ -61,13 +70,29 @@ const printMakeComponent = ({ printMake, dispatch }) => {
       dataIndex: "materialModel",
       key: "materialModel",
       align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: materialModel => (
+        <Tooltip placement="topLeft" title={materialModel}>
+          {materialModel}
+        </Tooltip>
+      ),
     },
     {
       title: "型号描述",
       dataIndex: "modelDesc",
       key: "modelDesc",
-      ellipsis: true,
+      ellipsis: {
+        showTitle: false,
+      },
       align: "center",
+      render: modelDesc => (
+        <Tooltip placement="topLeft" title={modelDesc}>
+          {modelDesc}
+        </Tooltip>
+      ),
     },
     {
       title: "打印时间",
@@ -89,7 +114,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "1",
       printBatch: "202202151200",
-      barcodeType: "只",
+      barType: "只",
       barCode: "2uybM0327491062640",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -100,7 +125,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "2",
       printBatch: "202202151200",
-      barcodeType: "只",
+      barType: "只",
       barCode: "2uybM0327491062639",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -113,7 +138,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "1",
       printBatch: "202202151200",
-      barcodeType: "盒",
+      barType: "盒",
       barCode: "2uybM0327491062640",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -124,7 +149,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "2",
       printBatch: "202202151200",
-      barcodeType: "盒",
+      barType: "盒",
       barCode: "2uybM0327491062639",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -136,7 +161,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
 
   const columns2 = [
-   
+
     {
       title: "打印批次",
       dataIndex: "printBatch",
@@ -145,8 +170,8 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
     {
       title: "条码类型",
-      dataIndex: "barcodeType",
-      key: "barcodeType",
+      dataIndex: "barType",
+      key: "barType",
       align: "center",
     },
     {
@@ -201,8 +226,8 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
     {
       title: "条码类型",
-      dataIndex: "barcodeType",
-      key: "barcodeType",
+      dataIndex: "barType",
+      key: "barType",
       align: "center",
     },
     {
@@ -248,7 +273,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "1",
       printBatch: "202202151200",
-      barcodeType: "箱",
+      barType: "箱",
       barCode: "2uybM0327491062640",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -259,7 +284,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     {
       key: "2",
       printBatch: "202202151200",
-      barcodeType: "箱",
+      barType: "箱",
       barCode: "2uybM0327491062639",
       materialNo: "32749",
       materialModel: "CDPZ3024DRHHDMZC",
@@ -270,7 +295,30 @@ const printMakeComponent = ({ printMake, dispatch }) => {
   ];
 
 
+  //多选条码
+  const rowSelection1 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    }
+  };
 
+  //多选盒码
+  const rowSelection2 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    }
+  };
+
+  //多选箱码
+  const rowSelection3 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    }
+  };
+
+
+
+  //tab标签切换获取index/key
   function callback(key) {
     console.log(key);
   }
@@ -280,7 +328,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     // setDataSource2(printMake.TableData2.detail)
   }, [])
 
-  
+
   //   @param 只条码 handleSearch 搜索
   const zhiSearch = (e) => {
     form1
@@ -410,7 +458,13 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
           </Form>
 
-          <Table dataSource={dataSource1} columns={columns1} scroll={{ y: 450 }} />
+          <Table dataSource={dataSource1} columns={columns1}
+            scroll={{ y: 450 }}
+            style={{ padding: "0 20px" }}
+            rowSelection={{
+              ...rowSelection1
+            }}
+          />
           {/* <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
@@ -461,7 +515,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="tank"
-                  label="条码"
+                  label="盒码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -509,7 +563,12 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns2} scroll={{ y: 450 }} />
+          <Table dataSource={dataSource2} columns={columns2} scroll={{ y: 450 }}
+            style={{ padding: "0 20px" }}
+            rowSelection={{
+              ...rowSelection2
+            }}
+          />
           {/* <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
@@ -561,7 +620,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="tank"
-                  label="条码"
+                  label="箱码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -609,14 +668,19 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns3} scroll={{ y: 450 }} pagination={false} />
-          <Pagination
+          <Table dataSource={dataSource3} columns={columns3} scroll={{ y: 450 }} pagination={true}
+            style={{ padding: "0 20px" }}
+            rowSelection={{
+              ...rowSelection3
+            }}
+          />
+          {/* <Pagination
             total={15}
             showTotal={(total, range) => `第 ${range[0]}-${range[1]} 条/ 总共 ${total} 条`}
             defaultPageSize={20}
             defaultCurrent={1}
             style={{ textAlign: 'right', padding: '15px' }}
-          />
+          /> */}
 
         </TabPane>
       </Tabs>

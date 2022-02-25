@@ -20,7 +20,7 @@ const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`
  * 查询条件初始化
  */
 export async function getDropDownInit() {
-  return request(`${path}/sspalds-role/api/${TableName}/getDropDownInit`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/getDropDownInit`, {
     method: 'GET'
   });
 }
@@ -28,7 +28,7 @@ export async function getDropDownInit() {
  * 查询
  */
 export async function postListInit(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/postListInit`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/postListInit`, {
     method: 'POST',
     data: { ...params },
   });
@@ -37,7 +37,7 @@ export async function postListInit(params) {
  * 删除
  */
 export async function deleted(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/delete`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/delete`, {
     method: 'DELETE',
     data: { ...params },
   });
@@ -46,7 +46,7 @@ export async function deleted(params) {
  * 新建初始化
  */
 export async function getAddDropDownInit() {
-  return request(`${path}/sspalds-role/api/${TableName}/getAddDropDownInit`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/getAddDropDownInit`, {
     method: 'GET'
   });
 }
@@ -54,7 +54,7 @@ export async function getAddDropDownInit() {
  * 新建保存
  */
 export async function addPost(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/addPost`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/addPost`, {
     method: 'POST',
     data: { ...params },
   });
@@ -63,7 +63,7 @@ export async function addPost(params) {
  * 编辑初始化
  */
 export async function getUpdateInit(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/getUpdateInit/${params}`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/getUpdateInit/${params}`, {
     method: 'GET'
   });
 }
@@ -71,7 +71,7 @@ export async function getUpdateInit(params) {
  * 编辑保存
  */
 export async function updatePut(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/updatePut`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/updatePut`, {
     method: 'PUT',
     data: { ...params },
   });
@@ -80,7 +80,7 @@ export async function updatePut(params) {
  * 详情
  */
 export async function getDetail(params) {
-  return request(`${path}/sspalds-role/api/${TableName}/getDetail/${params}`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/getDetail/${params}`, {
     method: 'GET'
   });
 }
@@ -89,7 +89,7 @@ export async function getDetail(params) {
  */
 export async function resetPassword(params) {
   console.log(...params+"params========");
-  return request(`${path}/sspalds-role/api/${TableName}/resetPassword/${params}`, {
+  return request(`${path}/DLX_OEM/api/${TableName}/resetPassword/${params}`, {
     method: 'GET'
   });
 }

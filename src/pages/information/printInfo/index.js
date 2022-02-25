@@ -1,5 +1,5 @@
-import { PlusOutlined, ArrowDownOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input } from "antd";
+import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { Button, message, DatePicker, Form, Input, Popconfirm } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -101,9 +101,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     },
 
     {
-      title: (a, b, c) => {
-        return <a style={{ color: "red" }}>物料型号</a>;
-      },
+      title: () => <a style={{ color: "red" }}>物料型号</a>,
       dataIndex: "materialModel",
       valueType: "textarea",
       align: "center",
@@ -203,9 +201,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     },
 
     {
-      title: (a, b, c) => {
-        return <a style={{ color: "red" }}>装盒数量</a>;
-      },
+      title: () => <a style={{ color: "red" }}>装盒数量</a>,
       dataIndex: "cartonsNumber",
       valueType: "textarea",
       align: "center",
@@ -485,9 +481,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       },
     },
     {
-      title: (a, b, c) => {
-        return <a style={{ color: "red" }}>箱重量</a>;
-      },
+      title: () => <a style={{ color: "red" }}>箱重量</a>,
       dataIndex: "boxWeight",
       valueType: "textarea",
       align: "center",
@@ -518,9 +512,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       },
     },
     {
-      title: (a, b, c) => {
-        return <a style={{ color: "red" }}>装箱数量</a>;
-      },
+      title: () => <a style={{ color: "red" }}>装箱数量</a>,
       dataIndex: "packingQuantity",
       valueType: "textarea",
       align: "center",
@@ -568,9 +560,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       },
     },
     {
-      title: (a, b, c) => {
-        return <a style={{ color: "red" }}>3C</a>;
-      },
+      title: () => <a style={{ color: "red" }}>3C</a>,
       dataIndex: "threeC",
       valueType: "textarea",
       align: "center",
@@ -631,18 +621,20 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     setPrintNo(e.target.value);
   };
 
-  //打印条码
-  const handleModal = async () => {
+
+  //点击确认生成条码
+  const confirm = async () => {
     setIds(selectedRowsState.map((item) => item.shiftid));
     if (selectedRowsState?.length > 0) {
       handleModalVisible(true);
     } else {
       message.info("请至少选择一条数据！");
     }
-  };
+  }
+
 
   const query = async (params, sorter, filter) => {
-    
+
     const TableList = postListInit({
       shiftname: params.shiftname == null ? "" : params.shiftname,
       shiftclass: Number(params.shiftclass),
@@ -827,13 +819,18 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
             label="打印张数:"
             name="number"
           >
-            <Input style={{ width: "70%" }} onChange={changeIpt} />
+            <Input style={{ width: "70%" }} onBlur={changeIpt} />
           </Form.Item>,
 
           // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
-          <Button type="primary" onClick={handleModal}>
-            <ArrowDownOutlined /> 打印条码
-          </Button>,
+
+
+          <Popconfirm placement="top" title="您确定要生成条码吗?" onConfirm={confirm} okText="确定" cancelText="取消">
+            <Button type="primary">
+              <SnippetsOutlined /> 生成条码
+            </Button>
+          </Popconfirm>
+
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}

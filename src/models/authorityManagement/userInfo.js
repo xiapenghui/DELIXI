@@ -25,7 +25,7 @@ const Model = {
       history.listen((location) => {
         if (location.pathname == `/authorityManagement/${TableName}`) {
           dispatch({
-            type: 'getDepartement',
+            type: 'getAddDropDownInit',
             payload: {}
           })
         }
@@ -38,10 +38,10 @@ const Model = {
      * @param {getDepartement} 查询初始化
      * @param {query} 查询
      */
-    * getDepartement({
+    * getAddDropDownInit({
       payload,
     }, { call, put, select }) {
-      const data = yield call(getDepartement)
+      const data = yield call(getAddDropDownInit)
       if (data.status !== '200') {
         
         return message.error(data.message);
@@ -50,7 +50,7 @@ const Model = {
         yield put({
           type: 'querySuccessed',
           payload: {
-            type: 'getDepartement',
+            type: 'getAddDropDownInit',
             data: data.list,
           }
         })
@@ -80,7 +80,7 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      if (payload.type === 'getDepartement') {
+      if (payload.type === 'getAddDropDownInit') {
         return {
           ...state, ...payload,
           departmentList: payload.data

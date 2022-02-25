@@ -124,7 +124,7 @@ const Components = ({ roleInfo, dispatch }) => {
   const OperationButton = () => {
     return (
       <Row>
-        <Col span={24} style={{ textAlign: "left",background:"#fff",padding:"20px 0 0 20px"}}>
+        <Col span={24} style={{ textAlign: "right",background:"#fff",padding:"15px 20px 0 0"}}>
           <Button
             type="primary"
             onClick={() => handleModalShow("addModalVisible")}
@@ -132,7 +132,7 @@ const Components = ({ roleInfo, dispatch }) => {
             <PlusOutlined /> 新建
           </Button>
           <Popconfirm title="确定删除吗?" onConfirm={() => deleteHandler()}>
-            <Button style={{ marginLeft: "5px" }} type="primary">
+            <Button style={{ marginLeft: "10px" }} type="primary">
               <DeleteOutlined /> 删除
             </Button>
           </Popconfirm>

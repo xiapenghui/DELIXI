@@ -1,10 +1,10 @@
 import request from '@/utils/request';
 
 import globalConfig from '../../config/defaultSettings';
-const path = `${globalConfig.ip}:${globalConfig.port.sspalds_role}/sspalds-role`
-// const path = "http://10.208.2.111:8072/sspalds-role";
-// const path = "http://192.168.1.221:8072/sspalds-role";
-// const path = "http://192.168.1.151:8072/sspalds-role";
+const path = `${globalConfig.ip}:${globalConfig.port.sspalds_role}/DLX_OEM`
+// const path = "http://10.208.2.111:8072/DLX_OEM";
+// const path = "http://192.168.1.221:8072/DLX_OEM";
+// const path = "http://192.168.1.151:8072/DLX_OEM";
 export async function query() {
   return request('/api/users');
 }
