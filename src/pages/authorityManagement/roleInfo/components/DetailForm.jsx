@@ -62,7 +62,7 @@ const DetailForm = (props) => {
             setCheckedKeys(result)
             form.setFieldsValue({
                 id: data.DetailData.id,
-                name: data.DetailData.name,
+                roleName: data.DetailData.roleName,
                 companyId: data.DetailData.companyId,
                 user: data.DetailData.userIdList
             })
@@ -89,7 +89,7 @@ const DetailForm = (props) => {
                     name="detailModalValueForm"
                     initialValues={{
                         id: data.DetailData.id,
-                        name: data.DetailData.name,
+                        roleName: data.DetailData.roleName,
                         companyId: data.DetailData.companyId,
                         user: data.DetailData.userIdList
                     }}
@@ -103,7 +103,7 @@ const DetailForm = (props) => {
                         <Input disabled />
                     </Form.Item>
                     <Form.Item
-                        name="name"
+                        name="roleName"
                         label="角色名"
                         hasFeedback
                         {...formItemLayout}

@@ -21,7 +21,7 @@ const UpdateForm = (props) => {
     // handleAdd(modalType)
     const params = {
       id: data.record.id,
-      name: values.name,
+      roleName: values.roleName,
       companyId: values.companyId,
       userIdList: values.user,
       sysMenuIdList: checkedMenu
@@ -84,7 +84,7 @@ const UpdateForm = (props) => {
       setCheckedKeys(result)
       form.setFieldsValue({
         id: data.EditData.id,
-        name: data.EditData.name,
+        roleName: data.EditData.roleName,
         companyId: data.EditData.companyId,
         user: data.EditData.userIdList
       })
@@ -120,7 +120,7 @@ const UpdateForm = (props) => {
           name="updateModalValueForm"
           initialValues={{
             id: data.EditData.id,
-            name: data.EditData.name,
+            roleName: data.EditData.roleName,
             companyId: data.EditData.companyId,
             user: data.EditData.userIdList
           }}
@@ -134,7 +134,7 @@ const UpdateForm = (props) => {
             <Input disabled />
           </Form.Item>
           <Form.Item
-            name="name"
+            name="roleName"
             label="角色名"
             hasFeedback
             {...formItemLayout}

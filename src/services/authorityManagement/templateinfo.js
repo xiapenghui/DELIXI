@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 import globalConfig from '../../../config/defaultSettings';
 // const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_adm}/yshyerp-adm/api/customer`
-const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`
 
 /**
  * 查询条件初始化
@@ -13,18 +13,12 @@ const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`
 //   });
 // }
 
-export async function getShif() { 
-  return request(`${ip}/WebAPI/api/Common/GetShiftinfoIdText`, {
-    method: 'POST',
-  });
-}
-
 
 /**
  * 查询
  */
 export async function postListInit(params) {
-  return request(`${ip}/WebAPI/api/OrgTimeAxis/List`, {
+  return request(`${ip}/DLX_OEM/api/temp/postListInit`, {
     method: 'POST',
     data: { ...params },
   });
@@ -36,7 +30,7 @@ export async function postListInit(params) {
  * 新建保存
  */
  export async function addPost(params) {
-  return request(`${ip}/WebAPI/api/OrgTimeAxis/Add`, {
+  return request(`${ip}/DLX_OEM/api/temp/addPost`, {
     method: 'POST',
     data: { ...params },
   });
@@ -47,8 +41,8 @@ export async function postListInit(params) {
  * 编辑保存
  */
  export async function updatePut(params) {
-  return request(`${ip}/WebAPI/api/OrgTimeAxis/Modify`, {
-    method: 'POST',
+  return request(`${ip}/DLX_OEM/api/temp/updatePut`, {
+    method: 'PUT',
     data: { ...params },
   });
 }
@@ -59,8 +53,8 @@ export async function postListInit(params) {
  * 删除
  */
 export async function deleted(params) {
-  return request(`${ip}/WebAPI/api/OrgTimeAxis/Delete`, {
-    method: 'POST',
+  return request(`${ip}/DLX_OEM/api/temp/delete`, {
+    method: 'DELETE',
     data: { ...params },
   });
 }

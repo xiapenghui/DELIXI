@@ -42,9 +42,9 @@ const Model = {
       payload,
     }, { call, put, select }) {
       const data = yield call(getShif)
-      if (data.status !== '200') {
+      if (data.status !== 200) {
         return message.error(data.message);
-      } else if (data.status == '200') {
+      } else if (data.status == 200) {
         yield put({
           type: 'querySuccessed',
           payload: {
@@ -60,9 +60,9 @@ const Model = {
       payload,
     }, { call, put, select }) {
       const data = yield call(postListInit, payload)
-      if (data.status !== '200') {
+      if (data.status !== 200) {
         return message.error(data.message);
-      } else if (data.status == '200') {
+      } else if (data.status == 200) {
         yield put({
           type: 'querySuccessed',
           payload: {

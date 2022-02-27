@@ -33,20 +33,11 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
   const getColumns = () => [
     {
       title: "编号",
-      dataIndex: "number",
+      dataIndex: "tempNo",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.number : "",
-    },
-
-    {
-      title: "名称",
-      dataIndex: "name",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      initialValue: IsUpdate ? UpdateDate.name : "",
+      initialValue: IsUpdate ? UpdateDate.tempNo : "",
       formItemProps: {
         rules: [
           {
@@ -58,43 +49,84 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
     },
 
     {
+      title: "名称",
+      dataIndex: "tempName",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      initialValue: IsUpdate ? UpdateDate.tempName : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "名称不能为空!",
+          },
+        ],
+      },
+    },
+
+    {
       title: "模板类型",
-      dataIndex: "templateType",
+      dataIndex: "tempType",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.templateType : "",
+      initialValue: IsUpdate ? UpdateDate.tempType : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "模板类型不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "尺寸",
-      dataIndex: "size",
+      dataIndex: "tempSize",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.size : "",
+      initialValue: IsUpdate ? UpdateDate.tempSize : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "尺寸不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "单位",
-      dataIndex: "unit",
+      dataIndex: "tempUnit",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.unit : "",
+      initialValue: IsUpdate ? UpdateDate.tempUnit : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "单位不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "备注",
-      dataIndex: "remark",
+      dataIndex: "remarks",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.remarks : "",
     },
 
     {
@@ -122,34 +154,16 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      shiftname: params.shiftname == null ? "" : params.shiftname,
-      shiftclass: Number(params.shiftclass),
-      PageIndex: params.current,
+      pageNum: params.current,
       PageSize: params.pageSize,
+      data:{
+        tempNo: params.tempNo,
+        tempName: params.tempName,
+      }
     });
     return TableList.then(function (value) {
       return {
-        data: value.list,
-        data: [
-          {
-            number: "01",
-            name: "70X40盒模板",
-            templateType: "标签",
-            size: "70*40",
-            unit: "mm",
-            remark: "备注",
-            changeMark: "无",
-          },
-          {
-            number: "02",
-            name: "80X40盒模板",
-            templateType: "标签",
-            size: "70*40",
-            unit: "mm",
-            remark: "备注",
-            changeMark: "无",
-          },
-        ],
+        data: value.data,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,

@@ -35,7 +35,8 @@ const proSettings = {
     yshyerp_oilwater: 8080,
     yshyerp_location: 8081,
     yshyerp_invoice: 8082,
-    sspalds_role: 8072,
+    // sspalds_role: 8073,
+    sspalds_role: 8088,
     yshyerp_sspa: 9100,
     // yshyerp_sspa: 23111
   },

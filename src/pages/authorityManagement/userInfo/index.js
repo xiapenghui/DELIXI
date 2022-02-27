@@ -1,12 +1,5 @@
-// import React from 'react';
-// import { Card } from 'antd';
-
-// export default () => (
-//   <Card>欢迎使用Pro</Card>
-// );
-
 import { PlusOutlined } from "@ant-design/icons";
-import { Divider, Button, message, Popconfirm } from "antd";
+import { Divider, Button, message, Popconfirm, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -26,8 +19,9 @@ import {
 } from "@/services/authorityManagement/userInfo";
 
 const Component = ({ userInfo, dispatch }) => {
-  // const {
-  //   TableList,userList } = userInfo
+  const {
+    factoryList
+  } = userInfo
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -78,28 +72,7 @@ const Component = ({ userInfo, dispatch }) => {
       align: "center",
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.userSex : "",
-      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-      //   if (type === "form" || type === "table") {
-      //     // 返回新的组件
-      //     let newList = [];
-      //     for (let [key, value] of Object.entries(shiftTypeList)) {
-      //       newList.push({ key: key, label: value.text });
-      //     }
-      //     return (
-      //       <Select allowClear showSearch optionFilterProp="children">
-      //         {newList.map(function (item, index) {
-      //           return (
-      //             <Select.Option key={index} value={item.key}>
-      //               {item.label}
-      //             </Select.Option>
-      //           );
-      //         })}
-      //       </Select>
-      //     );
-      //   }
-      //   return defaultRender(_);
-      // },
-
+      valueEnum: ["男", "女"],
       formItemProps: {
         rules: [
           {
@@ -129,10 +102,27 @@ const Component = ({ userInfo, dispatch }) => {
     {
       title: "所属工厂",
       dataIndex: "factoryId",
-      valueType: "text",
+      // valueType: "text",
       align: "center",
       hideInSearch: true,
+      valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {factoryList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
       formItemProps: {
         rules: [
           {
@@ -165,7 +155,7 @@ const Component = ({ userInfo, dispatch }) => {
       align: "center",
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.remarks : "",
-      
+
     },
 
     {
@@ -202,14 +192,14 @@ const Component = ({ userInfo, dispatch }) => {
     },
   ];
 
+
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       pageNum: params.current,
       pageSize: params.pageSize,
       data: {
-        name: params.name,
-        cname: params.cname,
-        code: params.code,
+        userNo: params.userNo,
+        userName: params.userName,
       },
     });
     return TableList.then(function (value) {
@@ -221,6 +211,7 @@ const Component = ({ userInfo, dispatch }) => {
         total: value.data.total,
       };
     });
+
 
     // console.log('query', params, sorter, filter)
 
@@ -249,6 +240,8 @@ const Component = ({ userInfo, dispatch }) => {
     //   }
     // });
   };
+
+ 
   /**
    * 添加节点
    * @param fields

@@ -58,7 +58,7 @@ const Components = ({ roleInfo, dispatch }) => {
       .validateFields()
       .then((values) => {
         const Params = {
-          name: values.roleName,
+          roleName: values.roleName,
           companyId: values.companyId,
         };
         SearchTableList(Params, 1, pagination.PageSize);
@@ -69,7 +69,7 @@ const Components = ({ roleInfo, dispatch }) => {
   };
   const PaginationComponentsChanger = (PageIndex, PageSize) => {
     const Params = {
-      name: form.getFieldValue("roleName"),
+      roleName: form.getFieldValue("roleName"),
       companyId: form.getFieldValue("companyId"),
     };
     SearchTableList(Params, PageIndex, PageSize);
@@ -113,7 +113,7 @@ const Components = ({ roleInfo, dispatch }) => {
   const TableColumns = [
     {
       title: "角色名",
-      dataIndex: "name",
+      dataIndex: "roleName",
     },
     {
       title: "公司",
@@ -300,7 +300,7 @@ const Components = ({ roleInfo, dispatch }) => {
           expandedRowRenderNAME="test"
           expandedRowRenderKEY="SelectedStationGroup"
           tableName={TableName}
-          // data={TableData}
+          data={TableData}
           tableLoading={tableLoading}
           pagination={pagination}
           columns={TableColumns}

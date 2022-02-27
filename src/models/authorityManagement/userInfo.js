@@ -17,13 +17,14 @@ const Model = {
   namespace: TableName,
   state: {
     TableList: [],
-    departmentList:{}
+    factoryList:{}
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname == `/authorityManagement/${TableName}`) {
+      
           dispatch({
             type: 'getAddDropDownInit',
             payload: {}
@@ -41,17 +42,17 @@ const Model = {
     * getAddDropDownInit({
       payload,
     }, { call, put, select }) {
+      
       const data = yield call(getAddDropDownInit)
-      if (data.status !== '200') {
-        
+      if (data.status !== 200) {
         return message.error(data.message);
-      } else if (data.status == '200') {
+      } else if (data.status === 200) {
         
         yield put({
           type: 'querySuccessed',
           payload: {
             type: 'getAddDropDownInit',
-            data: data.list,
+            data: data.data,
           }
         })
         return message.success(data.message);
@@ -62,11 +63,9 @@ const Model = {
       payload,
     }, { call, put, select }) {
       const data = yield call(postListInit, payload)
-      if (data.status !== '200') {
-        
+      if (data.status !== 200) {
         return message.error(data.message);
-      } else if (data.status == '200') {
-        
+      } else if (data.status === 200) {
         yield put({
           type: 'querySuccessed',
           payload: {
@@ -83,13 +82,12 @@ const Model = {
       if (payload.type === 'getAddDropDownInit') {
         return {
           ...state, ...payload,
-          departmentList: payload.data
+          factoryList: payload.data
         }
       } else if (payload.type === 'postListInit') {
         return {
           ...state,
           TableList: new Promise(resolve => {
-            
             resolve({
               data: payload.data.list,
               current: payload.data.pageNum,

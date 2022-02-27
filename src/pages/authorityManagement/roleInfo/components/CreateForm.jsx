@@ -37,9 +37,10 @@ const CreateForm = (props) => {
 
   // const onSave = async (values) => {
   const onSave = (values) => {
+    debugger
     // handleAdd(modalType)
     const params = {
-      name: values.name,
+      roleName: values.roleName,
       companyId: values.companyId,
       userIdList: values.user,
       sysMenuIdList: checkedMenu,
@@ -111,7 +112,7 @@ const CreateForm = (props) => {
       >
         <Form form={form} name="addModalValueForm" initialValues={{}}>
           <Form.Item
-            name="name"
+            name="roleName"
             label="角色名"
             hasFeedback
             {...formItemLayout}

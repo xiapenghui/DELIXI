@@ -34,41 +34,41 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
   const getColumns = () => [
     {
       title: "工厂编号",
-      dataIndex: "employeeno",
+      dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
-      initialValue: IsUpdate ? UpdateDate.employeeno : "",
+      initialValue: IsUpdate ? UpdateDate.factoryNo : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "员工编号不能为空!",
+            message: "工厂编号不能为空!",
           },
         ],
       },
     },
     {
       title: "工厂名称",
-      dataIndex: "employeename",
+      dataIndex: "factoryName",
       valueType: "text",
       align: "center",
-      initialValue: IsUpdate ? UpdateDate.employeename : "",
+      initialValue: IsUpdate ? UpdateDate.factoryName : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "员工名称不能为空!",
+            message: "工厂名称不能为空!",
           },
         ],
       },
     },
     {
       title: "打印设备号",
-      dataIndex: "employeename",
+      dataIndex: "printDevice",
       valueType: "text",
       align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.employeename : "",
+      initialValue: IsUpdate ? UpdateDate.printDevice : "",
       formItemProps: {
         rules: [
           {
@@ -81,11 +81,11 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
 
     {
       title: "备注",
-      dataIndex: "remark",
+      dataIndex: "remarks",
       valueType: "textarea",
       align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.remarks : "",
     },
 
     {
@@ -111,45 +111,17 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
   ];
 
   const query = async (params, sorter, filter) => {
-    let newState;
-    let newPattributes;
-    if (params.state == "0") {
-      newState = "长病假";
-    } else if (params.state == "1") {
-      newState = "离职";
-    } else if (params.state == "2") {
-      newState = "在职";
-    } else {
-      newState = "";
-    }
-
-    if (params.pattributes == "1") {
-      newPattributes = "正式工";
-    } else if (params.pattributes == "2") {
-      newPattributes = "小时工";
-    } else if (params.pattributes == "3") {
-      newPattributes = "领班";
-    } else if (params.pattributes == "4") {
-      newPattributes = "劳务工";
-    } else {
-      newPattributes = "";
-    }
-
     const TableList = postListInit({
-      
-      employeeno: params.employeeno == null ? "" : params.employeeno,
-      employeename: params.employeename == null ? "" : params.employeename,
-      departmentid: Number(params.departmentid),
-      defaultshiftclass: Number(params.defaultshiftclass),
-      state: newState,
-      pattributes: newPattributes,
-      PageIndex: params.current,
+      pageNum: params.current,
       PageSize: params.pageSize,
+      data:{
+        factoryNo: params.factoryNo,
+        factoryName: params.factoryName,
+      }
     });
     return TableList.then(function (value) {
       return {
-        // data: value.list,
-        data: [],
+        data: value.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -163,33 +135,10 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
    */
 
   const handleAdd = async (fields) => {
-    debugger
+ 
     const hide = message.loading("正在添加");
     try {
-      let newState;
-      let newPattributes;
-      if (fields.state == "0") {
-        newState = "长病假";
-      } else if (fields.state == "1") {
-        newState = "离职";
-      } else if (fields.state == "2") {
-        newState = "在职";
-      } else {
-        newState = "";
-      }
-
-      if (fields.pattributes == "1") {
-        newPattributes = "正式工";
-      } else if (fields.pattributes == "2") {
-        newPattributes = "小时工";
-      } else if (fields.pattributes == "3") {
-        newPattributes = "领班";
-      } else if (fields.pattributes == "4") {
-        newPattributes = "劳务工";
-      } else {
-        newPattributes = "";
-      }
-
+     
       let params = {
         employeeno: fields.employeeno,
         employeename: fields.employeename,
@@ -203,8 +152,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
           Number(fields.defaultshiftclass) == null
             ? ""
             : Number(fields.defaultshiftclass),
-        state: newState,
-        pattributes: newPattributes,
+  
         remark: fields.remark,
       };
       let data = await addPost(params);
@@ -230,29 +178,6 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
     debugger;
     const hide = message.loading("正在编辑");
     try {
-      let newState;
-      let newPattributes;
-      if (fields.state == "长病假" || fields.state == "0") {
-        newState = "长病假";
-      } else if (fields.state == "离职" || fields.state == "1") {
-        newState = "离职";
-      } else if (fields.state == "在职" || fields.state == "2") {
-        newState = "在职";
-      } else {
-        newState = "";
-      }
-
-      if (fields.pattributes == "正式工" || fields.pattributes == "0") {
-        newPattributes = "正式工";
-      } else if (fields.pattributes == "小时工" || fields.pattributes == "1") {
-        newPattributes = "小时工";
-      } else if (fields.pattributes == "领班" || fields.pattributes == "2") {
-        newPattributes = "领班";
-      } else if (fields.pattributes == "劳务工" || fields.pattributes == "3") {
-        newPattributes = "劳务工";
-      } else {
-        newPattributes = "";
-      }
       let data = await updatePut({
         employeeid: UpdateDate.employeeid,
         employeeno: fields.employeeno,
@@ -261,7 +186,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
         areaid: Number(fields.areaid),
         defaultlineid: Number(fields.defaultlineid),
         defaultshiftclass: Number(fields.defaultshiftclass),
-        state: newState,
+       
         pattributes: newPattributes,
         remark: fields.remark,
       });
