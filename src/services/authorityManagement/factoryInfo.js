@@ -1,13 +1,13 @@
 import request from "@/utils/request";
 import globalConfig from "../../../config/defaultSettings";
 // const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_adm}/yshyerp-adm/api/customer`
-const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`;
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 
 /**
  * 查询条件初始化
  */
 export async function getDepartement() {
-  return request(`${ip}/WebAPI/api/Common/getDropDownInit`, {
+  return request(`${ip}/DLX_OEM/api/Common/getDropDownInit`, {
     method: "POST",
   });
 }
@@ -18,7 +18,7 @@ export async function getDepartement() {
  * 查询
  */
 export async function postListInit(params) {
-  return request(`${ip}/WebAPI/api/factory/List`, {
+  return request(`${ip}/DLX_OEM/api/factory/postListInit`, {
     method: 'POST',
     data: { ...params },
   });
@@ -29,7 +29,7 @@ export async function postListInit(params) {
  * 新建保存
  */
 export async function addPost(params) {
-  return request(`${ip}/WebAPI/api/factory/Add`, {
+  return request(`${ip}/DLX_OEM/api/factory/addPost`, {
     method: "POST",
     data: { ...params },
   });
@@ -39,8 +39,8 @@ export async function addPost(params) {
  * 编辑保存
  */
 export async function updatePut(params) {
-  return request(`${ip}/WebAPI/api/factory/Modify`, {
-    method: "POST",
+  return request(`${ip}/DLX_OEM/api/factory/updatePut`, {
+    method: "PUT",
     data: { ...params },
   });
 }
@@ -49,8 +49,8 @@ export async function updatePut(params) {
  * 删除
  */
 export async function deleted(params) {
-  return request(`${ip}/WebAPI/api/factory/Delete`, {
-    method: "POST",
+  return request(`${ip}/DLX_OEM/api/factory/delete`, {
+    method: "DELETE",
     data: { ...params },
   });
 }

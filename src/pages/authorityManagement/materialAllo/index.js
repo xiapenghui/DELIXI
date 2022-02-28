@@ -57,51 +57,52 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
 
     {
       title: "工厂编号",
-      dataIndex: "timeorder",
-      valueType: "digit",
+      dataIndex: "factoryNo",
+      valueType: "text",
       align: "center",
       width: 120,
       // hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.timeorder : "",
-      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        if (type == "form") {
-          return <InputNumber min={1} max={8} />;
-        }
-        return defaultRender(_);
-      },
-
+      initialValue: IsUpdate ? UpdateDate.factoryNo : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "顺序不能为空且数字为1-8之间!",
+            message: "工厂编号不能为空!",
+          },
+        ],
+      },
+     },
+
+    {
+      title: "工厂名称",
+      dataIndex: "factoryName",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.factoryName : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "工厂名称不能为空!",
           },
         ],
       },
     },
 
     {
-      title: "工厂名称",
-      dataIndex: "remark",
-      valueType: "textarea",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
-    },
-
-    {
       title: "物料编号",
-      dataIndex: "timeaxis",
+      dataIndex: "materialNo",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.timeaxis : "",
+      initialValue: IsUpdate ? UpdateDate.materialNo : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "时间段不能为空!",
+            message: "物料编号不能为空!",
           },
         ],
       },
@@ -109,70 +110,126 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
 
     {
       title: "物料名称",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "materialName",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.materialName : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "物料名称不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "物料型号",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "materialType",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.materialType : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "物料型号不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "只码模板",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "onlyTemp",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.onlyTemp : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "只码模板不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "盒码模板",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "boxTemp",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.boxTemp : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "盒码模板不能为空!",
+          },
+        ],
+      },
     },
     {
       title: "箱码模板",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "text",
+      valueType: "bigBoxTemp",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.bigBoxTemp : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "箱码模板不能为空!",
+          },
+        ],
+      },
     },
     {
       title: "维护时间",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "maintainTime",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.maintainTime : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "维护时间不能为空!",
+          },
+        ],
+      },
     },
 
     {
       title: "操作人",
-      dataIndex: "remark",
-      valueType: "textarea",
+      dataIndex: "operator",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remark : "",
+      initialValue: IsUpdate ? UpdateDate.operator : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "操作人不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -200,17 +257,17 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      shiftid: params.shiftid,
-      timeaxis: params.timeaxis == null ? "" : params.timeaxis,
-      timefrom: params.timefrom,
-      timeto: params.timeto,
-      PageIndex: params.current,
-      PageSize: params.pageSize,
+      data:{
+        factoryNo:params.factoryNo,
+        materialNo:params.materialNo,
+      },
+      pageNum: params.current,
+      pageSize: params.pageSize,
+      userId: 1
     });
     return TableList.then(function (value) {
       return {
-        // data: value.list,
-        data: [],
+        data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -226,14 +283,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     try {
-      let data = await addPost({
-        shiftid: fields.shiftid,
-        timeaxis: fields.timeaxis,
-        timeorder: fields.timeorder,
-        timefrom: fields.timefrom.substring(11, 20).substring(0, 5),
-        timeto: fields.timeto.substring(11, 20).substring(0, 5),
-        remark: fields.remark,
-      });
+      let data = await addPost({ data: fields ,userId:1 });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -289,7 +339,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
 
     try {
       let data = await deleted({
-        timeaxisids: selectedRows.map((row) => row.timeaxisid),
+        data: selectedRows.map((row) => row.id),
       });
 
       if (data.status == "200") {
@@ -351,7 +401,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
-        rowKey="timeaxisid"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -421,7 +471,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
               }
             }
           }}
-          rowKey="timeaxisid"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -449,7 +499,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
                 }
               }
             }}
-            rowKey="timeaxisid"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

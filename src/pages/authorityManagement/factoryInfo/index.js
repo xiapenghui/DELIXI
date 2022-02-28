@@ -1,4 +1,4 @@
-import { PlusOutlined , FileWordOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
 import { Button, message, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -112,16 +112,16 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      pageNum: params.current,
-      PageSize: params.pageSize,
-      data:{
-        factoryNo: params.factoryNo,
-        factoryName: params.factoryName,
-      }
+        data: {
+          factoryNo: params.factoryNo,
+          factoryName: params.factoryName
+        },
+        pageNum: params.current,
+        pageSize: params.pageSize,
     });
     return TableList.then(function (value) {
       return {
-        data: value.list,
+        data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -135,27 +135,10 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
    */
 
   const handleAdd = async (fields) => {
- 
+
     const hide = message.loading("正在添加");
     try {
-     
-      let params = {
-        employeeno: fields.employeeno,
-        employeename: fields.employeename,
-        departmentid: fields.departmentid,
-        areaid: Number(fields.areaid) == null ? "" : Number(fields.areaid),
-        defaultlineid:
-          Number(fields.defaultlineid) == null
-            ? ""
-            : Number(fields.defaultlineid),
-        defaultshiftclass:
-          Number(fields.defaultshiftclass) == null
-            ? ""
-            : Number(fields.defaultshiftclass),
-  
-        remark: fields.remark,
-      };
-      let data = await addPost(params);
+      let data = await addPost({ data: fields });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -175,21 +158,9 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
    */
 
   const handleUpdate = async (fields) => {
-    debugger;
     const hide = message.loading("正在编辑");
     try {
-      let data = await updatePut({
-        employeeid: UpdateDate.employeeid,
-        employeeno: fields.employeeno,
-        employeename: fields.employeename,
-        departmentid: Number(fields.departmentid),
-        areaid: Number(fields.areaid),
-        defaultlineid: Number(fields.defaultlineid),
-        defaultshiftclass: Number(fields.defaultshiftclass),
-       
-        pattributes: newPattributes,
-        remark: fields.remark,
-      });
+      let data = await updatePut({ data: { id: UpdateDate.id, ...fields } });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -214,7 +185,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
 
     try {
       let data = await deleted({
-        employeeids: selectedRows.map((row) => row.employeeid),
+        data: selectedRows.map((row) => row.id),
       });
 
       if (data.status == "200") {
@@ -238,7 +209,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
-        rowKey="employeeid"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -246,8 +217,8 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-            <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-           <FileWordOutlined /> 导入
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <FileWordOutlined /> 导入
           </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
@@ -301,7 +272,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
               }
             }
           }}
-          rowKey="employeeid"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -329,14 +300,14 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
                 }
               }
             }}
-            rowKey="employeeid"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />
         </UpdateForm>
       ) : null}
 
-    
+
       {/* 导入  */}
       <ImportForm
         onCancel={() => handleImportModalVisible(false)}
@@ -355,11 +326,11 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
               }
             }
           }}
-          rowKey="employeeid"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         /> */}
-        
+
       </ImportForm>
 
 

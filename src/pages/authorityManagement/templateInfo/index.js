@@ -154,16 +154,16 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      pageNum: params.current,
-      PageSize: params.pageSize,
-      data:{
+      data: {
         tempNo: params.tempNo,
         tempName: params.tempName,
-      }
+      },
+      pageNum: params.current,
+      pageSize: params.pageSize,
     });
     return TableList.then(function (value) {
       return {
-        data: value.data,
+        data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -179,7 +179,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     try {
-      let data = await addPost(fields);
+      let data = await addPost({ data: fields });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -202,7 +202,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
     const hide = message.loading("正在编辑");
     console.log("handleUpdate", fields);
     try {
-      let data = await updatePut({ shiftid: UpdateDate.shiftid, ...fields });
+      let data = await updatePut({ data: { id: UpdateDate.id, ...fields } });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -227,7 +227,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
 
     try {
       let data = await deleted({
-        shiftids: selectedRows.map((row) => row.shiftid),
+        data: selectedRows.map((row) => row.id),
       });
 
       if (data.status == "200") {
@@ -278,7 +278,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
-        rowKey="shiftid"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -348,7 +348,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
               }
             }
           }}
-          rowKey="shiftid"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -376,7 +376,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
                 }
               }
             }}
-            rowKey="shiftid"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message } from "antd";
+import { Button, message,DatePicker  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -7,9 +7,9 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
-
+import moment from 'moment'
+import globalConfig from '../../../../config/defaultSettings';
 import {
-  getDropDownInit,
   postListInit,
   deleted,
   getAddDropDownInit,
@@ -37,15 +37,22 @@ const Component = ({ passwordManage, dispatch }) => {
 
     {
       title: "日期",
-      dataIndex: "date",
-      valueType: "text",
+      dataIndex: "dateTime",
+      valueType: "date",
       align: 'center',
-      initialValue: IsUpdate ? UpdateDate.cname : "",
+      initialValue: IsUpdate ? moment(UpdateDate.dateTime, globalConfig.form.onlyDateFormat) : moment(new Date()),
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form') {
+          // 返回新的组件
+          return <DatePicker style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+        }
+        return defaultRender(_);
+      },
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "中文名不能为空!",
+            message: '日期不能为空!',
           },
         ],
       },
@@ -56,12 +63,12 @@ const Component = ({ passwordManage, dispatch }) => {
       valueType: "text",
       align: 'center',
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.cname : "",
+      initialValue: IsUpdate ? UpdateDate.dateCode : "",
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "中文名不能为空!",
+            message: "日期暗码不能为空!",
           },
         ],
       },
@@ -69,11 +76,19 @@ const Component = ({ passwordManage, dispatch }) => {
 
     {
       title: "加密位",
-      dataIndex: "encryption",
+      dataIndex: "bit",
       valueType: "text",
       align: 'center',
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.title : "",
+      initialValue: IsUpdate ? UpdateDate.bit : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "加密位不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -100,34 +115,16 @@ const Component = ({ passwordManage, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
+      data: {
+        dateTime: params.dateTime 
+      },
       pageNum: params.current,
       pageSize: params.pageSize,
-      data: {
-        name: params.name,
-        cname: params.cname,
-        code: params.code,
-      },
+      userId:1
     });
     return TableList.then(function (value) {
       return {
-        // data: value.data.list,
-        data: [
-          {
-            date: "20220101",
-            dateCode: "smb",
-            encryption: "3"
-          },
-          {
-            date: "20220102",
-            dateCode: "slb",
-            encryption: "2"
-          },
-          {
-            date: "20220103",
-            dateCode: "skb",
-            encryption: "1"
-          }
-        ],
+        data: value.data.list,
         current: value.data.pageNum,
         pageSize: value.data.pageSize,
         success: true,

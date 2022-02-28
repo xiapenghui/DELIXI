@@ -1,7 +1,6 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
-  getShif,
   postListInit,
   deleted,
   getAddDropDownInit,
@@ -16,18 +15,14 @@ const TableName = 'materialAllo'
 const Model = {
   namespace: TableName,
   state: {
-    TableList: [],
-    timeList: {}
+    TableList: []
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname == `/authorityManagement/${TableName}`) {
-          dispatch({
-            type: 'getShif',
-            payload: {}
-          })
+           
         }
       })
     },
@@ -38,23 +33,7 @@ const Model = {
      * @param {getShif} 查询初始化
      * @param {query} 查询
      */
-    * getShif({
-      payload,
-    }, { call, put, select }) {
-      const data = yield call(getShif)
-      if (data.status !== 200) {
-        return message.error(data.message);
-      } else if (data.status == 200) {
-        yield put({
-          type: 'querySuccessed',
-          payload: {
-            type: 'getShif',
-            data: data.list,
-          }
-        })
-        return message.success(data.message);
-      }
-    },
+    
 
     * query({
       payload,
@@ -76,12 +55,7 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      if (payload.type === 'getShif') {
-        return {
-          ...state, ...payload,
-          timeList: payload.data
-        }
-      } else if (payload.type === 'postListInit') {
+        if (payload.type === 'postListInit') {
         return {
           ...state,
           TableList: new Promise(resolve => {
