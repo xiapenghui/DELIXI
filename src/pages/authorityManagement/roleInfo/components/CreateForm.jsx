@@ -37,7 +37,7 @@ const CreateForm = (props) => {
 
   // const onSave = async (values) => {
   const onSave = (values) => {
-    debugger
+    
     // handleAdd(modalType)
     const params = {
       roleName: values.roleName,

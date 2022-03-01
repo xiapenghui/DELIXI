@@ -10,7 +10,7 @@ const RouterModel = {
   effects: {
     // *getMenuListByUserId(_, { call, put }) {
     *getMenuListByUserId({ payload }, { call, put }) {
-      debugger
+      
       const response = yield call(queryCurrent);
       console.log("获取user", response);
       if (response.status == "200") {

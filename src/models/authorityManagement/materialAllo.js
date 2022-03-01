@@ -86,7 +86,7 @@ const Model = {
           materialList: payload.data.materialList,
         }
       } else if (payload.type === 'postListInit') {
-        debugger
+        
         return {
           ...state,
           TableList: new Promise(resolve => {

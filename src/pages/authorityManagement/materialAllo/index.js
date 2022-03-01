@@ -253,7 +253,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
       userId: 1
     });
     return TableList.then(function (value) {
-      debugger
+      
       return {
         data: value.data.list,
         current: value.pageNum,

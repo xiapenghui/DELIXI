@@ -18,6 +18,7 @@ const Model = {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
       console.log('fakeAccountLogin123', response)
+      
       yield put({
         type: 'changeLoginStatus',
         payload: response,
