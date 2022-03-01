@@ -6,11 +6,13 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`
 /**
  * 查询条件初始化
  */
-export async function getDepartement() {
-  return request(`${ip}/DLX_OEM/api/Common/GetDepartmentIdText`, {
-    method: 'POST'
+export async function getFactory() {
+  return request(`${ip}/DLX_OEM/api/materialFactory/getAddDropDownInit`, {
+    method: 'GET'
   });
 }
+
+
 /**
  * 查询
  */

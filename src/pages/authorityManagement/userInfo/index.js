@@ -51,6 +51,23 @@ const Component = ({ userInfo, dispatch }) => {
       },
     },
     {
+      title: "账号",
+      dataIndex: "account",
+      valueType: "text",
+      align: "center",
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.account : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "账号不能为空!",
+          },
+        ],
+      },
+    },
+
+    {
       title: "姓名",
       dataIndex: "userName",
       valueType: "text",

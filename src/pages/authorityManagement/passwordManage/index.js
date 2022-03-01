@@ -96,6 +96,7 @@ const Component = ({ passwordManage, dispatch }) => {
       dataIndex: "option",
       valueType: "option",
       align: 'center',
+      width: 120,
       render: (_, record) => (
         <>
           <a
@@ -275,7 +276,7 @@ const Component = ({ passwordManage, dispatch }) => {
               }
             }
           }}
-          rowKey="key"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -303,7 +304,7 @@ const Component = ({ passwordManage, dispatch }) => {
                 }
               }
             }}
-            rowKey="key"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

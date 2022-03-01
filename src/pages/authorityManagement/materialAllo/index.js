@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, InputNumber, Select } from "antd";
+import { Button, message, TimePicker, InputNumber, Select ,DatePicker  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -8,6 +8,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import moment from "moment";
+import globalConfig from '../../../../config/defaultSettings';
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
@@ -19,7 +20,7 @@ import {
 } from "@/services/authorityManagement/materialAllo";
 
 const materialAlloComponent = ({ materialAllo, dispatch }) => {
-  const { timeList } = materialAllo;
+  const { timeList ,factoryList, materialList } = materialAllo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const actionRef = useRef();
@@ -31,56 +32,41 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
-    // {
-    //   title: '维护时间',
-    //   dataIndex: 'timeto',
-    //   valueType: 'text',
-    //   align: 'center',
-    //   width: 120,
-    //   // initialValue: IsUpdate ? UpdateDate.timeto : '',
-    //   initialValue: IsUpdate ? moment(UpdateDate.timeto, 'HH:mm') : null,
-    //   renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-    //     if (type == 'form') {
-    //       return <TimePicker format={'HH:mm'} />
-    //     }
-    //     return defaultRender(_);
-    //   },
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: '时间至不能为空!',
-    //       },
-    //     ],
-    //   },
-    // },
-
+  
     {
       title: "工厂编号",
       dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
       width: 120,
-      // hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.factoryNo : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "工厂编号不能为空!",
-          },
-        ],
-      },
+      hideInSearch:true,
+      hideInForm:true,
      },
 
     {
       title: "工厂名称",
-      dataIndex: "factoryName",
+      dataIndex: "factoryId",
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.factoryName : "",
+      valueEnum: factoryList.length == 0 ? {} : [factoryList],
+      initialValue: IsUpdate ? UpdateDate.factoryId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {factoryList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
       formItemProps: {
         rules: [
           {
@@ -97,25 +83,34 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.materialNo : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料编号不能为空!",
-          },
-        ],
-      },
+      hideInSearch:true,
+      hideInForm:true,
     },
 
     {
       title: "物料名称",
-      dataIndex: "materialName",
+      dataIndex: "materialId",
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.materialName : "",
+      valueEnum: materialList.length == 0 ? {} : [materialList],
+      initialValue: IsUpdate ? UpdateDate.materialId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {materialList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
       formItemProps: {
         rules: [
           {
@@ -181,8 +176,8 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
     },
     {
       title: "箱码模板",
-      dataIndex: "text",
-      valueType: "bigBoxTemp",
+      dataIndex: "bigBoxTemp",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
@@ -199,38 +194,30 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
     {
       title: "维护时间",
       dataIndex: "maintainTime",
-      valueType: "text",
+      valueType: "date",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.maintainTime : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "维护时间不能为空!",
-          },
-        ],
-      },
+      hideInForm:true
     },
 
-    {
-      title: "操作人",
-      dataIndex: "operator",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.operator : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "操作人不能为空!",
-          },
-        ],
-      },
-    },
+    // {
+    //   title: "操作人",
+    //   dataIndex: "creatorId",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 120,
+    //   hideInSearch: true,
+    //   initialValue: IsUpdate ? UpdateDate.creatorId : "",
+    //   formItemProps: {
+    //     rules: [
+    //       {
+    //         required: true,
+    //         message: "操作人不能为空!",
+    //       },
+    //     ],
+    //   },
+    // },
 
     {
       title: "操作",
@@ -266,6 +253,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
       userId: 1
     });
     return TableList.then(function (value) {
+      debugger
       return {
         data: value.data.list,
         current: value.pageNum,
@@ -282,8 +270,23 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
 
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
+    let params = {
+       data:{
+        creatorId:1,
+        factoryNo:fields.factoryNo,
+        materialNo:fields.materialNo,
+        factoryId:fields.factoryId,
+        materialType:fields.materialType,
+        onlyTemp:fields.onlyTemp,
+        boxTemp:fields.boxTemp,
+        bigBoxTemp:fields.bigBoxTemp,
+        tsdate: fields.tsdate,
+        materialId: fields.materialId,
+       },
+       userId:1
+    }
     try {
-      let data = await addPost({ data: fields ,userId:1 });
+      let data = await addPost(params);
       if (data.status == "200") {
         hide();
         message.success(data.message);
