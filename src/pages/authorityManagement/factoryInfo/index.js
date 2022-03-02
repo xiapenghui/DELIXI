@@ -122,10 +122,10 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
     return TableList.then(function (value) {
       return {
         data: value.data.list,
-        current: value.pageNum,
-        pageSize: value.pageSize,
+        current: value.data.pageNum,
+        pageSize: value.data.pageSize,
         success: true,
-        total: value.total,
+        total: value.data.total,
       };
     });
   };

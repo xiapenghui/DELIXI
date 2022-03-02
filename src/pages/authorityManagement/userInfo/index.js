@@ -20,7 +20,8 @@ import {
 
 const Component = ({ userInfo, dispatch }) => {
   const {
-    factoryList
+    factoryList,
+    RoleList
   } = userInfo
 
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -33,6 +34,8 @@ const Component = ({ userInfo, dispatch }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+
+
 
   const getColumns = () => [
     {
@@ -119,7 +122,7 @@ const Component = ({ userInfo, dispatch }) => {
     {
       title: "所属工厂",
       dataIndex: "factoryId",
-      // valueType: "text",
+      valueType: "text",
       align: "center",
       hideInSearch: true,
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
@@ -140,6 +143,9 @@ const Component = ({ userInfo, dispatch }) => {
         }
         return defaultRender(_);
       },
+      render: (text, record) => {
+        return record.factoryName
+      },
       formItemProps: {
         rules: [
           {
@@ -148,14 +154,38 @@ const Component = ({ userInfo, dispatch }) => {
           },
         ],
       },
+
     },
+
+
+
     {
       title: "所属角色",
-      dataIndex: "state",
+      dataIndex: "roleId",
       valueType: "text",
       align: "center",
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.state : "",
+      valueEnum: RoleList.length == 0 ? {} : [RoleList],
+      initialValue: IsUpdate ? UpdateDate.roleId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {RoleList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.roleName
+      },
       formItemProps: {
         rules: [
           {
@@ -258,7 +288,7 @@ const Component = ({ userInfo, dispatch }) => {
     // });
   };
 
- 
+
   /**
    * 添加节点
    * @param fields
@@ -289,8 +319,22 @@ const Component = ({ userInfo, dispatch }) => {
   const handleUpdate = async (fields) => {
     const hide = message.loading("正在编辑");
     console.log("handleUpdate", fields);
+
     try {
-      let data = await updatePut({ data: { id: UpdateDate.id, ...fields } });
+      // let data = await updatePut({ data: { id: UpdateDate.id, ...fields } });
+      let data = await updatePut({
+        data: {
+          id: UpdateDate.id,
+          userNo: fields.userNo,
+          account: fields.account,
+          userName: fields.userName,
+          userSex: fields.userSex === '男' || fields.userSex === '0' ? 0 : 1,
+          position: fields.position,
+          factoryId: fields.factoryId,
+          roleId: fields.roleId,
+          remarks: fields.remarks
+        }
+      });
       if (data.status == "200") {
         hide();
         message.success(data.message);

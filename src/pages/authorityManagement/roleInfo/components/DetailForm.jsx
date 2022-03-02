@@ -64,7 +64,7 @@ const DetailForm = (props) => {
                 id: data.DetailData.id,
                 roleName: data.DetailData.roleName,
                 companyId: data.DetailData.companyId,
-                user: data.DetailData.userIdList
+                user: data.DetailData.userId
             })
         }
         return () => {
@@ -91,7 +91,7 @@ const DetailForm = (props) => {
                         id: data.DetailData.id,
                         roleName: data.DetailData.roleName,
                         companyId: data.DetailData.companyId,
-                        user: data.DetailData.userIdList
+                        user: data.DetailData.userId
                     }}
                 >
                     <Form.Item
@@ -128,7 +128,7 @@ const DetailForm = (props) => {
                         hasFeedback
                         {...formItemLayout}
                     >
-                        <Select mode="multiple" showSearch disabled>
+                        <Select  showSearch disabled>
                             {data.userList.map(function (item, index) {
                                 return <Select.Option key={index} value={item.id}>{item.text}</Select.Option>
                             })}

@@ -67,6 +67,9 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
         }
         return defaultRender(_);
       },
+      render: (text, record) => {
+        return  record.factoryName
+     },
       formItemProps: {
         rules: [
           {
@@ -111,6 +114,9 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
         }
         return defaultRender(_);
       },
+      render: (text, record) => {
+        return  record.materialName
+     },
       formItemProps: {
         rules: [
           {
@@ -128,15 +134,8 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      hideInForm:true,
       initialValue: IsUpdate ? UpdateDate.materialType : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料型号不能为空!",
-          },
-        ],
-      },
     },
 
     {
@@ -245,21 +244,20 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data:{
-        factoryNo:params.factoryNo,
-        materialNo:params.materialNo,
+        factoryId:params.factoryId,
+        materialId:params.materialId,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
       userId: 1
     });
     return TableList.then(function (value) {
-      
       return {
         data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
-        total: value.total,
+        total: value.data.total,
       };
     });
   };

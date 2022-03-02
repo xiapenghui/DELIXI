@@ -167,7 +167,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
-        total: value.total,
+        total: value.data.total,
       };
     });
   };

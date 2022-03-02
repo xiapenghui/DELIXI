@@ -23,8 +23,8 @@ const UpdateForm = (props) => {
       id: data.record.id,
       roleName: values.roleName,
       companyId: values.companyId,
-      userIdList: values.user,
-      sysMenuIdList: checkedMenu
+      userId: values.user,
+      menuIdList: checkedMenu
     }
     props.dispatch({
       type: `${props.tableName}/updateRole`,
@@ -72,21 +72,25 @@ const UpdateForm = (props) => {
   //将后台返回的含有父节点的数组和第一步骤遍历的数组做比较，求交集
   //data.menuList所有的树结构
   //data.EditData.sysMenuIdList后端给的要展示的父子节点
+
+   
   const result = [...new Set(requestList(data.menuList))].filter((item) =>
-    new Set(eval(data.EditData.sysMenuIdList)).has(item)
+   
+    new Set(eval(data.EditData.menuIdList)).has(item)
   );
 
 
   useEffect(() => {
     if (updateModalVisible) {
       console.log('result', result)
-      // setCheckedKeys(data.EditData.sysMenuIdList)
+      // setCheckedKeys(data.EditData.menuIdList)
+      debugger
       setCheckedKeys(result)
       form.setFieldsValue({
         id: data.EditData.id,
         roleName: data.EditData.roleName,
         companyId: data.EditData.companyId,
-        user: data.EditData.userIdList
+        user: data.EditData.userId
       })
     }
     return () => {
@@ -122,7 +126,7 @@ const UpdateForm = (props) => {
             id: data.EditData.id,
             roleName: data.EditData.roleName,
             companyId: data.EditData.companyId,
-            user: data.EditData.userIdList
+            user: data.EditData.userId
           }}
         >
           <Form.Item
@@ -169,7 +173,7 @@ const UpdateForm = (props) => {
             hasFeedback
             {...formItemLayout}
           >
-            <Select mode="multiple"
+            <Select  
               getPopupContainer={triggerNode => triggerNode.parentElement}
               allowClear
               showSearch

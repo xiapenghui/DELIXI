@@ -17,7 +17,8 @@ const Model = {
   namespace: TableName,
   state: {
     TableList: [],
-    factoryList:{}
+    factoryList:{},
+    RoleList:{}
   },
 
   subscriptions: {
@@ -82,7 +83,8 @@ const Model = {
       if (payload.type === 'getAddDropDownInit') {
         return {
           ...state, ...payload,
-          factoryList: payload.data
+          factoryList: payload.data.FactoryList,
+          RoleList: payload.data.RoleList
         }
       } else if (payload.type === 'postListInit') {
         return {
