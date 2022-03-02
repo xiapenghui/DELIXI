@@ -18,7 +18,9 @@ import {
   updatePut,
 } from "@/services/authorityManagement/factoryInfo";
 
-const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
+const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
+  const { } = user;
+
   const { departmentList, areaList, lineList, shiftTypeList } = factoryInfo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -118,6 +120,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
         },
         pageNum: params.current,
         pageSize: params.pageSize,
+        userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
@@ -338,6 +341,6 @@ const factoryInfoComponent = ({ factoryInfo, dispatch }) => {
   );
 };
 
-export default connect(({ factoryInfo }) => ({ factoryInfo }))(
+export default connect(({ factoryInfo ,user }) => ({ factoryInfo ,user }))(
   factoryInfoComponent
 );

@@ -18,11 +18,13 @@ import {
   resetPassword,
 } from "@/services/authorityManagement/userInfo";
 
-const Component = ({ userInfo, dispatch }) => {
+const Component = ({ userInfo, dispatch ,user }) => {
   const {
     factoryList,
     RoleList
-  } = userInfo
+  } = userInfo;
+
+  const { } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -247,6 +249,7 @@ const Component = ({ userInfo, dispatch }) => {
       data: {
         userNo: params.userNo,
         userName: params.userName,
+        userId: user.currentUser.id
       },
     });
     return TableList.then(function (value) {
@@ -502,4 +505,4 @@ const Component = ({ userInfo, dispatch }) => {
   );
 };
 
-export default connect(({ userInfo }) => ({ userInfo }))(Component);
+export default connect(({ userInfo ,user }) => ({ userInfo ,user }))(Component);

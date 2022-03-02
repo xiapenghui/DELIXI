@@ -18,8 +18,10 @@ import {
   updatePut,
 } from "@/services/authorityManagement/templateinfo";
 
-const templateinfoComponent = ({ templateinfo, dispatch }) => {
+const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
   const { TableList, typeList, riskList, isNoList } = templateinfo;
+  const { } = user;
+
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const actionRef = useRef();
@@ -160,6 +162,7 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
       },
       pageNum: params.current,
       pageSize: params.pageSize,
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
@@ -386,6 +389,6 @@ const templateinfoComponent = ({ templateinfo, dispatch }) => {
   );
 };
 
-export default connect(({ templateinfo }) => ({ templateinfo }))(
+export default connect(({ templateinfo ,user }) => ({ templateinfo ,user }))(
   templateinfoComponent
 );

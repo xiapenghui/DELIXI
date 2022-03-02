@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message,DatePicker  } from "antd";
+import { Button, message, DatePicker, Input } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -18,9 +18,10 @@ import {
   resetPassword,
 } from "@/services/authorityManagement/passwordManage";
 
-const Component = ({ passwordManage, dispatch }) => {
+const Component = ({ passwordManage, dispatch, user }) => {
   // const {
   //   TableList,userList } = passwordManage
+  const { } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -40,10 +41,12 @@ const Component = ({ passwordManage, dispatch }) => {
       dataIndex: "dateTime",
       valueType: "date",
       align: 'center',
-      initialValue: IsUpdate ? moment(UpdateDate.dateTime, globalConfig.form.onlyDateFormat) : moment(new Date()),
+      initialValue: IsUpdate ? moment(UpdateDate.dateTime, globalConfig.form.onlyDateFormat) : '',
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
         if (type === 'form') {
           // 返回新的组件
+          return <DatePicker style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+        } else {
           return <DatePicker style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
         }
         return defaultRender(_);
@@ -117,11 +120,11 @@ const Component = ({ passwordManage, dispatch }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
-        dateTime: params.dateTime 
+        dateTime: params.dateTime
       },
       pageNum: params.current,
       pageSize: params.pageSize,
-      userId:1
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
@@ -314,4 +317,4 @@ const Component = ({ passwordManage, dispatch }) => {
   );
 };
 
-export default connect(({ passwordManage }) => ({ passwordManage }))(Component);
+export default connect(({ passwordManage, user }) => ({ passwordManage, user }))(Component);

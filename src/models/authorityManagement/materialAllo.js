@@ -54,7 +54,6 @@ const Model = {
             data: data.data,
           }
         })
-        return message.success(data.message);
       }
     },
 

@@ -19,7 +19,10 @@ import {
   updatePut,
 } from "@/services/authorityManagement/materialAllo";
 
-const materialAlloComponent = ({ materialAllo, dispatch }) => {
+const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
+  const { } = user;
+
+
   const { timeList ,factoryList, materialList } = materialAllo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -241,6 +244,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
     },
   ];
 
+ 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data:{
@@ -249,7 +253,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
       },
       pageNum: params.current,
       pageSize: params.pageSize,
-      userId: 1
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
@@ -270,7 +274,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
     const hide = message.loading("正在添加");
     let params = {
        data:{
-        creatorId:1,
+        creatorId:user.currentUser.id,
         factoryNo:fields.factoryNo,
         materialNo:fields.materialNo,
         factoryId:fields.factoryId,
@@ -281,7 +285,7 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
         tsdate: fields.tsdate,
         materialId: fields.materialId,
        },
-       userId:1
+       userId:user.currentUser.id
     }
     try {
       let data = await addPost(params);
@@ -510,6 +514,9 @@ const materialAlloComponent = ({ materialAllo, dispatch }) => {
   );
 };
 
-export default connect(({ materialAllo }) => ({ materialAllo }))(
+export default connect(({ materialAllo ,user }) => ({ materialAllo ,user}))(
   materialAlloComponent
 );
+
+
+ 

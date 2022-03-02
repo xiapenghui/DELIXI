@@ -19,8 +19,9 @@ import {
   updatePut,
 } from "@/services/information/printInfo";
 
-const printInfoComponent = ({ printInfo, dispatch }) => {
+const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const { TableList, typeList, riskList, isNoList } = printInfo;
+  const { } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
@@ -38,7 +39,7 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
   const getColumns = () => [
     {
       title: "物料编号",
-      dataIndex: "serialNumber",
+      dataIndex: "materialNo",
       valueType: "text",
       align: "center",
       width: 120,
@@ -51,15 +52,6 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.supplierName : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "供应商号不能为空!",
-          },
-        ],
-      },
     },
 
     {
@@ -70,52 +62,25 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
       ellipsis: true,
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.chineseName : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "中文名称不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "英文名称",
       dataIndex: "englishName",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.englishName : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "英文名称不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: () => <a style={{ color: "red" }}>物料型号</a>,
-      dataIndex: "materialModel",
-      valueType: "textarea",
+      dataIndex: "materialType",
+      valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.materialModel : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料型号不能为空!",
-          },
-        ],
-      },
       render: (text) => {
         return (
           <input
@@ -129,93 +94,48 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
 
     {
       title: "物料型号描述",
-      dataIndex: "materialDesc",
-      valueType: "textarea",
+      dataIndex: "boxLabelDescription",
+      valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.materialDesc : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料型号描述不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "系列",
-      dataIndex: "series",
-      valueType: "textarea",
+      dataIndex: "serial",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.series : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "系列不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "装袋数量",
-      dataIndex: "cartonQuantity",
-      valueType: "textarea",
+      dataIndex: "basicQuantity",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.cartonQuantity : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "装袋数量不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "袋单位",
-      dataIndex: "bagUnit",
-      valueType: "textarea",
+      dataIndex: "unit",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.bagUnit : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "袋单位不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: () => <a style={{ color: "red" }}>装盒数量</a>,
       dataIndex: "cartonsNumber",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.cartonsNumber : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "装盒数量不能为空!",
-          },
-        ],
-      },
       render: (text) => {
         return (
           <input
@@ -235,267 +155,142 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     {
       title: "盒单位",
       dataIndex: "boxUnit",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.boxUnit : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "盒单位不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "盒重量",
-      dataIndex: "boxWeight",
-      valueType: "textarea",
+      dataIndex: "weight",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.boxWeight : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "盒重量不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "重量单位",
       dataIndex: "weightUnit",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.weightUnit : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "重量单位不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "箱盒数量",
       dataIndex: "boxesNumber",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.boxesNumber : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "箱盒数量不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "EAN13码",
-      dataIndex: "EAN13",
-      valueType: "textarea",
+      dataIndex: "boxIEAN13",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.EAN13 : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "EAN13码不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "箱ITF14码",
-      dataIndex: "caseITF14",
-      valueType: "textarea",
+      dataIndex: "boxITF14",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.caseITF14 : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "ITF14码不能为空!",
-          },
-        ],
-      },
     },
+
+    {
+      title: "盒ITF13码",
+      dataIndex: "boxIEAN13",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+    },
+
     {
       title: "盒ITF14码",
-      dataIndex: "boxITF14",
-      valueType: "textarea",
+      dataIndex: "caseITF14",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.boxITF14 : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "盒ITF14码不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "工厂",
       dataIndex: "factory",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.factory : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "工厂不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "生产厂/生产企业",
       dataIndex: "productionPlant",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.productionPlant : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "生产厂/生产企业不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "地址",
       dataIndex: "adress",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       ellipsis: true,
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.adress : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "地址不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "备注",
       dataIndex: "remarks",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       ellipsis: true,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.remarks : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "备注不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "执行标准",
       dataIndex: "standard",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.standard : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "执行标准不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "检验员",
       dataIndex: "examination",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.examination : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "检验员不能为空!",
-          },
-        ],
-      },
     },
     {
       title: "变更标记",
       dataIndex: "sign",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.sign : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "变更标记不能为空!",
-          },
-        ],
-      },
     },
     {
       title: () => <a style={{ color: "red" }}>箱重量</a>,
       dataIndex: "boxWeight",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.boxWeight : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "箱重量不能为空!",
-          },
-        ],
-      },
       render: (text) => {
         return (
           <input
@@ -514,19 +309,10 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     {
       title: () => <a style={{ color: "red" }}>装箱数量</a>,
       dataIndex: "packingQuantity",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.packingQuantity : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "装箱数量不能为空!",
-          },
-        ],
-      },
       render: (text) => {
         return (
           <input
@@ -545,36 +331,18 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
     {
       title: "生产日期",
       dataIndex: "date",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.date : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "生产日期不能为空!",
-          },
-        ],
-      },
     },
     {
       title: () => <a style={{ color: "red" }}>3C</a>,
       dataIndex: "threeC",
-      valueType: "textarea",
+      valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.threeC : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "3C不能为空!",
-          },
-        ],
-      },
       render: (text) => {
         return (
           <input
@@ -636,78 +404,17 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
   const query = async (params, sorter, filter) => {
 
     const TableList = postListInit({
-      shiftname: params.shiftname == null ? "" : params.shiftname,
-      shiftclass: Number(params.shiftclass),
-      PageIndex: params.current,
-      PageSize: params.pageSize,
+      data: {
+        shiftname: params.shiftname,
+        shiftclass: params.shiftname,
+      },
+      pageNum: params.current,
+      pageSize: params.pageSize,
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
-        // data: value.list,
-        data: [
-          {
-            serialNumber: "001",
-            supplierName: "601601",
-            chineseName: "配电箱",
-            englishName: "DISTRIBUTION  BOX  ENCLOSURE",
-            materialModel: "CDPZ3024DRHHDMZC",
-            materialDesc:
-              "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-            series: "领航者",
-            cartonQuantity: "1",
-            bagUnit: "只",
-            cartonsNumber: "1",
-            boxUnit: "个",
-            boxWeight: "1000",
-            weightUnit: "千克",
-            boxesNumber: "10",
-            EAN13: "6903185007533",
-            caseITF14: "5690385007538",
-            boxITF14: "5690385007538",
-            factory: "大明电气",
-            productionPlant: "德力西电气有限公司",
-            adress: "浙江省乐清市柳市镇德力西高科技工业园区",
-            remarks: "备注",
-            standard: "GB/T 14048.2",
-            examination: "检07",
-            sign: "否",
-            boxWeight: "8.95",
-            packingQuantity: "20",
-            date: "2022-02-15",
-            threeC: "1",
-          },
-          {
-            serialNumber: "002",
-            supplierName: "601601",
-            chineseName: "配电箱",
-            englishName: "DISTRIBUTION  BOX  ENCLOSURE",
-            materialModel: "CDPZ3024DRHHDMZC",
-            materialDesc:
-              "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-            series: "领航者",
-            cartonQuantity: "2",
-            bagUnit: "只",
-            cartonsNumber: "2",
-            boxUnit: "只",
-            boxWeight: "2000",
-            weightUnit: "个",
-            boxesNumber: "20",
-            EAN13: "6903185007533",
-            caseITF14: "5690385007538",
-            boxITF14: "5690385007538",
-            factory: "大明电气",
-            productionPlant: "德力西电气有限公司",
-            adress: "浙江省乐清市柳市镇德力西高科技工业园区",
-            remarks: "备注",
-            standard: "GB/T 14048.2",
-            examination: "检07",
-            sign: "是",
-            boxWeight: "8.95",
-            packingQuantity: "20",
-            date: "2022-02-15",
-            threeC: "1",
-          },
-        ],
+        data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -919,4 +626,4 @@ const printInfoComponent = ({ printInfo, dispatch }) => {
   );
 };
 
-export default connect(({ printInfo }) => ({ printInfo }))(printInfoComponent);
+export default connect(({ printInfo, user }) => ({ printInfo, user }))(printInfoComponent);

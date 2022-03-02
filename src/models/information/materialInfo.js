@@ -24,10 +24,10 @@ const Model = {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname == `/information/${TableName}`) {
-          dispatch({
-            type: 'getDropDownInit',
-            payload: {}
-          })
+          // dispatch({
+          //   type: 'getDropDownInit',
+          //   payload: {}
+          // })
         }
       })
     },
@@ -38,25 +38,25 @@ const Model = {
      * @param {getDropDownInit} 查询初始化
      * @param {query} 查询
      */
-    * getDropDownInit({
-      payload,
-    }, { call, put, select }) {
-      const data = yield call(getDropDownInit)
-      if (data.status !== '200') {
+    // * getDropDownInit({
+    //   payload,
+    // }, { call, put, select }) {
+    //   const data = yield call(getDropDownInit)
+    //   if (data.status !== '200') {
         
-        return message.error(data.message);
-      } else if (data.status == '200') {
+    //     return message.error(data.message);
+    //   } else if (data.status == '200') {
         
-        yield put({
-          type: 'querySuccessed',
-          payload: {
-            type: 'getDropDownInit',
-            data: data.list,
-          }
-        })
-        return message.success(data.message);
-      }
-    },
+    //     yield put({
+    //       type: 'querySuccessed',
+    //       payload: {
+    //         type: 'getDropDownInit',
+    //         data: data.list,
+    //       }
+    //     })
+    //     return message.success(data.message);
+    //   }
+    // },
 
     * query({
       payload,
@@ -79,13 +79,13 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      
-      if (payload.type === 'getDropDownInit') {
-        return {
-          ...state, ...payload,
-          departmentList: payload.data
-        }
-      } else if (payload.type === 'postListInit') {
+      // if (payload.type === 'getDropDownInit') {
+      //   return {
+      //     ...state, ...payload,
+      //     departmentList: payload.data
+      //   }
+      // } else 
+      if (payload.type === 'postListInit') {
         
         return {
           ...state,

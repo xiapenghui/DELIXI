@@ -48,7 +48,6 @@ const Model = {
       if (data.status !== 200) {
         return message.error(data.message);
       } else if (data.status === 200) {
-        
         yield put({
           type: 'querySuccessed',
           payload: {
@@ -56,7 +55,6 @@ const Model = {
             data: data.data,
           }
         })
-        return message.success(data.message);
       }
     },
 
