@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
-  getFactory,
+  getDropDownInit,
   postListInit,
   deleted,
   getAddDropDownInit,
@@ -18,7 +18,10 @@ const Model = {
   state: {
     TableList: [],
     factoryList: [],
-    materialList:[]
+    materialList: [],
+    onlyTempList: [],
+    boxTempList: [],
+    bigBoxTempList: []
   },
 
   subscriptions: {
@@ -26,7 +29,7 @@ const Model = {
       history.listen((location) => {
         if (location.pathname == `/authorityManagement/${TableName}`) {
           dispatch({
-            type: 'getFactory',
+            type: 'getDropDownInit',
             payload: {}
           })
         }
@@ -40,17 +43,17 @@ const Model = {
      * @param {query} 查询
      */
 
-    * getFactory({
+    * getDropDownInit({
       payload,
     }, { call, put, select }) {
-      const data = yield call(getFactory)
+      const data = yield call(getDropDownInit)
       if (data.status !== 200) {
         return message.error(data.message);
       } else if (data.status === 200) {
         yield put({
           type: 'querySuccessed',
           payload: {
-            type: 'getFactory',
+            type: 'getDropDownInit',
             data: data.data,
           }
         })
@@ -78,14 +81,17 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      if (payload.type === 'getFactory') {
+      if (payload.type === 'getDropDownInit') {
         return {
           ...state, ...payload,
           factoryList: payload.data.factoryList,
           materialList: payload.data.materialList,
+          onlyTempList: payload.data.onlyTempList,
+          boxTempList: payload.data.boxTempList,
+          bigBoxTempList: payload.data.bigBoxTempList
         }
       } else if (payload.type === 'postListInit') {
-        
+
         return {
           ...state,
           TableList: new Promise(resolve => {

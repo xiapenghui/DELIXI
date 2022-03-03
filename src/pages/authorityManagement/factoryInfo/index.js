@@ -34,11 +34,17 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
+
+
+
+
+
     {
       title: "工厂编号",
       dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
+      width:150,
       initialValue: IsUpdate ? UpdateDate.factoryNo : "",
       formItemProps: {
         rules: [
@@ -54,6 +60,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "factoryName",
       valueType: "text",
       align: "center",
+      width:250,
       initialValue: IsUpdate ? UpdateDate.factoryName : "",
       formItemProps: {
         rules: [
@@ -69,6 +76,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "printDevice",
       valueType: "text",
       align: "center",
+      width:150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.printDevice : "",
       formItemProps: {
@@ -79,6 +87,62 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
           },
         ],
       },
+    },
+
+    {
+      title: "线体编号",
+      dataIndex: "lineNo",
+      valueType: "text",
+      align: "center",
+      width:150,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.lineNo : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "线体编号不能为空!",
+          },
+        ],
+      },
+    },
+
+    {
+      title: "供应商SAP代码",
+      dataIndex: "supplierSapCode",
+      valueType: "text",
+      align: "center",
+      width:150,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "员工名称不能为空!",
+          },
+        ],
+      },
+    },
+
+    {
+      title: "省",
+      dataIndex: "province",
+      valueType: "text",
+      align: "center",
+      width:150,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.province : "",
+    },
+
+    {
+      title: "SAP城市",
+      dataIndex: "sapCity",
+      valueType: "text",
+      align: "center",
+      width:150,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.sapCity : "",
     },
 
     {
@@ -214,7 +278,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
         scroll={{ y: 500 }}
         rowKey="id"
         search={{
-          labelWidth: 120,
+          labelWidth: 150,
         }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>

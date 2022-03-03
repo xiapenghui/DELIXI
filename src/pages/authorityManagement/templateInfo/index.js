@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input } from "antd";
+import { Button, message, DatePicker, Form, Input ,Select  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -19,7 +19,7 @@ import {
 } from "@/services/authorityManagement/templateinfo";
 
 const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
-  const { TableList, typeList, riskList, isNoList } = templateinfo;
+  const {tempList } = templateinfo;
   const { } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -74,7 +74,27 @@ const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      valueEnum: tempList.length == 0 ? {} : [tempList],
       initialValue: IsUpdate ? UpdateDate.tempType : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {tempList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.tempTypeName
+      },
       formItemProps: {
         rules: [
           {

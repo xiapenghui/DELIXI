@@ -6,12 +6,12 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`
 /**
  * 查询条件初始化
  */
-// export async function getDropDownInit(params) {
-//   return request(`${ip}/WebAPI/api/Common/GetShiftinfoTextValuePair`, {
-//     method: 'POST',
-//     data: { ...params },
-//   });
-// }
+export async function getDropDownInit(params) {
+  return request(`${ip}/DLX_OEM/api/temp/getDropDownInit`, {
+    method: 'GET',
+    data: { ...params },
+  });
+}
 
 
 /**

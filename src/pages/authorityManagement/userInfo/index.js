@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
 import { Divider, Button, message, Popconfirm, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -7,27 +7,29 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
-
+import ImportForm from "./components/ImportForm";
 import {
   getDropDownInit,
   postListInit,
   deleted,
   getAddDropDownInit,
+  getTempl,
   addPost,
   updatePut,
   resetPassword,
 } from "@/services/authorityManagement/userInfo";
 
-const Component = ({ userInfo, dispatch ,user }) => {
+const Component = ({ userInfo, dispatch, user }) => {
   const {
     factoryList,
     RoleList
   } = userInfo;
 
-  const { } = user;
+  const { currentUser } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
 
@@ -242,6 +244,7 @@ const Component = ({ userInfo, dispatch ,user }) => {
   ];
 
 
+
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       pageNum: params.current,
@@ -262,9 +265,7 @@ const Component = ({ userInfo, dispatch ,user }) => {
       };
     });
 
-
-    // console.log('query', params, sorter, filter)
-
+ 
     // await dispatch({
     //   type: 'scustomerInfo/query',
     //   payload: {
@@ -401,6 +402,23 @@ const Component = ({ userInfo, dispatch ,user }) => {
     }
   };
   console.log("TableList-component", userInfo, UpdateDate);
+
+
+  //下载模板
+  const downloadTemp = async (fields) => {
+    let data = await getTempl(fields);
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+ 
+
   return (
     <PageContainer>
       <ProTable
@@ -415,6 +433,13 @@ const Component = ({ userInfo, dispatch ,user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <FileWordOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
+          </Button>,
+
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
@@ -501,8 +526,21 @@ const Component = ({ userInfo, dispatch ,user }) => {
           />
         </UpdateForm>
       ) : null}
+
+
+      {/* 导入  */}
+      <ImportForm
+        onCancel={() => handleImportModalVisible(false)}
+        modalVisible={importModalVisible}
+        currentUser={currentUser}
+        title="导入"
+      >
+      </ImportForm>
+
+     
+
     </PageContainer>
   );
 };
 
-export default connect(({ userInfo ,user }) => ({ userInfo ,user }))(Component);
+export default connect(({ userInfo, user }) => ({ userInfo, user }))(Component);

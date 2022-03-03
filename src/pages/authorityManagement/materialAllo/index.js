@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, InputNumber, Select ,DatePicker  } from "antd";
+import { Button, message, TimePicker, InputNumber, Select, DatePicker } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -19,11 +19,17 @@ import {
   updatePut,
 } from "@/services/authorityManagement/materialAllo";
 
-const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
+const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
   const { } = user;
 
 
-  const { timeList ,factoryList, materialList } = materialAllo;
+  const {
+    factoryList,
+    materialList,
+    onlyTempList,
+    boxTempList,
+    bigBoxTempList
+  } = materialAllo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const actionRef = useRef();
@@ -35,16 +41,16 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
-  
+
     {
       title: "工厂编号",
       dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch:true,
-      hideInForm:true,
-     },
+      hideInSearch: true,
+      hideInForm: true,
+    },
 
     {
       title: "工厂名称",
@@ -52,6 +58,7 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       valueType: "text",
       align: "center",
       width: 120,
+      hideInTable:true,
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -71,8 +78,8 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
         return defaultRender(_);
       },
       render: (text, record) => {
-        return  record.factoryName
-     },
+        return record.factoryName
+      },
       formItemProps: {
         rules: [
           {
@@ -83,14 +90,27 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       },
     },
 
+
+    {
+      title: "工厂名称",
+      dataIndex: "factoryName",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      ellipsis:true,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
+
     {
       title: "物料编号",
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch:true,
-      hideInForm:true,
+      hideInSearch: true,
+      hideInForm: true,
     },
 
     {
@@ -118,8 +138,8 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
         return defaultRender(_);
       },
       render: (text, record) => {
-        return  record.materialName
-     },
+        return record.materialName
+      },
       formItemProps: {
         rules: [
           {
@@ -137,9 +157,11 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
-      hideInForm:true,
+      hideInForm: true,
       initialValue: IsUpdate ? UpdateDate.materialType : "",
     },
+
+
 
     {
       title: "只码模板",
@@ -148,7 +170,27 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      valueEnum: onlyTempList.length == 0 ? {} : [onlyTempList],
       initialValue: IsUpdate ? UpdateDate.onlyTemp : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {onlyTempList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.onlyTempName
+      },
       formItemProps: {
         rules: [
           {
@@ -158,7 +200,8 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
         ],
       },
     },
-
+ 
+ 
     {
       title: "盒码模板",
       dataIndex: "boxTemp",
@@ -166,7 +209,27 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      valueEnum: boxTempList.length == 0 ? {} : [boxTempList],
       initialValue: IsUpdate ? UpdateDate.boxTemp : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {boxTempList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.boxTempName
+      },
       formItemProps: {
         rules: [
           {
@@ -183,7 +246,27 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      valueEnum: bigBoxTempList.length == 0 ? {} : [bigBoxTempList],
       initialValue: IsUpdate ? UpdateDate.bigBoxTemp : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {bigBoxTempList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.bigBoxTempName
+      },
       formItemProps: {
         rules: [
           {
@@ -200,26 +283,18 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
-      hideInForm:true
+      hideInForm: true
     },
 
-    // {
-    //   title: "操作人",
-    //   dataIndex: "creatorId",
-    //   valueType: "text",
-    //   align: "center",
-    //   width: 120,
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.creatorId : "",
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: "操作人不能为空!",
-    //       },
-    //     ],
-    //   },
-    // },
+    {
+      title: "操作人",
+      dataIndex: "operator",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+      hideInForm: true
+    },
 
     {
       title: "操作",
@@ -244,12 +319,12 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
     },
   ];
 
- 
+
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      data:{
-        factoryId:params.factoryId,
-        materialId:params.materialId,
+      data: {
+        factoryId: params.factoryId,
+        materialId: params.materialId,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -273,19 +348,15 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     let params = {
-       data:{
-        creatorId:user.currentUser.id,
-        factoryNo:fields.factoryNo,
-        materialNo:fields.materialNo,
-        factoryId:fields.factoryId,
-        materialType:fields.materialType,
+      data: {
+        creatorId: user.currentUser.id,
+        factoryId: fields.factoryId,
+        materialId: fields.materialId,
         onlyTemp:fields.onlyTemp,
         boxTemp:fields.boxTemp,
         bigBoxTemp:fields.bigBoxTemp,
-        tsdate: fields.tsdate,
-        materialId: fields.materialId,
-       },
-       userId:user.currentUser.id
+      },
+      userId: user.currentUser.id
     }
     try {
       let data = await addPost(params);
@@ -312,13 +383,16 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
     console.log("handleUpdate", fields);
     try {
       let data = await updatePut({
-        timeaxisid: UpdateDate.timeaxisid,
-        shiftid: fields.shiftid,
-        timeaxis: fields.timeaxis,
-        timeorder: fields.timeorder,
-        timefrom: fields.timefrom.substring(11, 20).substring(0, 5),
-        timeto: fields.timeto.substring(11, 20).substring(0, 5),
-        remark: fields.remark,
+         data:{
+          id: UpdateDate.id,
+          creatorId: user.currentUser.id,
+          factoryId: fields.factoryId,
+          materialId: fields.materialId,
+          onlyTemp:fields.onlyTemp,
+          boxTemp:fields.boxTemp,
+          bigBoxTemp:fields.bigBoxTemp,
+         },
+         userId: user.currentUser.id
       });
       if (data.status == "200") {
         hide();
@@ -514,9 +588,8 @@ const materialAlloComponent = ({ materialAllo, dispatch ,user }) => {
   );
 };
 
-export default connect(({ materialAllo ,user }) => ({ materialAllo ,user}))(
+export default connect(({ materialAllo, user }) => ({ materialAllo, user }))(
   materialAlloComponent
 );
 
 
- 

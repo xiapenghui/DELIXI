@@ -95,5 +95,18 @@ export async function resetPassword(params) {
 }
 
 
+// 获取用户下载模板
+export async function getTempl() {
+  return request(`${path}/DLX_OEM/api/excel/GetExcelTemplate/User`, {
+    method: 'GET'
+  });
+}
+ 
 
-
+// 上传用户信息
+export async function importExcel(params) {
+  return request(`${path}/DLX_OEM/api/excel/importExcel`, {
+    method: 'POST',
+    data: { ...params },
+  });
+}
