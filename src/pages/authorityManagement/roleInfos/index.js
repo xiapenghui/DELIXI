@@ -293,7 +293,7 @@ scroll={{ y: 500 }}
               }
             }
           }}
-          rowKey="key"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -325,7 +325,7 @@ scroll={{ y: 500 }}
                 }
               }
             }}
-            rowKey="key"
+            rowKey="id"
             type="form"
             columns={getColumns()}
 

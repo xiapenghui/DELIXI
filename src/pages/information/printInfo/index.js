@@ -29,7 +29,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [printNo, setPrintNo] = useState(0);
   const [ids, setIds] = useState([]);
   const [picker, setPicker] = useState();
-
+  const [materialType, setMaterialType] = useState(0);
+  const [materialTypeArr, setMaterialTypeArr] = useState([]);
   /**
    * 编辑初始化
    */
@@ -87,6 +88,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             style={{ color: "red" }}
             defaultValue={text}
             style={{ border: "none", color: "red", textAlign: "center" }}
+            onBlur={changeMater}
           ></input>
         );
       },
@@ -147,6 +149,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
+            onBlur={changeCartonsNumber}
           ></input>
         );
       },
@@ -379,6 +382,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     // },
   ];
 
+
+
   //获取打印日期的值
   const changePicker = async (date, dateString) => {
     setPicker(dateString);
@@ -389,10 +394,23 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     setPrintNo(e.target.value);
   };
 
+  //获取物料型号
+  const changeMater = async (e) => {
+    setMaterialType(e.target.value)
+    // setMaterialTypeArr.push()
+    console.log('123', materialType)
+  };
+
+  //获取装盒数量
+  const changeCartonsNumber = async (e) => {
+    // setPrintNo(e.target.value);
+  };
+
+
 
   //点击确认生成条码
   const confirm = async () => {
-    setIds(selectedRowsState.map((item) => item.shiftid));
+    setIds(selectedRowsState.map((item) => item.id));
     if (selectedRowsState?.length > 0) {
       handleModalVisible(true);
     } else {
@@ -457,7 +475,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     try {
       let data = await deleted({
-        shiftids: selectedRows.map((row) => row.shiftid),
+        id: selectedRows.map((row) => row.id),
       });
 
       if (data.status == "200") {
@@ -508,7 +526,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
-        rowKey="shiftid"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -530,7 +548,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           </Form.Item>,
 
           // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
-
 
           <Popconfirm placement="top" title="您确定要生成条码吗?" onConfirm={confirm} okText="确定" cancelText="取消">
             <Button type="primary">
@@ -616,7 +633,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
                 }
               }
             }}
-            rowKey="shiftid"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

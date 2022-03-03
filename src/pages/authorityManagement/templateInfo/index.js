@@ -301,7 +301,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
   //下载模板
   const downloadTemp = async (fields) => {
-    debugger
+    
     let data = await getTempl(fields);
     if (data.status === 200) {
 

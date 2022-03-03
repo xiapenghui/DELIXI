@@ -49,7 +49,7 @@ const Model = {
             data: data.data,
           },
         });
-        return message.success(data.message);
+        // return message.success(data.message);
       }
     },
 
@@ -75,7 +75,6 @@ const Model = {
   reducers: {
     querySuccessed(state, { payload }) {
       if (payload.type === "getDropDownInit") {
-        debugger
         return {
           ...state, ...payload,
           tempList: payload.data,

@@ -1,5 +1,5 @@
 import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
-import { Button, message, Select } from "antd";
+import { Button, message, Select ,Cascader  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -7,7 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
-import ImportForm from "./components/ImportForm";
+import ImportForm from "../../../components/ImportExcel/ImportForm";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
@@ -18,9 +18,9 @@ import {
   addPost,
   updatePut,
 } from "@/services/authorityManagement/factoryInfo";
-
-const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
-  const { } = user;
+import city from '../../../utils/city'
+const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
+  const {currentUser } = user;
 
   const { departmentList, areaList, lineList, shiftTypeList } = factoryInfo;
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -37,15 +37,12 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
   const getColumns = () => [
 
 
-
-
-
     {
       title: "工厂编号",
       dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       initialValue: IsUpdate ? UpdateDate.factoryNo : "",
       formItemProps: {
         rules: [
@@ -61,7 +58,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "factoryName",
       valueType: "text",
       align: "center",
-      width:250,
+      width: 250,
       initialValue: IsUpdate ? UpdateDate.factoryName : "",
       formItemProps: {
         rules: [
@@ -77,7 +74,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "printDevice",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.printDevice : "",
       formItemProps: {
@@ -95,7 +92,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "lineNo",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.lineNo : "",
       formItemProps: {
@@ -113,7 +110,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       dataIndex: "supplierSapCode",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
       formItemProps: {
@@ -127,24 +124,39 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
     },
 
     {
-      title: "省",
+      title: "所属省市",
       dataIndex: "province",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.province : "",
+      valueEnum: city.length == 0 ? {} : [city],
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Cascader
+            size="large"
+            style={{ width: '100%' }}
+            options={city}
+            placeholder="请选择省市"
+          />
+        }
+        return defaultRender(_);
+      },
+      // render: (text, record) => {
+      //   return record.factoryName
+      // },
     },
 
-    {
-      title: "SAP城市",
-      dataIndex: "sapCity",
-      valueType: "text",
-      align: "center",
-      width:150,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.sapCity : "",
-    },
+    // {
+    //   title: "SAP城市",
+    //   dataIndex: "sapCity",
+    //   valueType: "text",
+    //   align: "center",
+    //   width:150,
+    //   hideInSearch: true,
+    //   initialValue: IsUpdate ? UpdateDate.sapCity : "",
+    // },
 
     {
       title: "备注",
@@ -179,13 +191,13 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-        data: {
-          factoryNo: params.factoryNo,
-          factoryName: params.factoryName
-        },
-        pageNum: params.current,
-        pageSize: params.pageSize,
-        userId: user.currentUser.id
+      data: {
+        factoryNo: params.factoryNo,
+        factoryName: params.factoryName
+      },
+      pageNum: params.current,
+      pageSize: params.pageSize,
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
@@ -301,9 +313,9 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <FileWordOutlined /> 导入
           </Button>,
-           <Button type="primary" onClick={() => downloadTemp()}>
-           <FileWordOutlined /> 下载模板
-         </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
+          </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
@@ -392,29 +404,14 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
       ) : null}
 
 
-      {/* 导入  */}
-      <ImportForm
+       {/* 导入  */}
+       <ImportForm
         onCancel={() => handleImportModalVisible(false)}
         modalVisible={importModalVisible}
+        currentUser={currentUser}
         title="导入"
+        query={query}
       >
-        {/* <ProTable
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-
-            if (success) {
-              handleModalVisible(false);
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={getColumns()}
-        /> */}
-
       </ImportForm>
 
 
@@ -422,6 +419,6 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
   );
 };
 
-export default connect(({ factoryInfo ,user }) => ({ factoryInfo ,user }))(
+export default connect(({ factoryInfo, user }) => ({ factoryInfo, user }))(
   factoryInfoComponent
 );

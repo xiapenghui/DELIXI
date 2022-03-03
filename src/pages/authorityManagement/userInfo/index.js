@@ -493,7 +493,7 @@ const Component = ({ userInfo, dispatch, user }) => {
               }
             }
           }}
-          rowKey="key"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -521,7 +521,7 @@ const Component = ({ userInfo, dispatch, user }) => {
                 }
               }
             }}
-            rowKey="key"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

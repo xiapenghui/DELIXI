@@ -2,17 +2,23 @@ import React from 'react';
 import { Modal, Upload, message, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import globalConfig from '../../../../../config/defaultSettings';
-const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
+
+
 
 const ImportForm = (props) => {
-  const { modalVisible, onCancel } = props;
-
+  const { modalVisible, onCancel, currentUser, query } = props;
   const uploadData = {
     name: 'file',
-    action: `${ip}/123`,
-    headers: {
-      authorization: localStorage.user_token,
+    action: `${ip}/DLX_OEM/api/excel/importExcel`,
+    // 接受的文件类型
+    accept: '.xls,.xlsx',
+    data: {
+      type: 'User',
+      userId: currentUser.id
     },
+    headers: {},
+
     beforeUpload: file => {
       const isExcel = file.type === 'application/vnd.ms-excel';
       if (!isExcel) {
@@ -25,14 +31,24 @@ const ImportForm = (props) => {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
-        message.success(`${info.file.name} 文件上传成功!`);
-        onCancel()
+        message.loading('正在导入中...');
+        if (info.file.response.status === 200) {
+          setTimeout(() => {
+            message.success(`${info.file.name} 文件上传成功!`);
+            onCancel()
+            query({
+              current: 1,
+              pageSize: 20,
+            })
+          }, 2000)
+        }
+
+
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 文件上传失败!`);
       }
     },
   };
-
 
 
   return (

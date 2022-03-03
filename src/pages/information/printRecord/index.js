@@ -337,10 +337,10 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 430 }}
-        rowKey="shiftID"
+        rowKey="id"
         search={{
-          collapsed:false,
-          collapseRender:false,
+          collapsed: false,
+          collapseRender: false,
           labelWidth: 120,
         }}
         toolBarRender={() => [
@@ -400,7 +400,7 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
               }
             }
           }}
-          rowKey="shiftID"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -430,7 +430,7 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
                 }
               }
             }}
-            rowKey="shiftID"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />

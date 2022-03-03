@@ -445,7 +445,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
-        rowKey="departmentid"
+        rowKey="id"
         search={{
           labelWidth: 120,
         }}
@@ -516,7 +516,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
               }
             }
           }}
-          rowKey="departmentid"
+          rowKey="id"
           type="form"
           columns={getColumns()}
         />
@@ -544,7 +544,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
                 }
               }
             }}
-            rowKey="departmentid"
+            rowKey="id"
             type="form"
             columns={getColumns()}
           />
