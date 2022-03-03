@@ -13,6 +13,7 @@ import {
   getDropDownInit,
   postListInit,
   deleted,
+  getTempl,
   getAddDropDownInit,
   addPost,
   updatePut,
@@ -270,6 +271,19 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
     }
   };
 
+  //下载模板
+  const downloadTemp = async (fields) => {
+    let data = await getTempl(fields);
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
   return (
     <PageContainer>
       <ProTable
@@ -287,6 +301,9 @@ const factoryInfoComponent = ({ factoryInfo, dispatch ,user   }) => {
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <FileWordOutlined /> 导入
           </Button>,
+           <Button type="primary" onClick={() => downloadTemp()}>
+           <FileWordOutlined /> 下载模板
+         </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}

@@ -7,7 +7,8 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
-import ImportForm from "./components/ImportForm";
+import ImportForm from "../../../components/ImportExcel/ImportForm";
+
 import {
   getDropDownInit,
   postListInit,
@@ -252,7 +253,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       data: {
         userNo: params.userNo,
         userName: params.userName,
-        userId: user.currentUser.id
+        // userId: user.currentUser.id
       },
     });
     return TableList.then(function (value) {
@@ -534,6 +535,7 @@ const Component = ({ userInfo, dispatch, user }) => {
         modalVisible={importModalVisible}
         currentUser={currentUser}
         title="导入"
+        query={query}
       >
       </ImportForm>
 

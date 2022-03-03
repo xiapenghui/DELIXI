@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
 import { Button, message, TimePicker, InputNumber, Select, DatePicker } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -7,6 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
+import ImportForm from "../../../components/ImportExcel/ImportForm";
 import moment from "moment";
 import globalConfig from '../../../../config/defaultSettings';
 import ExportJsonExcel from "js-export-excel";
@@ -14,14 +15,14 @@ import {
   getDropDownInit,
   postListInit,
   deleted,
+  getTempl,
   getAddDropDownInit,
   addPost,
   updatePut,
 } from "@/services/authorityManagement/materialAllo";
 
 const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
-  const { } = user;
-
+  const { currentUser } = user;
 
   const {
     factoryList,
@@ -32,6 +33,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
   } = materialAllo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
   /**
@@ -58,7 +60,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      hideInTable:true,
+      hideInTable: true,
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -97,7 +99,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      ellipsis:true,
+      ellipsis: true,
       hideInSearch: true,
       hideInForm: true,
     },
@@ -200,8 +202,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         ],
       },
     },
- 
- 
+
+
     {
       title: "盒码模板",
       dataIndex: "boxTemp",
@@ -352,9 +354,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         creatorId: user.currentUser.id,
         factoryId: fields.factoryId,
         materialId: fields.materialId,
-        onlyTemp:fields.onlyTemp,
-        boxTemp:fields.boxTemp,
-        bigBoxTemp:fields.bigBoxTemp,
+        onlyTemp: fields.onlyTemp,
+        boxTemp: fields.boxTemp,
+        bigBoxTemp: fields.bigBoxTemp,
       },
       userId: user.currentUser.id
     }
@@ -383,16 +385,16 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     console.log("handleUpdate", fields);
     try {
       let data = await updatePut({
-         data:{
+        data: {
           id: UpdateDate.id,
           creatorId: user.currentUser.id,
           factoryId: fields.factoryId,
           materialId: fields.materialId,
-          onlyTemp:fields.onlyTemp,
-          boxTemp:fields.boxTemp,
-          bigBoxTemp:fields.bigBoxTemp,
-         },
-         userId: user.currentUser.id
+          onlyTemp: fields.onlyTemp,
+          boxTemp: fields.boxTemp,
+          bigBoxTemp: fields.bigBoxTemp,
+        },
+        userId: user.currentUser.id
       });
       if (data.status == "200") {
         hide();
@@ -474,6 +476,21 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     toExcel.saveExcel();
   };
 
+
+  //下载模板
+  const downloadTemp = async (fields) => {
+    let data = await getTempl(fields);
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
   return (
     <PageContainer>
       <ProTable
@@ -487,6 +504,12 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <FileWordOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
           </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
@@ -584,6 +607,18 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
           />
         </UpdateForm>
       ) : null}
+
+
+      {/* 导入  */}
+      <ImportForm
+        onCancel={() => handleImportModalVisible(false)}
+        modalVisible={importModalVisible}
+        currentUser={currentUser}
+        title="导入"
+        query={query}
+      >
+      </ImportForm>
+
     </PageContainer>
   );
 };

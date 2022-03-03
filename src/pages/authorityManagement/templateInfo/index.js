@@ -1,5 +1,5 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input ,Select  } from "antd";
+import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
+import { Button, message, DatePicker, Form, Input, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -7,6 +7,8 @@ import ProTable from "@ant-design/pro-table";
 import moment from "moment";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
+import ImportForm from "../../../components/ImportExcel/ImportForm";
+
 // import "../../../../src/assets/commonStyle.css";
 import ExportJsonExcel from "js-export-excel";
 import {
@@ -14,16 +16,18 @@ import {
   postListInit,
   deleted,
   getAddDropDownInit,
+  getTempl,
   addPost,
   updatePut,
 } from "@/services/authorityManagement/templateinfo";
 
-const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
-  const {tempList } = templateinfo;
-  const { } = user;
+const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
+  const { tempList } = templateinfo;
+  const { currentUser } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
   /**
@@ -295,6 +299,22 @@ const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
     toExcel.saveExcel();
   };
 
+  //下载模板
+  const downloadTemp = async (fields) => {
+    debugger
+    let data = await getTempl(fields);
+    if (data.status === 200) {
+
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
   return (
     <PageContainer>
       <ProTable
@@ -309,6 +329,14 @@ const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
+
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <FileWordOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
+          </Button>,
+
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
@@ -405,10 +433,22 @@ const templateinfoComponent = ({ templateinfo, dispatch , user}) => {
           />
         </UpdateForm>
       ) : null}
+
+      {/* 导入  */}
+      <ImportForm
+        onCancel={() => handleImportModalVisible(false)}
+        modalVisible={importModalVisible}
+        currentUser={currentUser}
+        title="导入"
+        query={query}
+      >
+      </ImportForm>
+
     </PageContainer>
+
   );
 };
 
-export default connect(({ templateinfo ,user }) => ({ templateinfo ,user }))(
+export default connect(({ templateinfo, user }) => ({ templateinfo, user }))(
   templateinfoComponent
 );

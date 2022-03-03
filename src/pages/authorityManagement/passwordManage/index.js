@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
 import { Button, message, DatePicker, Input } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -7,6 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
+import ImportForm from "../../../components/ImportExcel/ImportForm";
 import moment from 'moment'
 import globalConfig from '../../../../config/defaultSettings';
 import {
@@ -14,6 +15,7 @@ import {
   deleted,
   getAddDropDownInit,
   addPost,
+  getTempl,
   updatePut,
   resetPassword,
 } from "@/services/authorityManagement/passwordManage";
@@ -21,10 +23,11 @@ import {
 const Component = ({ passwordManage, dispatch, user }) => {
   // const {
   //   TableList,userList } = passwordManage
-  const { } = user;
+  const { currentUser } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
 
@@ -213,6 +216,21 @@ const Component = ({ passwordManage, dispatch, user }) => {
   };
 
 
+  //下载模板
+  const downloadTemp = async (fields) => {
+    let data = await getTempl(fields);
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
+
   return (
     <PageContainer>
       <ProTable
@@ -226,6 +244,12 @@ const Component = ({ passwordManage, dispatch, user }) => {
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <FileWordOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
           </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
@@ -313,6 +337,18 @@ const Component = ({ passwordManage, dispatch, user }) => {
           />
         </UpdateForm>
       ) : null}
+
+
+      {/* 导入  */}
+      <ImportForm
+        onCancel={() => handleImportModalVisible(false)}
+        modalVisible={importModalVisible}
+        currentUser={currentUser}
+        title="导入"
+        query={query}
+      >
+      </ImportForm>
+
     </PageContainer>
   );
 };
