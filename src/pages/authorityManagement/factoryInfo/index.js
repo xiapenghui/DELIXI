@@ -131,32 +131,29 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
       width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.province : "",
-      valueEnum: city.length == 0 ? {} : [city],
-      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        if (type === 'form' || type === 'table') {
-          return <Cascader
-            size="large"
-            style={{ width: '100%' }}
-            options={city}
-            placeholder="请选择省市"
-          />
-        }
-        return defaultRender(_);
-      },
-      // render: (text, record) => {
-      //   return record.factoryName
+      // valueEnum: city.length == 0 ? {} : [city],
+      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+      //   if (type === 'form' || type === 'table') {
+      //     return <Cascader
+      //       size="large"
+      //       style={{ width: '100%' }}
+      //       options={city}
+      //       placeholder="请选择省市"
+      //     />
+      //   }
+      //   return defaultRender(_);
       // },
     },
 
-    // {
-    //   title: "SAP城市",
-    //   dataIndex: "sapCity",
-    //   valueType: "text",
-    //   align: "center",
-    //   width:150,
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.sapCity : "",
-    // },
+    {
+      title: "SAP城市",
+      dataIndex: "sapCity",
+      valueType: "text",
+      align: "center",
+      width:150,
+      hideInSearch: true,
+      initialValue: IsUpdate ? UpdateDate.sapCity : "",
+    },
 
     {
       title: "备注",

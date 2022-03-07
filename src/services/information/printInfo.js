@@ -57,8 +57,13 @@ export async function deleted(params) {
 }
  
 
+//打印获取条码
+export async function generateBarCode(params) {
+  return request(`${ip}/DLX_OEM/api/barCode/generateBarCode`, {
+    method: 'POST',
+    data: { ...params },
+  });
+}
  
-
-
 
 

@@ -17,6 +17,7 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
+  generateBarCode
 } from "@/services/information/printInfo";
 
 const printInfoComponent = ({ printInfo, dispatch, user }) => {
@@ -27,10 +28,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
   const [printNo, setPrintNo] = useState(0);
-  const [ids, setIds] = useState([]);
   const [picker, setPicker] = useState();
-  const [materialType, setMaterialType] = useState(0);
-  const [materialTypeArr, setMaterialTypeArr] = useState([]);
+  const [materialTypeRow, setMaterialTypeRow] = useState([]);
+  const [materialTypeArr, setMaterialTypeArr] = useState([])
+
   /**
    * 编辑初始化
    */
@@ -74,6 +75,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       ellipsis: true,
       hideInSearch: true,
     },
+
 
     {
       title: () => <a style={{ color: "red" }}>物料型号</a>,
@@ -130,6 +132,9 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 120,
       hideInSearch: true,
     },
+
+
+
 
     {
       title: () => <a style={{ color: "red" }}>装盒数量</a>,
@@ -336,7 +341,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "date",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 180,
       hideInSearch: true,
     },
     {
@@ -384,6 +389,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
 
+
   //获取打印日期的值
   const changePicker = async (date, dateString) => {
     setPicker(dateString);
@@ -396,9 +402,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取物料型号
   const changeMater = async (e) => {
-    setMaterialType(e.target.value)
-    // setMaterialTypeArr.push()
-    console.log('123', materialType)
+    setMaterialTypeRow(e.target.value)
+    let Arr = []
+    Arr.push(materialTypeRow)
+    console.log('Arr', Arr)
   };
 
   //获取装盒数量
@@ -410,9 +417,48 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //点击确认生成条码
   const confirm = async () => {
-    setIds(selectedRowsState.map((item) => item.id));
+    // setIds(selectedRowsState.map((item) => item.id));
+
+
+
     if (selectedRowsState?.length > 0) {
       handleModalVisible(true);
+      selectedRowsState.map((item,key)=>{
+        item.cartonsNumber=33
+      })
+
+      let data2 = await generateBarCode({
+        materialFactoryList: selectedRowsState,
+        // materialFactoryList: [
+        //   // selectedRowsState.map((item,key)=>{
+        //   //    a:item.id;
+        //   //    b:item.defaultValue
+        //   // })
+        //   {
+        //     bigBoxWeight: 1,
+        //     cartonsNumber: 2,
+        //     factoryId: 1,
+        //     factoryNo: "德力西",
+        //     id: 1,
+        //     materialId: 1,
+        //     materialNo: "123",
+        //     materialType: "1",
+        //     packingQuantity: 2,
+        //     printDevice: "河南",
+        //     productionDate: "2022-03-06",
+        //     threeC: "3c"
+        //   }
+ 
+        // ],
+        printDate: picker,
+        printQuantity: printNo
+      });
+      if (data2.status == '200') {
+        setMaterialTypeArr(data2.data)
+      }
+
+
+
     } else {
       message.info("请至少选择一条数据！");
     }
@@ -493,32 +539,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     }
   };
 
-  // 导出
-  const downloadExcel = async (selectedRows) => {
-    var option = {};
-    var dataTable = [];
-    if (selectedRows.length > 0) {
-      for (let i in selectedRows) {
-        let obj = {
-          shiftname: selectedRows[i].shiftname,
-          remark: selectedRows[i].remark,
-        };
-        dataTable.push(obj);
-      }
-    }
-    option.fileName = "班次信息";
-    option.datas = [
-      {
-        sheetData: dataTable,
-        sheetName: "sheet",
-        sheetFilter: ["shiftname", "remark"],
-        sheetHeader: ["班次名称", "备注"],
-      },
-    ];
 
-    var toExcel = new ExportJsonExcel(option);
-    toExcel.saveExcel();
-  };
 
   return (
     <PageContainer>
@@ -588,16 +609,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           >
             批量删除
           </Button>
-
-          <Button
-            onClick={async () => {
-              await downloadExcel(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量导出
-          </Button>
         </FooterToolbar>
       )}
 
@@ -605,8 +616,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
         printNo={printNo}
-        ids={ids}
         picker={picker}
+        materialTypeArr={materialTypeArr}
         title="打印条码"
       ></PrintForm>
 

@@ -7,14 +7,9 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 const ImportForm = (props) => {
   const { modalVisible, onCancel, currentUser, query } = props;
   const [newType, setNewType] = useState("User")
-
-
-
   useEffect(() => {
- 
     if (location.pathname === "/authorityManagement/factoryInfo") {
-
-      setNewType("factoryInfo")
+      setNewType("Factory")
     } else if (location.pathname === "/authorityManagement/userInfo") {
       setNewType("User")
     } else if (location.pathname === "/authorityManagement/materialAllo") {
@@ -22,7 +17,7 @@ const ImportForm = (props) => {
     } else if (location.pathname === "/authorityManagement/templateinfo") {
       setNewType("Temp")
     } else if (location.pathname === "/authorityManagement/passwordManage") {
-      setNewType("passwordManage")
+      setNewType("PasswordRules")
     }
   }, []);
 
