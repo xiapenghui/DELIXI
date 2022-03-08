@@ -64,55 +64,49 @@ const dataSource2 = [];
 
 const dataSource3 = [];
 
-const PrintForm = (props) => {
+const CreateForm = (props) => {
   const { modalVisible, onCancel, materialTypeList } = props;
   const [keys, setKeys] = useState(1);
   const [zhiCode, setZhiCode] = useState(false);
   const [heCode, setHeCode] = useState(true);
   const [boxCode, setBoxCode] = useState(true);
-  const [loading1, setLoading1] = useState(false);
+  const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
+  const [erCode, setErCode] = useState([172, 154, 175, 197])
   const [noStart, setNoStart] = useState('')
   const [CodeList, setCodeList] = useState(['123456789012', '123456789013'])
+  const [code, setCode] = useState('123456789014')
 
 
   const [arr, setArr] = useState([
     "22345678905",
     "12345678901",
-    "12345678906",
+    // "12345678906",
     // "12345678902",
     // "12345678907",
   ]);
 
   useEffect(() => {
- 
-    if (modalVisible) {
-      setNoStart(
-        `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-        LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-        LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "128A", "123456");
-        LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-        LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-        LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-        LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-        LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);`
-      )
-     
+    // if (modalVisible) {
+    //   // LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_获得程序代码");
+    //   // LODOP.ADD_PRINT_BARCODE(190, 483, 213, 60, "128A", "123456789012");
+    //   // LODOP.ADD_PRINT_TEXT(20, 180, 100, 25, "郭德强1");
+    //   LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_获得程序代码");
+    //   LODOP.ADD_PRINT_BARCODE(80, 62, 213, 60, "128A", "123456789012");
+    //   // LODOP.ADD_PRINT_TEXT(29,61,100,25,"郭德强1");
+    // }
+    // if (noStart) {
+    //   console.log("useEffect", noStart)
+    //   CreateOneFormPage()
+    // }
+
+    if (materialTypeList.onlyBarCodeList) {
+      setLoading1(false)
     }
-  }, [modalVisible]);
+
+  }, [materialTypeList]);
+
 
 
 
@@ -138,25 +132,101 @@ const PrintForm = (props) => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //开始
+
+
+
   //点击打印条码
   const pintCode = () => {
-    var zhiList = noStart.replace('123456', arr[0])
-    eval(zhiList)
+    console.log('111111111', noStart, typeof(noStart), )
+    // 'LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "22345678905");`LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);'.replace('LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "22345678905");','LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "22345678906");')
+    // eval(noStart)   
+    //  LODOP.PRINT_INIT("react使用打印插件CLodop"); //打印初始化
+    // var content = []
+     var a =  noStart.replace('123456', arr[0])
+    eval(a) 
     LODOP.PRINT();
+    var top = 0;
     for (var i = 0; i < arr.length; i++) {
-      if (i > 0) {
-        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        zhiList = zhiList.replace(arr[i-1], arr[i])
-        eval(zhiList)
+      // LODOP.SET_PRINT_STYLEA(0,"Content",arr[i]);//设置内容参数的变量名
+      if(i > 0) {
+        // top = top + 200;
+        // LODOP.ADD_PRINT_RECT((i+1.5) * 166, 74, 506, 201, 0, 1);
+        // // LODOP.ADD_PRINT_TEXT((i+0.7) * 325, 439, 138, 40, "400828008");
+        
+        // LODOP.ADD_PRINT_TEXT( top +  325, 439, 138, 40, "400828008");
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+        // LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
+        // // LODOP.ADD_PRINT_TEXT((i+0.9) * 259, 399, 174, 45, "222222222222222222");
+        // LODOP.ADD_PRINT_TEXT( top +  259, 399, 174, 45, "222222222222222222");
+       
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+        // LODOP.ADD_PRINT_TEXT((i+1.5) * 178, 388, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+        // LODOP.ADD_PRINT_TEXT((i+1.5) * 179, 331, 55, 30, "S/N:");
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
+        // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+        // // LODOP.ADD_PRINT_TEXT((i+0.9) * 260, 327, 70, 35, "DATE：");
+        // LODOP.ADD_PRINT_TEXT(top + 260, 327, 70, 35, "DATE：");
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+        // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+        // LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
+        // // LODOP.ADD_PRINT_TEXT((i+0.7) * 326, 324, 111, 39, "服务热线：");
+        // LODOP.ADD_PRINT_TEXT(top + 326, 324, 111, 39, "服务热线：");
+        // LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+        // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+        LODOP.SET_PRINT_PAGESIZE(1,2,"A3");
+        a = a.replace(arr[0], arr[i])
+      
         LODOP.PRINT();
-        LODOP.PRINT_INIT("");
+        LODOP.PRINT_INIT("");	
+        // LODOP.ADD_PRINT_BARCODE((i+1.5) * 172, 79, 242, 188, '128A', arr[i]);
+        // LODOP.PRINT();	
+        // // LODOP.PREVIEW();
+        // LODOP.PRINT_INIT("");	
+        
+        // LODOP.PRINT_DESIGN();
       }
     }
+    // var a = noStart.replace('22345678905', '22345678906')
+    // var a = noStart.replace('LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "22345678905");', 
+    // 'LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "22345678906");')
+    // console.log('222222', a)
+
+	
   };
 
 
-  //只条码模板
+  //只条码打印
   const zhiPint = () => {
     CreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
@@ -167,33 +237,77 @@ const PrintForm = (props) => {
 
 
   const CreateOneFormPage = () => {
-    LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-    LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-    LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "128A", "123456");
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-    LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-    LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+    LODOP.PRINT_INITA(10,10,1653,905,"打印控件功能演示_Lodop功能");
+    LODOP.ADD_PRINT_RECT(8,52,506,201,0,1);
+    LODOP.ADD_PRINT_TEXT(167,417,138,40,"400828008");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",17);
+    LODOP.ADD_PRINT_BARCODE(14,57,242,188,"128A","123456");
+    LODOP.SET_PRINT_STYLEA(0,"ScalY",1.2);
+    LODOP.ADD_PRINT_TEXT(101,377,174,45,"222222222222222222");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",17);
+    LODOP.ADD_PRINT_TEXT(20,366,192,55,"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",17);
+    LODOP.ADD_PRINT_TEXT(21,309,55,30,"S/N:");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",16);
+    LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+    LODOP.ADD_PRINT_TEXT(102,305,70,35,"DATE：");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",15);
+    LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+    LODOP.SET_PRINT_STYLEA(0,"ScalY",1.15);
+    LODOP.ADD_PRINT_TEXT(168,302,111,39,"服务热线：");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",15);
+    LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
 
+    // LODOP.PRINT_INIT("react使用打印插件CLodop"); //打印初始化
+    // LODOP.PRINT_INITA(10, 10, 1653, 905, "打印控件功能演示_Lodop功能");
+    // LODOP.ADD_PRINT_RECT(166, 74, 506, 201, 0, 1);
+    // LODOP.ADD_PRINT_TEXT(325, 439, 138, 40, "400828008");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    // LODOP.ADD_PRINT_BARCODE(172, 79, 242, 188, "128A", "123456");
+    // LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
+    // LODOP.ADD_PRINT_TEXT(259, 399, 174, 45, "222222222222222222");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    // LODOP.ADD_PRINT_TEXT(178, 388, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    // LODOP.ADD_PRINT_TEXT(179, 331, 55, 30, "S/N:");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
+    // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+    // LODOP.ADD_PRINT_TEXT(260, 327, 70, 35, "DATE：");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+    // LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
+    // LODOP.ADD_PRINT_TEXT(326, 324, 111, 39, "服务热线：");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    // LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
 
   };
 
 
 
+
+
+
+
+
   //结束代码
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -306,4 +420,4 @@ const PrintForm = (props) => {
   );
 };
 
-export default PrintForm;
+export default CreateForm;

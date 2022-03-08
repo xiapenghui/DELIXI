@@ -11,41 +11,40 @@ import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import {
-  getDropDownInit,
-  tankSearch,
-  tankSearch1,
-  deleted,
-  getAddDropDownInit,
-  addPost,
-  updatePut,
-  GetShiftNO,
+  getOnlyBarCodeList,
+  getBoxBarCodeList,
+  getBigBoxBarCodeList
 } from "@/services/information/printMake";
+import Checkbox from "antd/lib/checkbox/Checkbox";
 
-const printMakeComponent = ({ printMake, dispatch }) => {
-
-
+const printMakeComponent = ({ printMake, dispatch, user }) => {
+  const { materialList } = printMake
+  const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
   const formItemLayout = globalConfig.table.formItemLayout
-  const columns1 = [
-
-
+  const columns = [
     {
       title: "打印批次",
-      dataIndex: "printBatch",
-      key: "printBatch",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
       align: "center",
     },
+
     {
       title: "条码类型",
-      dataIndex: "barType",
-      key: "barType",
+      dataIndex: "materialType",
+      key: "materialType",
       align: "center",
+      render: (text, record) => {
+        return record.barCodeType
+      },
     },
+
     {
-      title: "条码",
+      title: "只条码",
       dataIndex: "barCode",
       key: "barCode",
       align: "center",
@@ -67,16 +66,16 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
     {
       title: "物料型号",
-      dataIndex: "materialModel",
-      key: "materialModel",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
       align: "center",
       ellipsis: {
         showTitle: false,
       },
       align: "center",
-      render: materialModel => (
-        <Tooltip placement="topLeft" title={materialModel}>
-          {materialModel}
+      render: batchNumber => (
+        <Tooltip placement="topLeft" title={batchNumber}>
+          {batchNumber}
         </Tooltip>
       ),
     },
@@ -96,203 +95,23 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     },
     {
       title: "打印时间",
-      dataIndex: "printTime",
-      key: "printTime",
+      dataIndex: "printDateTime",
+      key: "printDateTime",
       align: "center",
     },
     {
       title: "打印人员",
-      dataIndex: "PrinterPer",
-      key: "PrinterPer",
+      dataIndex: "printer",
+      key: "printer",
       align: "center",
     },
 
   ];
 
 
-  const [dataSource1, setDataSource1] = useState([
-    {
-      key: "1",
-      printBatch: "202202151200",
-      barType: "只",
-      barCode: "2uybM0327491062640",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-    {
-      key: "2",
-      printBatch: "202202151200",
-      barType: "只",
-      barCode: "2uybM0327491062639",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-  ])
-  const [dataSource2, setDataSource2] = useState([
-    {
-      key: "1",
-      printBatch: "202202151200",
-      barType: "盒",
-      barCode: "2uybM0327491062640",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-    {
-      key: "2",
-      printBatch: "202202151200",
-      barType: "盒",
-      barCode: "2uybM0327491062639",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-  ])
-
-
-  const columns2 = [
-
-    {
-      title: "打印批次",
-      dataIndex: "printBatch",
-      key: "printBatch",
-      align: "center",
-    },
-    {
-      title: "条码类型",
-      dataIndex: "barType",
-      key: "barType",
-      align: "center",
-    },
-    {
-      title: "条码",
-      dataIndex: "barCode",
-      key: "barCode",
-      align: "center",
-    },
-    {
-      title: "物料编号",
-      dataIndex: "materialNo",
-      key: "materialNo",
-      align: "center",
-    },
-    {
-      title: "物料型号",
-      dataIndex: "materialModel",
-      key: "materialModel",
-      align: "center",
-    },
-    {
-      title: "型号描述",
-      dataIndex: "modelDesc",
-      key: "modelDesc",
-      ellipsis: true,
-      align: "center",
-    },
-    {
-      title: "打印时间",
-      dataIndex: "printTime",
-      key: "printTime",
-      align: "center",
-    },
-    {
-      title: "打印人员",
-      dataIndex: "PrinterPer",
-      key: "PrinterPer",
-      align: "center",
-    },
-  ];
-
-
-
-  const columns3 = [
-
-
-    {
-      title: "打印批次",
-      dataIndex: "printBatch",
-      key: "printBatch",
-      align: "center",
-    },
-    {
-      title: "条码类型",
-      dataIndex: "barType",
-      key: "barType",
-      align: "center",
-    },
-    {
-      title: "条码",
-      dataIndex: "barCode",
-      key: "barCode",
-      align: "center",
-    },
-    {
-      title: "物料编号",
-      dataIndex: "materialNo",
-      key: "materialNo",
-      align: "center",
-    },
-    {
-      title: "物料型号",
-      dataIndex: "materialModel",
-      key: "materialModel",
-      align: "center",
-    },
-    {
-      title: "型号描述",
-      dataIndex: "modelDesc",
-      key: "modelDesc",
-      ellipsis: true,
-      align: "center",
-    },
-    {
-      title: "打印时间",
-      dataIndex: "printTime",
-      key: "printTime",
-      align: "center",
-    },
-    {
-      title: "打印人员",
-      dataIndex: "PrinterPer",
-      key: "PrinterPer",
-      align: "center",
-    },
-  ];
-
-  const dataSource3 = [
-    {
-      key: "1",
-      printBatch: "202202151200",
-      barType: "箱",
-      barCode: "2uybM0327491062640",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-    {
-      key: "2",
-      printBatch: "202202151200",
-      barType: "箱",
-      barCode: "2uybM0327491062639",
-      materialNo: "32749",
-      materialModel: "CDPZ3024DRHHDMZC",
-      modelDesc: "PZ30-24单暗装1.2mm厚 120mm深2层板（导轨）+面盖除底箱SM战采",
-      printTime: "2022-02-15 12:00:00",
-      PrinterPer: "张三",
-    },
-  ];
+  const [dataSource1, setDataSource1] = useState([]);
+  const [dataSource2, setDataSource2] = useState([]);
+  const [dataSource3, setDataSource3] = useState([])
 
 
   //多选条码
@@ -324,9 +143,27 @@ const printMakeComponent = ({ printMake, dispatch }) => {
   }
 
   useEffect(() => {
-    // setDataSource1(printMake.TableData1)
-    // setDataSource2(printMake.TableData2.detail)
+    zhiSearch()
+    heSearch()
+    boxSearch()
   }, [])
+
+
+  //查询封装公用参数
+
+  const params = (values) => {
+    return {
+      data: {
+        startDate: values.startDate,
+        endDate: values.endDate,
+        barCode: values.barCode,
+        materialId: values.materialId
+      },
+      pageNum: 1,
+      pageSize: 20,
+      userId: user.currentUser.id
+    }
+  }
 
 
   //   @param 只条码 handleSearch 搜索
@@ -334,14 +171,9 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     form1
       .validateFields()
       .then(async (values) => {
-        let data = await tankSearch(
-          {
-            tsdateStart: moment(values.tsdateStart).format(globalConfig.form.dateFormat).substring(0, 10),
-            tsdateEnd: moment(values.tsdateEnd).format(globalConfig.form.dateFormat).substring(0, 10)
-          }
-        );
-        if (data.status === '200') {
-          setDataSource1(data.list)
+        let data = await getOnlyBarCodeList(params(values));
+        if (data.status === 200) {
+          setDataSource1(data.data.list)
         }
       })
   }
@@ -351,17 +183,27 @@ const printMakeComponent = ({ printMake, dispatch }) => {
     form2
       .validateFields()
       .then(async (values) => {
-        let data = await tankSearch1(
-          {
-            tsdateStart: moment(values.tsdateStart).format(globalConfig.form.dateFormat).substring(0, 10),
-            tsdateEnd: moment(values.tsdateEnd).format(globalConfig.form.dateFormat).substring(0, 10)
-          }
-        );
-        if (data.status === '200') {
-          setDataSource2(data.list.detail)
+        let data = await getBoxBarCodeList(params(values));
+        if (data.status === 200) {
+          setDataSource2(data.data.list)
         }
       })
   }
+
+
+  //箱条码查询
+  const boxSearch = (e) => {
+    form3
+      .validateFields()
+      .then(async (values) => {
+        let data = await getBigBoxBarCodeList(params(values));
+        if (data.status === 200) {
+          setDataSource3(data.data.list)
+        }
+      })
+  }
+
+
 
 
 
@@ -376,15 +218,15 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             form={form1}
             name="form_in_modal"
             initialValues={{
-              // sdate1: moment().subtract(1, "years"),
-              // sdate2: moment().endOf('day')
+              // startDate: moment().subtract(1, "years"),
+              // endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tsdateStart"
+                  name="startDate"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout}
@@ -396,7 +238,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tsdateEnd"
+                  name="endDate"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout}
@@ -410,25 +252,17 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tank"
-                  label="条码"
+                  name="barCode"
+                  label="只条码"
                   hasFeedback
                   {...formItemLayout}
                 >
-                  <Select
-                    allowClear
-                    showSearch
-                  >
-                    {/* {tankList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
-                  </Select>
-
+                  <Input></Input>
                 </Form.Item>
               </Col>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="customer"
+                  name="materialId"
                   label="物料编号"
                   hasFeedback
                   {...formItemLayout}
@@ -437,19 +271,16 @@ const printMakeComponent = ({ printMake, dispatch }) => {
                     allowClear
                     showSearch
                   >
-                    {/* {customerList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
+                    {materialList.map(function (item, index) {
+                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </Col>
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
-                <Button>重置</Button>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
-
-                {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
                 <Button type="primary" style={{ marginLeft: '10px' }}>
                   <Tag color="volcano">  只码模板:</Tag>成品条码
                 </Button>
@@ -458,9 +289,10 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
           </Form>
 
-          <Table dataSource={dataSource1} columns={columns1}
+          <Table dataSource={dataSource1} columns={columns}
             scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
+            // rowKey="index"
             rowSelection={{
               ...rowSelection1
             }}
@@ -475,20 +307,19 @@ const printMakeComponent = ({ printMake, dispatch }) => {
         </TabPane>
         <TabPane tab="盒条码" key="2">
           <Form
-            className="ant-advanced-search-form"
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
             onFinish={heSearch}
             form={form2}
             name="form_in_modal"
             initialValues={{
-              // sdate1: moment().subtract(1, "years"),
-              // sdate2: moment().endOf('day')
+              // startDate: moment().subtract(1, "years"),
+              // endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tsdateStart"
+                  name="startDate"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout}
@@ -500,7 +331,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tsdateEnd"
+                  name="endDate"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout}
@@ -514,25 +345,18 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tank"
-                  label="盒码"
+                  name="barCode"
+                  label="盒条码"
                   hasFeedback
                   {...formItemLayout}
                 >
-                  <Select
-                    allowClear
-                    showSearch
-                  >
-                    {/* {tankList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
-                  </Select>
+                  <Input></Input>
 
                 </Form.Item>
               </Col>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="customer"
+                  name="materialId"
                   label="物料编号"
                   hasFeedback
                   {...formItemLayout}
@@ -541,15 +365,14 @@ const printMakeComponent = ({ printMake, dispatch }) => {
                     allowClear
                     showSearch
                   >
-                    {/* {customerList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
+                    {materialList.map(function (item, index) {
+                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </Col>
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
-                <Button>重置</Button>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
@@ -563,9 +386,10 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns2} scroll={{ y: 450 }}
+          <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowSelection={{
+              type: Checkbox,
               ...rowSelection2
             }}
           />
@@ -580,20 +404,19 @@ const printMakeComponent = ({ printMake, dispatch }) => {
         </TabPane>
         <TabPane tab="箱条码" key="3">
           <Form
-            className="ant-advanced-search-form"
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
-            // onFinish={handleSearch}
+            onFinish={boxSearch}
             form={form3}
             name="form_in_modal"
             initialValues={{
-              // sdate1: moment().subtract(1, "years"),
-              // sdate2: moment().endOf('day')
+              // startDate: moment().subtract(1, "years"),
+              // endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate1"
+                  name="startDate"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout}
@@ -605,7 +428,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="sdate2"
+                  name="endDate"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout}
@@ -619,25 +442,18 @@ const printMakeComponent = ({ printMake, dispatch }) => {
 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="tank"
-                  label="箱码"
+                  name="barCode"
+                  label="箱条码"
                   hasFeedback
                   {...formItemLayout}
                 >
-                  <Select
-                    allowClear
-                    showSearch
-                  >
-                    {/* {tankList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
-                  </Select>
+                  <Input></Input>
 
                 </Form.Item>
               </Col>
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
-                  name="customer"
+                  name="materialId"
                   label="物料编号"
                   hasFeedback
                   {...formItemLayout}
@@ -646,15 +462,15 @@ const printMakeComponent = ({ printMake, dispatch }) => {
                     allowClear
                     showSearch
                   >
-                    {/* {customerList.map(function (item, index) {
-                        return <Select.Option key={index} value={item.key}>{item.value}</Select.Option>
-                      })} */}
+                    {materialList.map(function (item, index) {
+                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                    })}
                   </Select>
                 </Form.Item>
               </Col>
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
-                <Button>重置</Button>
+
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
@@ -668,7 +484,7 @@ const printMakeComponent = ({ printMake, dispatch }) => {
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns3} scroll={{ y: 450 }} pagination={true}
+          <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
             style={{ padding: "0 20px" }}
             rowSelection={{
               ...rowSelection3
@@ -688,6 +504,6 @@ const printMakeComponent = ({ printMake, dispatch }) => {
   );
 };
 
-export default connect(({ printMake }) => ({ printMake }))(
+export default connect(({ printMake, user }) => ({ printMake, user }))(
   printMakeComponent
 );

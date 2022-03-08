@@ -4,67 +4,10 @@ import { ArrowDownOutlined } from "@ant-design/icons";
 import { getLodop } from "../../../../utils/LodopFuncs";
 import "./modal.css";
 const { TabPane } = Tabs;
-const columns = [
-  {
-    title: "打印批次",
-    dataIndex: "batchNumber",
-    key: "batchNumber",
-    align: "center",
-  },
-  {
-    title: "条码类型",
-    dataIndex: "barCodeType",
-    key: "barCodeType",
-    align: "center",
-  },
-  {
-    title: "条码",
-    dataIndex: "barCode",
-    width: 150,
-    ellipsis: true,
-    key: "barCode",
-    align: "center",
-  },
-  {
-    title: "物料编号",
-    dataIndex: "materialNo",
-    key: "materialNo",
-    align: "center",
-  },
-  {
-    title: "物料型号",
-    dataIndex: "materialType",
-    key: "materialType",
-    align: "center",
-  },
-  {
-    title: "型号描述",
-    dataIndex: "materialDescription",
-    key: "materialDescription",
-    ellipsis: true,
-    align: "center",
-  },
-  {
-    title: "打印时间",
-    dataIndex: "printTime",
-    key: "printTime",
-    align: "center",
-  },
-  {
-    title: "打印人员",
-    dataIndex: "PrinterPer",
-    key: "PrinterPer",
-    align: "center",
-  },
-];
+ 
+ 
 
-const dataSource1 = [];
-
-const dataSource2 = [];
-
-const dataSource3 = [];
-
-const PrintForm = (props) => {
+const CreateForm = (props) => {
   const { modalVisible, onCancel, materialTypeList } = props;
   const [keys, setKeys] = useState(1);
   const [zhiCode, setZhiCode] = useState(false);
@@ -115,25 +58,7 @@ const PrintForm = (props) => {
   }, [modalVisible]);
 
 
-
-  //tabs切换获取当前index
-  const callback = (key) => {
-    setKeys(key);
-    if (key === "1") {
-      setZhiCode(false);
-      setHeCode(true);
-      setBoxCode(true);
-    } else if (key === "2") {
-      setZhiCode(true);
-      setHeCode(false);
-      setBoxCode(true);
-    } else {
-      setZhiCode(true);
-      setHeCode(true);
-      setBoxCode(false);
-    }
-  };
-
+ 
 
 
 
@@ -229,81 +154,8 @@ const PrintForm = (props) => {
       footer={null}
       width={1500}
     >
-      <div style={{ height: "40px" }}>
-        <span>
-          批次号： <Tag color="red">202202151200</Tag>
-        </span>
-        <span>
-          物料编号：<Tag color="volcano">32749</Tag>
-        </span>
-        <Button type="primary" className="pintCode" onClick={pintCode}>
-          <ArrowDownOutlined />
-          打印条码
-        </Button>
-
-        <Button type="primary" className="pintRight" hidden={zhiCode} onClick={zhiPint}>
-          <Tag color="volcano"> 只码模板:</Tag>成品条码
-        </Button>
-        <Button type="primary" className="pintRight" hidden={heCode} onClick={hePint} >
-          <Tag color="volcano"> 盒码模板:</Tag>40x60
-        </Button>
-        <Button type="primary" className="pintRight" hidden={boxCode}>
-          <Tag color="volcano"> 箱码模板:</Tag>60x80
-        </Button>
-      </div>
-      <Tabs defaultActiveKey="1" onChange={callback} type="card" >
-
-        <TabPane tab="只" key="1">
-          <Table
-            dataSource={materialTypeList.onlyBarCodeList}
-            columns={columns}
-            pagination={false}
-            loading={loading1}
-            pagination={{ pageSize: 20 }}
-            scroll={{ y: 300 }}
-          />
-        </TabPane>
-        <TabPane tab="盒" key="2">
-          <Table
-            dataSource={materialTypeList.boxBarCodeList}
-            columns={columns}
-            pagination={false}
-            loading={loading2}
-            pagination={{ pageSize: 20 }}
-            scroll={{ y: 300 }}
-          />
-        </TabPane>
-        <TabPane tab="箱" key="3">
-          <Table
-            dataSource={materialTypeList.bigBoxBarCodeList}
-            columns={columns}
-            pagination={false}
-            loading={loading3}
-            pagination={{ pageSize: 20 }}
-            scroll={{ y: 300 }}
-          />
-        </TabPane>
-      </Tabs>
-
-      <div id="zhiPrint" style={{ display: "none" }}>
-        <div className="center">
-          <div className="left">防伪查询</div>
-          <div className="center">二维码</div>
-          <div className="right">
-            <p>
-              <span>S/N:</span>WWWWWWWWWWWWWWWWWWWW
-            </p>
-            <p>
-              <span>DATE:</span>2222222222222222
-            </p>
-            <p>
-              <span>服务热线:</span>4008268008
-            </p>
-          </div>
-        </div>
-      </div>
     </Modal>
   );
 };
 
-export default PrintForm;
+export default CreateForm;

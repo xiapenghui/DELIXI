@@ -311,7 +311,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
-        serialNumber: params.serialNumber,
+        materialNo: params.materialNo,
         supplierName: params.supplierName,
       },
       pageNum: params.current,

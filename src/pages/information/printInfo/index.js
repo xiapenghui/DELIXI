@@ -1,5 +1,5 @@
 import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Popconfirm } from "antd";
+import { Button, message, DatePicker, Form, Input, Popconfirm, Radio } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -22,15 +22,18 @@ import {
 
 const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const { TableList, typeList, riskList, isNoList } = printInfo;
-  const { } = user;
+  const {currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
   const [printNo, setPrintNo] = useState(0);
   const [picker, setPicker] = useState();
-  const [materialTypeRow, setMaterialTypeRow] = useState([]);
-  const [materialTypeArr, setMaterialTypeArr] = useState([])
+  const [materialTypeRow, setMaterialTypeRow] = useState('')
+  const [materialTypeList, setMaterialTypeList] = useState([])
+  const [isDisabled, setIsDisabled] = useState(true)
+
+
 
   /**
    * 编辑初始化
@@ -84,13 +87,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text) => {
+      render: (text, record, index, key) => {
         return (
           <input
+            id={"materialType" + record.id}
             style={{ color: "red" }}
             defaultValue={text}
             style={{ border: "none", color: "red", textAlign: "center" }}
-            onBlur={changeMater}
+            disabled={isDisabled}
+            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -143,9 +148,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 150,
       hideInSearch: true,
-      render: (text) => {
+      render: (text, record, index, key) => {
         return (
           <input
+            id={"cartonsNumber" + record.id}
             style={{ color: "red" }}
             defaultValue={text}
             style={{
@@ -154,7 +160,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
-            onBlur={changeCartonsNumber}
+            // onBlur={changeCartonsNumber}
+            onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -299,9 +306,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 150,
       hideInSearch: true,
-      render: (text) => {
+      render: (text, record, index, key) => {
         return (
           <input
+            id={"boxWeight" + record.id}
             style={{ color: "red" }}
             defaultValue={text}
             style={{
@@ -310,6 +318,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
+            onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -321,9 +330,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 150,
       hideInSearch: true,
-      render: (text) => {
+      render: (text, record, index, key) => {
         return (
           <input
+            id={"packingQuantity" + record.id}
             style={{ color: "red" }}
             defaultValue={text}
             style={{
@@ -332,6 +342,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
+            onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -351,9 +362,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text) => {
+      render: (text, record, index, key) => {
         return (
           <input
+            id={"threeC" + record.id}
             style={{ color: "red" }}
             defaultValue={text}
             style={{
@@ -362,6 +374,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
+            onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -401,66 +414,72 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   };
 
   //获取物料型号
-  const changeMater = async (e) => {
-    setMaterialTypeRow(e.target.value)
-    let Arr = []
-    Arr.push(materialTypeRow)
-    console.log('Arr', Arr)
+  const changeMater = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.materialType = value
+      }
+    })
   };
 
   //获取装盒数量
-  const changeCartonsNumber = async (e) => {
-    // setPrintNo(e.target.value);
+  const changeCartonsNumber = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.changeCartonsNumber = value
+      }
+    })
   };
+
+  //获取箱重量
+  const changeBoxWeight = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.boxWeight = value
+      }
+    })
+  };
+
+  //获取装箱数量
+  const changePacking = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.packingQuantity = value
+      }
+    })
+  };
+
+  //获取3C
+  const changethreeC = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.threeC = value
+      }
+    })
+  };
+
 
 
 
   //点击确认生成条码
   const confirm = async () => {
-    // setIds(selectedRowsState.map((item) => item.id));
 
-
-
+    // if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
     if (selectedRowsState?.length > 0) {
+      setIsDisabled(false)
       handleModalVisible(true);
-      selectedRowsState.map((item,key)=>{
-        item.cartonsNumber=33
-      })
 
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
-        // materialFactoryList: [
-        //   // selectedRowsState.map((item,key)=>{
-        //   //    a:item.id;
-        //   //    b:item.defaultValue
-        //   // })
-        //   {
-        //     bigBoxWeight: 1,
-        //     cartonsNumber: 2,
-        //     factoryId: 1,
-        //     factoryNo: "德力西",
-        //     id: 1,
-        //     materialId: 1,
-        //     materialNo: "123",
-        //     materialType: "1",
-        //     packingQuantity: 2,
-        //     printDevice: "河南",
-        //     productionDate: "2022-03-06",
-        //     threeC: "3c"
-        //   }
- 
-        // ],
         printDate: picker,
-        printQuantity: printNo
+        printQuantity: printNo,
+        userId:user.currentUser.id
       });
       if (data2.status == '200') {
-        setMaterialTypeArr(data2.data)
+        setMaterialTypeList(data2.data)
       }
-
-
-
     } else {
-      message.info("请至少选择一条数据！");
+      message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
     }
   }
 
@@ -469,8 +488,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     const TableList = postListInit({
       data: {
-        shiftname: params.shiftname,
-        shiftclass: params.shiftname,
+        materialNo: params.materialNo,
+        supplierName: params.supplierName,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -580,6 +599,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{
+          type: 'radio',
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         }}
       />
@@ -617,7 +637,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         modalVisible={createModalVisible}
         printNo={printNo}
         picker={picker}
-        materialTypeArr={materialTypeArr}
+        materialTypeList={materialTypeList}
         title="打印条码"
       ></PrintForm>
 
