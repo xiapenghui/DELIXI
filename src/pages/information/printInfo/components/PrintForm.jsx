@@ -93,7 +93,7 @@ const PrintForm = (props) => {
         LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
         LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
         LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "128A", "123456");
+        LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
         LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
         LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
         LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
@@ -141,12 +141,12 @@ const PrintForm = (props) => {
   //开始
   //点击打印条码
   const pintCode = () => {
-    var zhiList = noStart.replace('123456', arr[0])
+    var zhiList = noStart.replace('123456789', arr[0])
     eval(zhiList)
     LODOP.PRINT();
     for (var i = 0; i < arr.length; i++) {
       if (i > 0) {
-        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        LODOP.SET_PRINT_PAGESIZE(1, arr.length, "A3");
         zhiList = zhiList.replace(arr[i-1], arr[i])
         eval(zhiList)
         LODOP.PRINT();
@@ -171,7 +171,7 @@ const PrintForm = (props) => {
     LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
     LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "128A", "123456");
+    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
     LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
     LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
@@ -203,7 +203,7 @@ const PrintForm = (props) => {
     LODOP.SET_PRINT_MODE("PROGRAM_CONTENT_BYVAR", true);//生成程序时，内容参数有变量用变量，无变量用具体值
     let strStyle = `<style> 打印的样式需要写在这里，下面引入</style> `;
     // LODOP.ADD_PRINT_HTM(17,"5.875%","90%",450,"(超文本1的HTML代码内容)");
-    // LODOP.ADD_PRINT_BARCODE(161,"5.5%","46.375%",208,"128A","123456789012");
+    // LODOP.ADD_PRINT_BARCODE(161,"5.5%","46.375%",208,"QRCode","123456789012");
     LODOP.ADD_PRINT_HTM(
       15,
       "6%",
@@ -211,7 +211,7 @@ const PrintForm = (props) => {
       450,
       strStyle + document.getElementById("zhiPrint").innerHTML
     );
-    LODOP.ADD_PRINT_BARCODE(190, 483, 213, 60, "128A", "123456789012");
+    LODOP.ADD_PRINT_BARCODE(190, 483, 213, 60, "QRCode", "123456789012");
     CreateOneFormPage(CodeList)
     LODOP.PRINT_DESIGN();
     LODOP.PREVIEW(); //最后一个打印(预览)语句
@@ -231,10 +231,10 @@ const PrintForm = (props) => {
     >
       <div style={{ height: "40px" }}>
         <span>
-          批次号： <Tag color="red">202202151200</Tag>
+          批次号： <Tag color="red">{materialTypeList.batchNumber}</Tag>
         </span>
         <span>
-          物料编号：<Tag color="volcano">32749</Tag>
+          物料编号：<Tag color="volcano">{materialTypeList.materialNo}</Tag>
         </span>
         <Button type="primary" className="pintCode" onClick={pintCode}>
           <ArrowDownOutlined />

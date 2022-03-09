@@ -464,8 +464,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   //点击确认生成条码
   const confirm = async () => {
 
-    // if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
-    if (selectedRowsState?.length > 0) {
+    if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
+    // if (selectedRowsState?.length > 0) {
       setIsDisabled(false)
       handleModalVisible(true);
 

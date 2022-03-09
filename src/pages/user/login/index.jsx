@@ -57,7 +57,7 @@ const Login = (props) => {
 
         <UserName
           name="userName"
-          placeholder="用户名: admin or user"
+          placeholder="用户名"
           rules={[
             {
               required: true,
@@ -67,7 +67,7 @@ const Login = (props) => {
         />
         <Password
           name="password"
-          placeholder="密码: sf"
+          placeholder="密码"
           rules={[
             {
               required: true,
@@ -78,7 +78,7 @@ const Login = (props) => {
 
 
         <div>
-          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)}>
+          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)} style={{color:'#67be8e'}}>
             自动登录
           </Checkbox>
           <a

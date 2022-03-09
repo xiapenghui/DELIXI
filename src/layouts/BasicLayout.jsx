@@ -166,7 +166,7 @@ const BasicLayout = (props) => {
       actionRef={actionRef}
       // logo={ <img alt={'logo'} src={logo} style={{ width: '162px', height: '152px', marginBottom: '7px' }} />}
       // logo={<img alt={'logo'} src={logo} style={{ width: '155px', height: '32px', marginBottom: '7px' }} />}
-      logo={<img alt={'logo'} src={logo} style={{ width: '170px', height: '50px',padding:'5px 15px' }} />}
+      logo={<img alt={'logo'} src={logo} style={{ width: '200px', height: '80px',padding:'5px 30px 5px 15px' }} />}
       formatMessage={formatMessage}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}

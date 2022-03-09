@@ -1,39 +1,49 @@
 import request from '@/utils/request';
 import globalConfig from '../../../config/defaultSettings';
-// const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_adm}/yshyerp-adm/api/customer`
-// const ip = `${globalConfig.ip}:${globalConfig.port.yshyerp_sspa}`
-const ip = `http://192.168.1.18:23111`
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
+
 
 /**
  * 查询条件初始化
  */
-export async function getDropDownInit(params) {
-  return request(`${ip}/WebAPI/api/Common/GetProductAreaTextValuePair`, {
-    method: 'POST',
-    data: { ...params },
-  });
+export async function getDropDownInit() {
+  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit`, {
+    method: 'GET',
+  })
 }
 
 /**
  * 查询
  */
 
-export async function tankSearch(params) {
-  return request(`${ip}/WebAPI/api/KpiLine/List`, {
+
+ //只码
+export async function getOnlyBarCodeList(params) {
+  return request(`${ip}/DLX_OEM/api/printRecord/getOnlyBarCodeList`, {
     method: 'POST',
     data: { ...params },
   });
 }
 
 
-export async function tankSearch1(params) {
-  return request(`${ip}/WebAPI/api/lineoeekpi/ListArea`, {
+
+ //盒码
+ export async function getBoxBarCodeList(params) {
+  return request(`${ip}/DLX_OEM/api/printRecord/getBoxBarCodeList`, {
     method: 'POST',
     data: { ...params },
   });
 }
 
 
+
+ //箱码
+ export async function getBigBoxBarCodeList(params) {
+  return request(`${ip}/DLX_OEM/api/printRecord/getBigBoxBarCodeList`, {
+    method: 'POST',
+    data: { ...params },
+  });
+}
 
 
  

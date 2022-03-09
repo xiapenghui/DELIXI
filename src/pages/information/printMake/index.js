@@ -7,7 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import globalConfig from '../../../../config/defaultSettings';
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-import CreateForm from "./components/CreateForm";
+// import PrintFormZhi from "./components/PrintFormZhi"; //只码模板
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import {
@@ -17,14 +17,23 @@ import {
 } from "@/services/information/printMake";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
-const printMakeComponent = ({ printMake, dispatch, user }) => {
+const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
   const { materialList } = printMake
   const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
+  // const [createModalVisible, handleModalVisible] = useState(false);
   const formItemLayout = globalConfig.table.formItemLayout
+  const [noStart, setNoStart] = useState('')
+  const [arr, setArr] = useState([
+    "22345678905",
+    "12345678901",
+    "12345678906",
+    // "12345678902",
+    // "12345678907",
+  ]);
   const columns = [
     {
       title: "打印批次",
@@ -108,7 +117,6 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
 
   ];
 
-
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [dataSource3, setDataSource3] = useState([])
@@ -143,6 +151,29 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
   }
 
   useEffect(() => {
+
+    setNoStart(
+      `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
+      LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
+      LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+      LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
+      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
+      LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+      LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+      LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
+      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+      LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
+      LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);`
+    )
     zhiSearch()
     heSearch()
     boxSearch()
@@ -150,7 +181,6 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
 
 
   //查询封装公用参数
-
   const params = (values) => {
     return {
       data: {
@@ -202,6 +232,60 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
         }
       })
   }
+
+
+
+
+
+  //点击打印只条码
+  const pintZhiCode = () => {
+    var zhiList = noStart.replace('123456789', arr[0])
+    eval(zhiList)
+    LODOP.PRINT();
+    for (var i = 0; i < arr.length; i++) {
+      if (i > 0) {
+        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        zhiList = zhiList.replace(arr[i - 1], arr[i])
+        eval(zhiList)
+        LODOP.PRINT();
+        LODOP.PRINT_INIT("");
+      }
+    }
+  };
+
+
+  //只条码模板
+  const zhiCode = () => {
+    CreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+  
+  const CreateOneFormPage = () => {
+    LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
+    LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
+    LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
+    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
+    LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
+    LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
+    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+    LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
+    LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+  };
 
 
 
@@ -280,11 +364,10 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>
                   <Tag color="volcano">  只码模板:</Tag>成品条码
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
           </Form>
@@ -292,7 +375,7 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
           <Table dataSource={dataSource1} columns={columns}
             scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
-            // rowKey="index"
+            rowKey="id"
             rowSelection={{
               ...rowSelection1
             }}
@@ -388,8 +471,8 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
           </Form>
           <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
+            // rowKey="id"
             rowSelection={{
-              type: Checkbox,
               ...rowSelection2
             }}
           />
@@ -486,6 +569,7 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
           </Form>
           <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
             style={{ padding: "0 20px" }}
+            rowKey="id"
             rowSelection={{
               ...rowSelection3
             }}
@@ -500,6 +584,12 @@ const printMakeComponent = ({ printMake, dispatch, user }) => {
 
         </TabPane>
       </Tabs>
+
+
+
+
+
+
     </PageContainer>
   );
 };

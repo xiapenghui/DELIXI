@@ -3,23 +3,12 @@ import { Modal, Tabs, Table, Tag, Button } from "antd";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { getLodop } from "../../../../utils/LodopFuncs";
 import "./modal.css";
-const { TabPane } = Tabs;
  
  
 
-const CreateForm = (props) => {
-  const { modalVisible, onCancel, materialTypeList } = props;
-  const [keys, setKeys] = useState(1);
-  const [zhiCode, setZhiCode] = useState(false);
-  const [heCode, setHeCode] = useState(true);
-  const [boxCode, setBoxCode] = useState(true);
-  const [loading1, setLoading1] = useState(false);
-  const [loading2, setLoading2] = useState(false);
-  const [loading3, setLoading3] = useState(false);
+const PrintFormZhi = (props) => {
+  const { modalVisible, onCancel } = props;
   const [noStart, setNoStart] = useState('')
-  const [CodeList, setCodeList] = useState(['123456789012', '123456789013'])
-
-
   const [arr, setArr] = useState([
     "22345678905",
     "12345678901",
@@ -29,7 +18,6 @@ const CreateForm = (props) => {
   ]);
 
   useEffect(() => {
- 
     if (modalVisible) {
       setNoStart(
         `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
@@ -120,28 +108,7 @@ const CreateForm = (props) => {
 
   //结束代码
 
-
-
-  //盒码
-  const hePint = () => {
-    LODOP.PRINT_INIT("react使用打印插件CLodop"); //打印初始化
-    LODOP.SET_PRINT_MODE("PROGRAM_CONTENT_BYVAR", true);//生成程序时，内容参数有变量用变量，无变量用具体值
-    let strStyle = `<style> 打印的样式需要写在这里，下面引入</style> `;
-    // LODOP.ADD_PRINT_HTM(17,"5.875%","90%",450,"(超文本1的HTML代码内容)");
-    // LODOP.ADD_PRINT_BARCODE(161,"5.5%","46.375%",208,"128A","123456789012");
-    LODOP.ADD_PRINT_HTM(
-      15,
-      "6%",
-      "90%",
-      450,
-      strStyle + document.getElementById("zhiPrint").innerHTML
-    );
-    LODOP.ADD_PRINT_BARCODE(190, 483, 213, 60, "128A", "123456789012");
-    CreateOneFormPage(CodeList)
-    LODOP.PRINT_DESIGN();
-    LODOP.PREVIEW(); //最后一个打印(预览)语句
-    // LODOP.SET_PRINT_STYLEA(0,"Content", code);//设置内容参数的变量名
-  };
+ 
 
   return (
     <Modal
@@ -149,7 +116,7 @@ const CreateForm = (props) => {
       destroyOnClose
       title="打印条码"
       visible={modalVisible}
-      // visible={true}
+      pintCode={pintCode}
       onCancel={() => onCancel()}
       footer={null}
       width={1500}
@@ -158,4 +125,4 @@ const CreateForm = (props) => {
   );
 };
 
-export default CreateForm;
+export default PrintFormZhi;
