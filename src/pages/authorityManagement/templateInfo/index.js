@@ -108,6 +108,18 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         ],
       },
     },
+    
+
+    {
+      title: "模板代码",
+      dataIndex: "tempCode",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis:true,
+      hideInSearch: true,
+      hideInForm:true
+    },
 
     {
       title: "尺寸",

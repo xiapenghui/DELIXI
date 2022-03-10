@@ -7,19 +7,17 @@ import ProTable from "@ant-design/pro-table";
 import globalConfig from '../../../../config/defaultSettings';
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-// import PrintFormZhi from "./components/PrintFormZhi"; //只码模板
-import { getLodop } from "../../../utils/LodopFuncs";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
   getBigBoxBarCodeList
-} from "@/services/information/printMake";
+} from "@/services/information/printMakeCopy";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
-const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
-  const { materialList } = printMake
+const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => {
+  const { materialList } = printMakeCopy
   const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
@@ -197,7 +195,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
       },
       pageNum: 1,
       pageSize: 20,
-      state:2,
+      state:1,
       userId: user.currentUser.id
     }
   }
@@ -600,6 +598,6 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
   );
 };
 
-export default connect(({ printMake, user }) => ({ printMake, user }))(
-  printMakeComponent
+export default connect(({ printMakeCopy, user }) => ({ printMakeCopy, user }))(
+  printMakeCopyComponent
 );

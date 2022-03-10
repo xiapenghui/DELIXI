@@ -22,7 +22,7 @@ import {
 
 const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const { TableList, typeList, riskList, isNoList } = printInfo;
-  const {currentUser } = user;
+  const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
@@ -241,7 +241,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     {
       title: "工厂",
-      dataIndex: "factory",
+      dataIndex: "factoryName",
       valueType: "text",
       align: "center",
       width: 150,
@@ -259,7 +259,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
     {
       title: "地址",
-      dataIndex: "adress",
+      dataIndex: "address",
       valueType: "text",
       align: "center",
       ellipsis: true,
@@ -293,7 +293,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
     {
       title: "变更标记",
-      dataIndex: "sign",
+      dataIndex: "state",
       valueType: "text",
       align: "center",
       width: 120,
@@ -458,22 +458,25 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     })
   };
 
+ 
 
-
+  // const  = {
+  //   onChange: (selectedRowKeys, selectedRows) => {
+  //     setIsDisabled(false)
+  //   },
+  // }
 
   //点击确认生成条码
   const confirm = async () => {
-
     if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
-    // if (selectedRowsState?.length > 0) {
-      setIsDisabled(false)
+      // setIsDisabled(false)
       handleModalVisible(true);
 
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
         printDate: picker,
         printQuantity: printNo,
-        userId:user.currentUser.id
+        userId: user.currentUser.id
       });
       if (data2.status == '200') {
         setMaterialTypeList(data2.data)
@@ -601,6 +604,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         rowSelection={{
           type: 'radio',
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+          // ...rowSelection,
         }}
       />
       {selectedRowsState?.length > 0 && (

@@ -20,7 +20,6 @@ const DetailForm = (props) => {
     const onExpand = (expandedKeysValue) => {
         console.log('onExpand', expandedKeysValue); // if not set autoExpandParent to false, if children expanded, parent can not collapse.
         // or, you can remove all expanded children keys.
-
         setExpandedKeys(expandedKeysValue);
         setAutoExpandParent(false);
     };
@@ -53,8 +52,11 @@ const DetailForm = (props) => {
     //data.menuList所有的树结构
     //data.EditData.sysMenuIdList后端给的要展示的父子节点
     const result = [...new Set(requestList(data.menuList))].filter((item) =>
-        new Set(eval(data.EditData.sysMenuIdList)).has(item)
+        new Set(eval(data.EditData.menuIdList)).has(item)
+      
     );
+
+    debugger
 
     useEffect(() => {
         if (detailModalVisible) {

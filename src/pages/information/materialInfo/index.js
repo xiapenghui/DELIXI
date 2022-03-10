@@ -276,7 +276,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       dataIndex: "date",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 180,
       hideInSearch: true,
     },
     {

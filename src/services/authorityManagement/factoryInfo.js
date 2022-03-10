@@ -57,7 +57,7 @@ export async function deleted(params) {
 
 //获取下载模板
 export async function getTempl() {
-  return request(`${ip}/DLX_OEM/api/excel/GetExcelTemplate/MaterialFactory`, {
+  return request(`${ip}/DLX_OEM/api/excel/GetExcelTemplate/Factory`, {
     method: 'GET'
   });
 }

@@ -57,12 +57,7 @@ const columns = [
     align: "center",
   },
 ];
-
-const dataSource1 = [];
-
-const dataSource2 = [];
-
-const dataSource3 = [];
+ 
 
 const PrintForm = (props) => {
   const { modalVisible, onCancel, materialTypeList } = props;
@@ -167,6 +162,7 @@ const PrintForm = (props) => {
 
 
   const CreateOneFormPage = () => {
+   
     LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
     LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
     LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
