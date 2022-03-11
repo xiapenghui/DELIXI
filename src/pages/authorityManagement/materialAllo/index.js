@@ -172,9 +172,11 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      hideInTable: true,
       valueEnum: onlyTempList.length == 0 ? {} : [onlyTempList],
       initialValue: IsUpdate ? UpdateDate.onlyTemp : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+
         if (type === 'form' || type === 'table') {
           return <Select
             allowClear
@@ -190,9 +192,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.onlyTempName
-      },
+      // render: (text, record) => {
+      //   return record.onlyTempName
+      // },
       formItemProps: {
         rules: [
           {
@@ -203,14 +205,27 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       },
     },
 
+    {
+      title: "只码模板",
+      dataIndex: "onlyTempName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      ellipsis: true,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
 
     {
       title: "盒码模板",
       dataIndex: "boxTemp",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
+      hideInTable: true,
+      ellipsis: true,
       valueEnum: boxTempList.length == 0 ? {} : [boxTempList],
       initialValue: IsUpdate ? UpdateDate.boxTemp : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -229,9 +244,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.boxTempName
-      },
+      // render: (text, record) => {
+      //   return record.boxTempName
+      // },
       formItemProps: {
         rules: [
           {
@@ -241,6 +256,20 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         ],
       },
     },
+
+
+    {
+      title: "盒码模板",
+      dataIndex: "boxTempName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      ellipsis: true,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
+
     {
       title: "箱码模板",
       dataIndex: "bigBoxTemp",
@@ -248,6 +277,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      hideInTable: true,
       valueEnum: bigBoxTempList.length == 0 ? {} : [bigBoxTempList],
       initialValue: IsUpdate ? UpdateDate.bigBoxTemp : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -266,9 +296,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.bigBoxTempName
-      },
+      // render: (text, record) => {
+      //   return record.bigBoxTempName
+      // },
       formItemProps: {
         rules: [
           {
@@ -278,6 +308,19 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         ],
       },
     },
+
+    {
+      title: "箱码模板",
+      dataIndex: "bigBoxTempName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      ellipsis: true,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
+
     {
       title: "维护时间",
       dataIndex: "maintainTime",
@@ -476,7 +519,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     toExcel.saveExcel();
   };
 
-
+ 
   //下载模板
   const downloadTemp = async (fields) => {
     let data = await getTempl(fields);

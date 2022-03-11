@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input } from "antd";
+import { Button, message, TimePicker, DatePicker, Input ,Tag } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -12,16 +12,12 @@ import "../../../../src/assets/commonStyle.css";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
-  postListInit,
-  deleted,
-  getAddDropDownInit,
-  addPost,
-  updatePut,
-  GetShiftNO,
+  postListInit
 } from "@/services/information/printRecord";
 
-const printRecordComponent = ({ printRecord, dispatch }) => {
+const printRecordComponent = ({ printRecord, dispatch ,user}) => {
   const { TableList, typeList, riskList, isNoList } = printRecord;
+  const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const actionRef = useRef();
@@ -31,76 +27,56 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
-  const [shiftNO, setShiftNO] = useState();
   const getColumns = () => [
     {
       title: "打印时间从",
-      dataIndex: "tsdateStart",
+      dataIndex: "startDate",
       // valueType: 'dateTime',
       valueType: "date",
       align: "center",
       width: 120,
       hideInTable: true,
-      initialValue: new Date(),
-      initialValue: moment(UpdateDate.tsdateStart),
+      // initialValue: new Date(),
+      // initialValue: moment(UpdateDate.tsdateStart),
     },
 
     {
       title: "打印时间至",
-      dataIndex: "tsdateEnd",
+      dataIndex: "endDate",
       // valueType: 'dateTime',
       valueType: "date",
       align: "center",
       width: 120,
       hideInTable: true,
-      initialValue: new Date(),
-      initialValue: moment(UpdateDate.tsdateEnd),
+      // initialValue: new Date(),
+      // initialValue: moment(UpdateDate.tsdateEnd),
     },
 
-    // {
-    //   title: '打包时间',
-    //   dataIndex: 'timefrom',
-    //   // valueType: 'text',
-    //   valueType: 'timeData',
-    //   align: 'center',
-    //   // initialValue: IsUpdate ? UpdateDate.timefrom : '',
-    //   width:120,
-    //   initialValue: IsUpdate ? moment(UpdateDate.timefrom, 'HH:mm') : null,
-    //   renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-    //     if (type == 'form') {
-    //       return <TimePicker format={'HH:mm'} />
-    //     }
-    //     return defaultRender(_);
-    //   },
-
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: '时间从不能为空!',
-    //       },
-    //     ],
-    //   },
-    // },
 
     {
       title: "打印批次",
-      dataIndex: "shiftdec",
+      dataIndex: "batchNumber",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
-      title: "是否上传",
-      dataIndex: "shiftdec",
+      title: "是否打印",
+      dataIndex: "state",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
+        render: (text, record) => {
+        let color = text ==="未打印" ? "red" : "green";
+          return (
+            <Tag color={color}>
+              {text}
+            </Tag>
+          );
+      },
     },
 
     {
@@ -114,95 +90,69 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
     },
     {
       title: "只码",
-      dataIndex: "shiftdec",
+      dataIndex: "onlyBarCode",
       valueType: "text",
       align: "center",
       width: 120,
-
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
       title: "盒码",
-      dataIndex: "shiftname",
+      dataIndex: "boxBarCode",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.shiftname : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "班别名称不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "箱码",
-      dataIndex: "shiftdec",
+      dataIndex: "bigBoxBarCode",
       valueType: "text",
       align: "center",
       width: 120,
-
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
       title: "物料编号",
-      dataIndex: "shiftdec",
+      dataIndex: "materialNo",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
       title: "物料型号",
-      dataIndex: "shiftdec",
+      dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
       title: "型号描述",
-      dataIndex: "shiftname",
+      dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftname : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "班别名称不能为空!",
-          },
-        ],
-      },
     },
 
     {
       title: "打印时间",
-      dataIndex: "shiftdec",
+      dataIndex: "printDateTime",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     {
-      title: "	打印人员",
-      dataIndex: "shiftdec",
+      title: "打印人员",
+      dataIndex: "printer",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     },
 
     // {
@@ -228,14 +178,22 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
-      shiftname: params.shiftname == null ? "" : params.shiftname,
-      PageIndex: params.current,
-      PageSize: params.pageSize,
+      data: {
+        startDate: params.startDate,
+        endDate: params.endDate,
+        materialNo:params.materialNo,
+        materialType:params.materialType,
+        onlyBarCode:params.onlyBarCode,
+        boxBarCode:params.boxBarCode,
+        bigBoxBarCode:params.bigBoxBarCode
+      },
+      pageNum: params.current,
+      pageSize: params.pageSize,
+      userId: user.currentUser.id
     });
     return TableList.then(function (value) {
       return {
-        // data: value.list,
-        data: [],
+        data: value.data.list,
         current: value.pageNum,
         pageSize: value.pageSize,
         success: true,
@@ -248,46 +206,13 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
    * @param fields
    */
 
-  const handleAdd = async (fields) => {
-    const hide = message.loading("正在添加");
-    try {
-      let data = await addPost(fields);
-      if (data.status == "200") {
-        hide();
-        message.success(data.message);
-        return true;
-      } else {
-        message.error(data.message);
-        return false;
-      }
-    } catch (error) {
-      message.error("添加失败请重试！");
-      return false;
-    }
-  };
+ 
   /**
    * 更新节点
    * @param handleUpdate 编辑保存
    */
 
-  const handleUpdate = async (fields) => {
-    const hide = message.loading("正在编辑");
-    console.log("handleUpdate", fields);
-    try {
-      let data = await updatePut({ shiftID: UpdateDate.shiftID, ...fields });
-      if (data.status == "200") {
-        hide();
-        message.success(data.message);
-        return true;
-      } else {
-        message.error(data.message);
-        return false;
-      }
-    } catch (error) {
-      message.error("编辑失败请重试！");
-      return false;
-    }
-  };
+   
   /**
    *  删除节点
    * @param selectedRows
@@ -317,20 +242,7 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
     }
   };
 
-  //新增班别编号
-  const handleModalVisible1 = async () => {
-    try {
-      let data = await GetShiftNO();
-      if (data.status == "200") {
-        setShiftNO(data.list);
-        handleModalVisible(true);
-      }
-    } catch (error) {
-      message.error("编辑失败请重试！");
-      return false;
-    }
-  };
-
+ 
   return (
     <PageContainer>
       <ProTable
@@ -343,11 +255,6 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
           collapseRender: false,
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-          // <Button type="primary" onClick={() => handleModalVisible1(true)}>
-          //   <PlusOutlined /> 新建
-          // </Button>,
-        ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{
@@ -382,64 +289,11 @@ const printRecordComponent = ({ printRecord, dispatch }) => {
           </Button>
         </FooterToolbar>
       )}
-      <CreateForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-        title="新建"
-      >
-        <ProTable
-          className="boxTbale"
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
-
-            if (success) {
-              handleModalVisible(false);
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={getColumns()}
-        />
-      </CreateForm>
-      {UpdateDate && Object.keys(UpdateDate).length ? (
-        <UpdateForm
-          width={700}
-          onCancel={() => {
-            setUpdateDate({}); //编辑modal一旦关闭就必须setUpdateDate
-            setIsUpdate(false);
-            handleUpdateModalVisible(false);
-          }}
-          modalVisible={updateModalVisible}
-          title="编辑"
-        >
-          <ProTable
-            className="boxTbale"
-            onSubmit={async (value) => {
-              const success = await handleUpdate(value);
-
-              if (success) {
-                handleUpdateModalVisible(false);
-                setUpdateDate({});
-                setIsUpdate(false);
-                if (actionRef.current) {
-                  actionRef.current.reload();
-                }
-              }
-            }}
-            rowKey="id"
-            type="form"
-            columns={getColumns()}
-          />
-        </UpdateForm>
-      ) : null}
+       
     </PageContainer>
   );
 };
 
-export default connect(({ printRecord }) => ({ printRecord }))(
+export default connect(({ printRecord ,user}) => ({ printRecord ,user }))(
   printRecordComponent
 );

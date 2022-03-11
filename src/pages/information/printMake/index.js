@@ -193,11 +193,11 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         startDate: values.startDate,
         endDate: values.endDate,
         barCode: values.barCode,
-        materialId: values.materialId
+        materialId: values.materialId,
+        state:2,
       },
       pageNum: 1,
       pageSize: 20,
-      state:2,
       userId: user.currentUser.id
     }
   }

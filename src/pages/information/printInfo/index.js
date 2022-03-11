@@ -94,7 +94,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             style={{ color: "red" }}
             defaultValue={text}
             style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={isDisabled}
+            // disabled={isDisabled}
             onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
           ></input>
         );
@@ -458,20 +458,13 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     })
   };
 
- 
 
-  // const  = {
-  //   onChange: (selectedRowKeys, selectedRows) => {
-  //     setIsDisabled(false)
-  //   },
-  // }
+
 
   //点击确认生成条码
   const confirm = async () => {
     if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
-      // setIsDisabled(false)
       handleModalVisible(true);
-
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
         printDate: picker,

@@ -3,9 +3,7 @@ import { history } from 'umi';
 import {
   getDropDownInit,
   postListInit,
-  deleted,
-  getAddDropDownInit,
-  addPost,
+ 
 } from '@/services/information/printRecord';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -24,11 +22,11 @@ const Model = {
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname == `/time/${TableName}`) {
-          dispatch({
-            type: 'getDropDownInit',
-            payload: {}
-          })
+        if (location.pathname == `/information/${TableName}`) {
+          // dispatch({
+          //   type: 'getDropDownInit',
+          //   payload: {}
+          // })
         }
       })
     },
@@ -39,24 +37,7 @@ const Model = {
      * @param {getDropDownInit} 查询初始化
      * @param {query} 查询
      */
-    * getDropDownInit({
-      payload,
-    }, { call, put, select }) {
-      const data = yield call(getDropDownInit)
-      if (data.status !== '200') {
-        return message.error(data.message);
-      } else if (data.status == '200') {
-        yield put({
-          type: 'querySuccessed',
-          payload: {
-            type: 'getDropDownInit',
-            data: data.list,
-          }
-        })
-        return message.success(data.message);
-      }
-    },
-
+   
     * query({
       payload,
     }, { call, put, select }) {
@@ -77,13 +58,7 @@ const Model = {
   },
   reducers: {
     querySuccessed(state, { payload }) {
-      if (payload.type === 'getDropDownInit') {
-        return {
-          ...state, ...payload,
-          customerList: payload.data.customerList,
-          isNoList:payload.data.isNoList
-        }
-      } else if (payload.type === 'postListInit') {
+       if (payload.type === 'postListInit') {
         return {
           ...state,
           TableList: new Promise(resolve => {

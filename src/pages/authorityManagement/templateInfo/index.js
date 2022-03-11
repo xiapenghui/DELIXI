@@ -118,7 +118,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       width: 200,
       ellipsis:true,
       hideInSearch: true,
-      hideInForm:true
+      // hideInForm:true
+      initialValue: IsUpdate ? UpdateDate.tempCode : "",
     },
 
     {

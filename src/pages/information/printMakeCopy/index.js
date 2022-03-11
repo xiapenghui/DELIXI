@@ -9,6 +9,7 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
+import { getLodop } from "../../../utils/LodopFuncs";
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
@@ -23,11 +24,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
- 
-  
+
+
   // const [createModalVisible, handleModalVisible] = useState(false);
   const formItemLayout = globalConfig.table.formItemLayout
-  const [noStart, setNoStart] = useState('')
+  const [noStartZhi, setNoStartZhi] = useState('')
   const [arr, setArr] = useState([
     "22345678905",
     "12345678901",
@@ -91,8 +92,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     },
     {
       title: "型号描述",
-      dataIndex: "modelDesc",
-      key: "modelDesc",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
       ellipsis: {
         showTitle: false,
       },
@@ -121,7 +122,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [dataSource3, setDataSource3] = useState([])
-
+  const [show1, isShow1] = useState(true)
+  const [show2, isShow2] = useState(true)
+  const [show3, isShow3] = useState(true)
+  const [zhiString, setZhiString] = useState('')
+  const [heString, setHeString] = useState('')
+  const [boxString, setBoxString] = useState('')
+  
 
   //多选条码
   const rowSelection1 = {
@@ -152,36 +159,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   }
 
   useEffect(() => {
-
-    setNoStart(
-      `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-      LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-      LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-      LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-      LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);`
-    )
-    zhiSearch()
-    heSearch()
-    boxSearch()
+    // zhiSearch()
+    // heSearch()
+    // boxSearch()
   }, [])
 
 
-  
+
 
 
   //查询封装公用参数
@@ -191,11 +175,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         startDate: values.startDate,
         endDate: values.endDate,
         barCode: values.barCode,
-        materialId: values.materialId
+        materialId: values.materialId,
+        state: 1,
       },
       pageNum: 1,
       pageSize: 20,
-      state:1,
       userId: user.currentUser.id
     }
   }
@@ -206,9 +190,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     form1
       .validateFields()
       .then(async (values) => {
-        let data = await getOnlyBarCodeList(params(values));
-        if (data.status === 200) {
-          setDataSource1(data.data.list)
+        if (values.materialId === undefined) {
+          isShow1(true)
+          message.warning('请先选择物料编号')
+        } else {
+          isShow1(false)
+          let data = await getOnlyBarCodeList(params(values));
+          if (data.status === 200) {
+            setDataSource1(data.data.list)
+            setZhiString(data.data.tempCode)
+          }
         }
       })
   }
@@ -218,9 +209,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     form2
       .validateFields()
       .then(async (values) => {
-        let data = await getBoxBarCodeList(params(values));
-        if (data.status === 200) {
-          setDataSource2(data.data.list)
+        if (values.materialId === undefined) {
+          isShow2(true)
+          message.warning('请先选择物料编号')
+        } else {
+          isShow2(false)
+          let data = await getBoxBarCodeList(params(values));
+          if (data.status === 200) {
+            setDataSource2(data.data.list)
+            setHeString(data.data.tempCode)
+          }
         }
       })
   }
@@ -231,9 +229,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     form3
       .validateFields()
       .then(async (values) => {
-        let data = await getBigBoxBarCodeList(params(values));
-        if (data.status === 200) {
-          setDataSource3(data.data.list)
+        if (values.materialId === undefined) {
+          isShow3(true)
+          message.warning('请先选择物料编号')
+        } else {
+          isShow3(false)
+          let data = await getBigBoxBarCodeList(params(values));
+          if (data.status === 200) {
+            setDataSource3(data.data.list)
+            setBoxString(data.data.tempCode)
+          }
         }
       })
   }
@@ -242,9 +247,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-  //点击打印只条码
+  //点击打印只条码  只---开始
   const pintZhiCode = () => {
-    var zhiList = noStart.replace('123456789', arr[0])
+    var zhiList = noStartZhi.replace('123456789', arr[0])
     eval(zhiList)
     LODOP.PRINT();
     for (var i = 0; i < arr.length; i++) {
@@ -261,39 +266,98 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //只条码模板
   const zhiCode = () => {
-    CreateOneFormPage()
+    zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
-      setNoStart(Value)
+      setNoStartZhi(Value)
     }
     LODOP.PRINT_DESIGN();
   };
 
-  
-  const CreateOneFormPage = () => {
-    LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-    LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-    LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-    LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-    LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+
+  const zhiCreateOneFormPage = () => {
+    eval(zhiString)
+  };
+
+  // 只---结束
+
+
+
+  //点击打印盒条码  盒---开始
+  const pintHeCode = () => {
+    var heList = noStartZhi.replace('123456789', arr[0])
+    eval(heList)
+    LODOP.PRINT();
+    for (var i = 0; i < arr.length; i++) {
+      if (i > 0) {
+        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        heList = heList.replace(arr[i - 1], arr[i])
+        eval(heList)
+        LODOP.PRINT();
+        LODOP.PRINT_INIT("");
+      }
+    }
   };
 
 
- 
+  //盒条码模板
+  const heCode = () => {
+    heCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStartZhi(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+
+  const heCreateOneFormPage = () => {
+    eval(heString)
+  };
+
+  // 盒---结束
+
+
+
+
+
+  //点击打印箱条码  箱---开始
+  const pintBoxCode = () => {
+    var boxList = noStartZhi.replace('123456789', arr[0])
+    eval(boxList)
+    LODOP.PRINT();
+    for (var i = 0; i < arr.length; i++) {
+      if (i > 0) {
+        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        boxList = boxList.replace(arr[i - 1], arr[i])
+        eval(boxList)
+        LODOP.PRINT();
+        LODOP.PRINT_INIT("");
+      }
+    }
+  };
+
+
+  //箱条码模板
+  const boxCode = () => {
+    boxCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStartBox(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+
+  const boxCreateOneFormPage = () => {
+    eval(boxString)
+  };
+
+  // 箱---结束
+
+
+
+
+
+
+
 
   return (
     <PageContainer>
@@ -355,7 +419,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
                   >
                     {materialList.map(function (item, index) {
@@ -367,10 +431,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode} hidden={show1}>
                   <Tag color="volcano">  只码模板:</Tag>成品条码
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode} hidden={show1}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
           </Form>
@@ -382,7 +446,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             rowSelection={{
               ...rowSelection1
             }}
-            // pagination= {{ pageSize: 10 }}
+          // pagination= {{ pageSize: 10 }}
           />
           {/* <Pagination
             total={dataSource1.length}
@@ -449,7 +513,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
                   >
                     {materialList.map(function (item, index) {
@@ -463,11 +527,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
-                {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} hidden={show2} >
                   <Tag color="volcano">  盒码模板:</Tag>40X60
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode} hidden={show2}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
 
@@ -546,7 +609,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
                   >
                     {materialList.map(function (item, index) {
@@ -562,10 +625,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
                 {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode} hidden={show3}>
                   <Tag color="volcano">  箱码模板:</Tag>60X80
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode} hidden={show3}><ArrowDownOutlined />点击打印</Button>
               </Col>
 
             </Row>
@@ -588,11 +651,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
         </TabPane>
       </Tabs>
-
-
-
-
-
 
     </PageContainer>
   );
