@@ -13,7 +13,8 @@ import { getLodop } from "../../../utils/LodopFuncs";
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
-  getBigBoxBarCodeList
+  getBigBoxBarCodeList,
+  printBarCode
 } from "@/services/information/printMakeCopy";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
@@ -28,14 +29,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   // const [createModalVisible, handleModalVisible] = useState(false);
   const formItemLayout = globalConfig.table.formItemLayout
-  const [noStartZhi, setNoStartZhi] = useState('')
-  const [arr, setArr] = useState([
-    "22345678905",
-    "12345678901",
-    "12345678906",
-    // "12345678902",
-    // "12345678907",
-  ]);
+
+
+
   const columns = [
     {
       title: "打印批次",
@@ -122,34 +118,21 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [dataSource3, setDataSource3] = useState([])
+  const [noStartZhi, setNoStartZhi] = useState('')
+  const [arrList, setArrList] = useState([]);
+  const [materialId1, setMaterialId1] = useState('');
+
+
+
   const [show1, isShow1] = useState(true)
+  const [show1_1, isShow1_1] = useState(true)
+
   const [show2, isShow2] = useState(true)
   const [show3, isShow3] = useState(true)
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
-  
 
-  //多选条码
-  const rowSelection1 = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    }
-  };
-
-  //多选盒码
-  const rowSelection2 = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    }
-  };
-
-  //多选箱码
-  const rowSelection3 = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    }
-  };
 
 
 
@@ -166,6 +149,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
+  const changeMaterialId = (value) => {
+    setMaterialId1(value)
+  }
+
 
 
   //查询封装公用参数
@@ -179,7 +166,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         state: 1,
       },
       pageNum: 1,
-      pageSize: 20,
+      pageSize: 1000,
       userId: user.currentUser.id
     }
   }
@@ -197,8 +184,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           isShow1(false)
           let data = await getOnlyBarCodeList(params(values));
           if (data.status === 200) {
+            // let NewArr=[]
             setDataSource1(data.data.list)
             setZhiString(data.data.tempCode)
+            // data.data.list.map((item,index)=>{
+            //   NewArr.push(item.barCode)
+            //   setArrList(NewArr)
+            // })
           }
         }
       })
@@ -248,24 +240,40 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   //点击打印只条码  只---开始
-  const pintZhiCode = () => {
-    var zhiList = noStartZhi.replace('123456789', arr[0])
-    eval(zhiList)
-    LODOP.PRINT();
-    for (var i = 0; i < arr.length; i++) {
-      if (i > 0) {
-        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        zhiList = zhiList.replace(arr[i - 1], arr[i])
-        eval(zhiList)
-        LODOP.PRINT();
-        LODOP.PRINT_INIT("");
+  const pintZhiCode = async () => {
+
+    let data = await printBarCode({
+      barCodeType: 1,
+      materialId: materialId1,
+      state: 1,
+      userId: 1
+    });
+    if (data.status == 200) {
+      var dataString = data.data.barCodeList
+      var zhiList = noStartZhi.replace('2222222222222222222222', dataString[0]).
+        replace('1234567890', dataString[0]).
+        replace('2022-01-01', data.data.material.date)
+      console.log('zhiList', zhiList)
+      eval(zhiList)
+      LODOP.PRINT();
+      for (var i = 0; i < dataString.length; i++) {
+        if (i > 0) {
+          LODOP.SET_PRINT_PAGESIZE(1, dataString.length, "A3");
+          zhiList = zhiList.replace(dataString[i - 1], dataString[i]);
+          eval(zhiList)
+          LODOP.PRINT();
+          LODOP.PRINT_INIT("");
+        }
       }
+    } else {
+      message.error('参数错误!')
     }
   };
 
 
   //只条码模板
   const zhiCode = () => {
+    isShow1_1(false)
     zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStartZhi(Value)
@@ -284,13 +292,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印盒条码  盒---开始
   const pintHeCode = () => {
-    var heList = noStartZhi.replace('123456789', arr[0])
+    var heList = noStartZhi.replace('123456789', arrList[0])
     eval(heList)
     LODOP.PRINT();
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arrList.length; i++) {
       if (i > 0) {
         LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        heList = heList.replace(arr[i - 1], arr[i])
+        heList = heList.replace(arrList[i - 1], arrList[i])
         eval(heList)
         LODOP.PRINT();
         LODOP.PRINT_INIT("");
@@ -321,13 +329,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印箱条码  箱---开始
   const pintBoxCode = () => {
-    var boxList = noStartZhi.replace('123456789', arr[0])
+    var boxList = noStartZhi.replace('123456789', arrList[0])
     eval(boxList)
     LODOP.PRINT();
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arrList.length; i++) {
       if (i > 0) {
         LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        boxList = boxList.replace(arr[i - 1], arr[i])
+        boxList = boxList.replace(arrList[i - 1], arrList[i])
         eval(boxList)
         LODOP.PRINT();
         LODOP.PRINT_INIT("");
@@ -421,6 +429,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   <Select
                     // allowClear
                     showSearch
+                    name="materialId"
+                    onChange={changeMaterialId}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -434,7 +444,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode} hidden={show1}>
                   <Tag color="volcano">  只码模板:</Tag>成品条码
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode} hidden={show1}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode} hidden={show1_1}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
           </Form>
@@ -443,10 +453,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowKey="id"
-            rowSelection={{
-              ...rowSelection1
-            }}
-          // pagination= {{ pageSize: 10 }}
+          // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
             total={dataSource1.length}
@@ -538,10 +545,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           </Form>
           <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
-            // rowKey="id"
-            rowSelection={{
-              ...rowSelection2
-            }}
+            rowKey="id"
+          // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
@@ -637,9 +642,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
             style={{ padding: "0 20px" }}
             rowKey="id"
-            rowSelection={{
-              ...rowSelection3
-            }}
+          // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
