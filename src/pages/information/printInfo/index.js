@@ -27,8 +27,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
-  const [printNo, setPrintNo] = useState(0);
-  const [picker, setPicker] = useState();
   const [materialTypeRow, setMaterialTypeRow] = useState('')
   const [materialTypeList, setMaterialTypeList] = useState([])
   const [isDisabled, setIsDisabled] = useState(true)
@@ -91,7 +89,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"materialType" + record.id}
-            style={{ color: "red" }}
             defaultValue={text}
             style={{ border: "none", color: "red", textAlign: "center" }}
             // disabled={isDisabled}
@@ -152,7 +149,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"cartonsNumber" + record.id}
-            style={{ color: "red" }}
             defaultValue={text}
             style={{
               border: "none",
@@ -310,7 +306,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"boxWeight" + record.id}
-            style={{ color: "red" }}
             defaultValue={text}
             style={{
               border: "none",
@@ -334,7 +329,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"packingQuantity" + record.id}
-            style={{ color: "red" }}
             defaultValue={text}
             style={{
               border: "none",
@@ -366,7 +360,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"threeC" + record.id}
-            style={{ color: "red" }}
             defaultValue={text}
             style={{
               border: "none",
@@ -403,15 +396,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
 
-  //获取打印日期的值
-  const changePicker = async (date, dateString) => {
-    setPicker(dateString);
-  };
-
-  //获取张数
-  const changeIpt = async (e) => {
-    setPrintNo(e.target.value);
-  };
 
   //获取物料型号
   const changeMater = async (value, id) => {
@@ -463,12 +447,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //点击确认生成条码
   const confirm = async () => {
-    if (selectedRowsState?.length > 0 && picker !== undefined && Number(printNo) > 0) {
+    let inputVal = document.getElementById("inputVal").value;
+    let picker  = document.getElementById("PickerVal").value;
+    if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
       handleModalVisible(true);
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
         printDate: picker,
-        printQuantity: printNo,
+  
+        printQuantity: inputVal,
         userId: user.currentUser.id
       });
       if (data2.status == '200') {
@@ -572,7 +559,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="打印日期:"
             name="data"
           >
-            <DatePicker onChange={changePicker} />
+            <DatePicker defaultValue={moment(new Date())}  id="PickerVal"  allowClear={false}/>
           </Form.Item>,
 
           <Form.Item
@@ -580,7 +567,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="打印张数:"
             name="number"
           >
-            <Input style={{ width: "70%" }} onBlur={changeIpt} />
+            <Input style={{ width: "70%" }} id="inputVal" defaultValue={10} />
           </Form.Item>,
 
           // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
@@ -632,8 +619,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       <PrintForm
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
-        printNo={printNo}
-        picker={picker}
         materialTypeList={materialTypeList}
         title="打印条码"
       ></PrintForm>

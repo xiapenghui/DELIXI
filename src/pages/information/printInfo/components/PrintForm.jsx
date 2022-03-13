@@ -16,11 +16,12 @@ const columns = [
     dataIndex: "barCodeType",
     key: "barCodeType",
     align: "center",
+  
   },
   {
     title: "条码",
     dataIndex: "barCode",
-    width: 150,
+    width: 180,
     ellipsis: true,
     key: "barCode",
     align: "center",
@@ -46,8 +47,8 @@ const columns = [
   },
   {
     title: "打印时间",
-    dataIndex: "printTime",
-    key: "printTime",
+    dataIndex: "printDate",
+    key: "printDate",
     align: "center",
   },
   {
@@ -193,26 +194,7 @@ const PrintForm = (props) => {
 
 
 
-  //盒码
-  const hePint = () => {
-    LODOP.PRINT_INIT("react使用打印插件CLodop"); //打印初始化
-    LODOP.SET_PRINT_MODE("PROGRAM_CONTENT_BYVAR", true);//生成程序时，内容参数有变量用变量，无变量用具体值
-    let strStyle = `<style> 打印的样式需要写在这里，下面引入</style> `;
-    // LODOP.ADD_PRINT_HTM(17,"5.875%","90%",450,"(超文本1的HTML代码内容)");
-    // LODOP.ADD_PRINT_BARCODE(161,"5.5%","46.375%",208,"QRCode","123456789012");
-    LODOP.ADD_PRINT_HTM(
-      15,
-      "6%",
-      "90%",
-      450,
-      strStyle + document.getElementById("zhiPrint").innerHTML
-    );
-    LODOP.ADD_PRINT_BARCODE(190, 483, 213, 60, "QRCode", "123456789012");
-    CreateOneFormPage(CodeList)
-    LODOP.PRINT_DESIGN();
-    LODOP.PREVIEW(); //最后一个打印(预览)语句
-    // LODOP.SET_PRINT_STYLEA(0,"Content", code);//设置内容参数的变量名
-  };
+ 
 
   return (
     <Modal
@@ -220,7 +202,6 @@ const PrintForm = (props) => {
       destroyOnClose
       title="打印条码"
       visible={modalVisible}
-      // visible={true}
       onCancel={() => onCancel()}
       footer={null}
       width={1500}
@@ -232,7 +213,7 @@ const PrintForm = (props) => {
         <span>
           物料编号：<Tag color="volcano">{materialTypeList.materialNo}</Tag>
         </span>
-        <Button type="primary" className="pintCode" onClick={pintCode}>
+        {/* <Button type="primary" className="pintCode" onClick={pintCode}>
           <ArrowDownOutlined />
           打印条码
         </Button>
@@ -240,12 +221,12 @@ const PrintForm = (props) => {
         <Button type="primary" className="pintRight" hidden={zhiCode} onClick={zhiPint}>
           <Tag color="volcano"> 只码模板:</Tag>成品条码
         </Button>
-        <Button type="primary" className="pintRight" hidden={heCode} onClick={hePint} >
+        <Button type="primary" className="pintRight" hidden={heCode} >
           <Tag color="volcano"> 盒码模板:</Tag>40x60
         </Button>
         <Button type="primary" className="pintRight" hidden={boxCode}>
           <Tag color="volcano"> 箱码模板:</Tag>60x80
-        </Button>
+        </Button> */}
       </div>
       <Tabs defaultActiveKey="1" onChange={callback} type="card" >
 
@@ -255,7 +236,7 @@ const PrintForm = (props) => {
             columns={columns}
             pagination={false}
             loading={loading1}
-            pagination={{ pageSize: 20 }}
+            // pagination={{ pageSize: 20 }}
             scroll={{ y: 300 }}
           />
         </TabPane>
@@ -265,7 +246,7 @@ const PrintForm = (props) => {
             columns={columns}
             pagination={false}
             loading={loading2}
-            pagination={{ pageSize: 20 }}
+            // pagination={{ pageSize: 20 }}
             scroll={{ y: 300 }}
           />
         </TabPane>
@@ -275,29 +256,12 @@ const PrintForm = (props) => {
             columns={columns}
             pagination={false}
             loading={loading3}
-            pagination={{ pageSize: 20 }}
+            // pagination={{ pageSize: 20 }}
             scroll={{ y: 300 }}
           />
         </TabPane>
       </Tabs>
 
-      <div id="zhiPrint" style={{ display: "none" }}>
-        <div className="center">
-          <div className="left">防伪查询</div>
-          <div className="center">二维码</div>
-          <div className="right">
-            <p>
-              <span>S/N:</span>WWWWWWWWWWWWWWWWWWWW
-            </p>
-            <p>
-              <span>DATE:</span>2222222222222222
-            </p>
-            <p>
-              <span>服务热线:</span>4008268008
-            </p>
-          </div>
-        </div>
-      </div>
     </Modal>
   );
 };
