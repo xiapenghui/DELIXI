@@ -46,7 +46,7 @@ export async function getOnlyBarCodeList(params) {
 }
 
 
- //箱码
+ //打印条码
  export async function printBarCode(params) {
   return request(`${ip}/DLX_OEM/api/printRecord/printBarCode`, {
     method: 'POST',

@@ -15,11 +15,11 @@ import {
   getBoxBarCodeList,
   getBigBoxBarCodeList,
   printBarCode
-} from "@/services/information/printMakeCopy";
+} from "@/services/information/printMake";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
-const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => {
-  const { materialList } = printMakeCopy
+const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
+  const { materialList } = printMake
   const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
@@ -123,6 +123,15 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [materialId2, setMaterialId2] = useState('');
   const [materialId3, setMaterialId3] = useState('');
 
+
+
+  const [show1, isShow1] = useState(true)
+  const [show1_1, isShow1_1] = useState(true)
+
+  const [show2, isShow2] = useState(true)
+  const [show2_1, isShow2_1] = useState(true)
+  const [show3, isShow3] = useState(true)
+  const [show3_1, isShow3_1] = useState(true)
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
@@ -135,11 +144,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     console.log(key);
   }
 
+
   useEffect(() => {
-    // zhiSearch()
-    // heSearch()
-    // boxSearch()
+    zhiSearch()
+    heSearch()
+    boxSearch()
   }, [])
+
+
 
 
 
@@ -153,22 +165,46 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     setMaterialId2(value)
   }
 
-  //获取箱码物料编号
+    //获取箱码物料编号
   const changeMaterialId3 = (value) => {
     setMaterialId3(value)
   }
 
 
 
+    //多选条码
+    const rowSelection1 = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      }
+    };
+  
+    //多选盒码
+    const rowSelection2 = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      }
+    };
+  
+    //多选箱码
+    const rowSelection3 = {
+      onChange: (selectedRowKeys, selectedRows) => {
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      }
+    };
+
+    
+
   //查询封装公用参数
   const params = (values) => {
+    
     return {
       data: {
         startDate: values.startDate,
         endDate: values.endDate,
         barCode: values.barCode,
         materialId: values.materialId,
-        state: 1,
+        state: 2,
       },
       pageNum: 1,
       pageSize: 1000,
@@ -178,53 +214,47 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   //   @param 只条码 handleSearch 搜索
-  const zhiSearch = (e) => {
+  const zhiSearch = () => {
     form1
       .validateFields()
       .then(async (values) => {
-        if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
-        } else {
+          isShow1(false)
           let data = await getOnlyBarCodeList(params(values));
           if (data.status === 200) {
             setDataSource1(data.data.list)
             setZhiString(data.data.tempCode)
-          }
+          
         }
       })
   }
 
   //盒条码查询
-  const heSearch = (e) => {
+  const heSearch = () => {
     form2
       .validateFields()
       .then(async (values) => {
-        if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
-        } else {
+          isShow2(false)
           let data = await getBoxBarCodeList(params(values));
           if (data.status === 200) {
             setDataSource2(data.data.list)
             setHeString(data.data.tempCode)
-          }
+        }else{
+          
         }
       })
   }
 
 
   //箱条码查询
-  const boxSearch = (e) => {
+  const boxSearch = () => {
     form3
       .validateFields()
       .then(async (values) => {
-        if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
-        } else {
+          isShow3(false)
           let data = await getBigBoxBarCodeList(params(values));
           if (data.status === 200) {
             setDataSource3(data.data.list)
             setBoxString(data.data.tempCode)
-          }
         }
       })
   }
@@ -235,57 +265,45 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
-    if (materialId1 == "") {
-      message.warning('请先选择物料编号')
-    } else {
 
-      let content = noStart
-      if (content === "") {
-        eval(zhiString)
-        content = zhiString
-      }
+    let data = await printBarCode({
+      barCodeType: 1,
+      materialId: materialId1,
+      state: 2,
+     
+      userId: user.currentUser.id
+    });
+    if (data.status == 200) {
+      var dataString = data.data.barCodeList
+      var zhiList = noStart.replaceAll('1234567890', dataString[0]).replace('2022-01-01', data.data.material.date);
 
-      let data = await printBarCode({
-        barCodeType: 1,
-        materialId: materialId1,
-        state: 1,
-        userId: user.currentUser.id
-      });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var zhiList = content.replaceAll('1234567890', dataString[0]).replace('2022-01-01', data.data.material.date);
-        eval(zhiList)
-        LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]);
-            console.log('zhiList123', zhiList)
-            eval(zhiList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
-          }
+      eval(zhiList)
+      LODOP.PRINT();
+      for (var i = 0; i < 2; i++) {
+        
+        if (i > 0) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]);
+          console.log('zhiList123', zhiList)
+          eval(zhiList)
+          LODOP.PRINT();
+          LODOP.PRINT_INIT("");
         }
-      } else {
-        message.error('参数错误!')
       }
+    } else {
+      message.error('参数错误!')
     }
-
-
   };
 
 
   //只条码模板
   const zhiCode = () => {
-    if (materialId1 == "") {
-      message.warning('请先选择物料编号')
-    } else {
-      zhiCreateOneFormPage()
-      LODOP.On_Return = (TaskID, Value) => {
-        setNoStart(Value)
-      }
-      LODOP.PRINT_DESIGN();
+    isShow1_1(false)
+    zhiCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
     }
+    LODOP.PRINT_DESIGN();
   };
 
 
@@ -302,50 +320,40 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
+    let data = await printBarCode({
+      barCodeType: 2,
+      materialId: materialId2,
+      state: 2,
+     userId: user.currentUser.id
+    });
+    if (data.status == 200) {
+      var dataString = data.data.barCodeList
+      var heList = noStart.replaceAll('1234567890', dataString[0]).
+        replace('2022-01-01', data.data.material.date).
+        replace('物料型号', data.data.material.materialType).
+        replace('物料型号描述', data.data.material.boxLabelDescription).
+        replace('装盒', data.data.material.boxesNumber).
+        replace('检验02', data.data.material.examination).
+        replace('GB/T', data.data.material.standard).
+        replace('2022-01-01', data.data.material.date).
+        replace('浙江省', data.data.material.address).
+        replace('德力西', data.data.material.productionPlant).
+        replace('690318519991', data.data.material.caseIEAN13)
 
-    if (materialId2 == "") {
-      message.warning('请先选择物料编号')
-    } else {
-
-      let content = noStart
-      if (content === "") {
-        eval(heString)
-        content = heString
-      }
-
-      let data = await printBarCode({
-        barCodeType: 2,
-        materialId: materialId2,
-        state: 1,
-        userId: user.currentUser.id
-      });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var heList = heString.replaceAll('1234567890', dataString[0]).
-          replace('2022-01-01', data.data.material.date).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.boxesNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/T', data.data.material.standard).
-          replace('2022-01-01', data.data.material.date).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13)
-
-        eval(heList)
-        LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            heList = heList.replaceAll(dataString[i - 1], dataString[i]);
-            console.log('heList123', heList)
-            eval(heList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
-          }
+      eval(heList)
+      LODOP.PRINT();
+      for (var i = 0; i < 2; i++) {
+        if (i > 0) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          heList = heList.replaceAll(dataString[i - 1], dataString[i]);
+          console.log('heList123', heList)
+          eval(heList)
+          LODOP.PRINT();
+          LODOP.PRINT_INIT("");
         }
       }
+    } else {
+      message.error('参数错误!')
     }
   };
 
@@ -353,16 +361,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //盒条码模板
   const heCode = () => {
-    if (materialId2 == "") {
-      message.warning('请先选择物料编号')
-    } else {
-      heCreateOneFormPage()
-      LODOP.On_Return = (TaskID, Value) => {
-        setNoStart(Value)
-      }
-      LODOP.PRINT_DESIGN();
+    isShow2_1(false)
+    heCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
     }
-
+    LODOP.PRINT_DESIGN();
   };
 
 
@@ -382,76 +386,57 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   const pintBoxCode = async () => {
-
-    if (materialId3 == "") {
-      message.warning('请先选择物料编号')
-    } else {
-
-      let content = noStart
-      if (content === "") {
-        eval(boxString)
-        content = boxString
-      }
-
-      let data = await printBarCode({
-        barCodeType: 3,
-        materialId: materialId3,
-        state: 1,
-        userId: user.currentUser.id
-      });
-      if (data.status == 200) {
-
-        var dataString = data.data.barCodeList
-        var boxList = content.replaceAll('1234567890', dataString[0]).
-          replace('2022-01-01', data.data.material.date).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒数', data.data.material.boxesNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/T', data.data.material.standard).
-          replace('2022-01-01', data.data.material.date).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
-          replace('装箱数', data.data.material.packingQuantity).
-          replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial)
-
-        eval(boxList)
-        LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
-
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            boxList = boxList.replaceAll(dataString[i - 1], dataString[i]);
-            console.log('heList123', boxList)
-            eval(boxList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
-          }
+    let data = await printBarCode({
+      barCodeType: 3,
+      materialId: materialId3,
+      state: 2,
+     userId: user.currentUser.id
+    });
+    if (data.status == 200) {
+      
+      var dataString = data.data.barCodeList
+      var boxList = noStart.replaceAll('1234567890', dataString[0]).
+        replace('2022-01-01', data.data.material.date).
+        replace('物料型号', data.data.material.materialType).
+        replace('物料型号描述', data.data.material.boxLabelDescription).
+        replace('装盒数', data.data.material.boxesNumber).
+        replace('检验02', data.data.material.examination).
+        replace('GB/T', data.data.material.standard).
+        replace('2022-01-01', data.data.material.date).
+        replace('浙江省', data.data.material.address).
+        replace('德力西', data.data.material.productionPlant).
+        replace('690318519991', data.data.material.caseIEAN13).
+        replace('装箱数', data.data.material.packingQuantity).
+        replace('箱重', data.data.material.bigBoxWeight).
+        replace('系列123', data.data.material.serial)
+        
+      eval(boxList)
+      LODOP.PRINT();
+      for (var i = 0; i < 2; i++) {
+        
+        if (i > 0) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          boxList = boxList.replaceAll(dataString[i - 1], dataString[i]);
+          console.log('heList123', boxList)
+          eval(boxList)
+          LODOP.PRINT();
+          LODOP.PRINT_INIT("");
         }
-      } else {
-        message.error('参数错误!')
       }
+    } else {
+      message.error('参数错误!')
     }
-
-
-
   };
 
 
   //箱条码模板
   const boxCode = () => {
-    if (materialId3 == "") {
-      message.warning('请先选择物料编号')
-    } else {
-      boxCreateOneFormPage()
-      LODOP.On_Return = (TaskID, Value) => {
-        setNoStart(Value)
-      }
-      LODOP.PRINT_DESIGN();
+    isShow3_1(false)
+    boxCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
     }
-
+    LODOP.PRINT_DESIGN();
   };
 
 
@@ -476,8 +461,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Form
             onFinish={zhiSearch}
             form={form1}
-            name="form_in_modal"
+            name="form_in_modal1"
             initialValues={{
+              materialId:1
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -542,10 +528,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode} hidden={show1}>
                   <Tag color="volcano">  只码模板:</Tag>成品条码
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode} hidden={show1_1}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
           </Form>
@@ -554,6 +540,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowKey="id"
+            rowSelection={{
+              ...rowSelection1
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -569,8 +558,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
             onFinish={heSearch}
             form={form2}
-            name="form_in_modal"
+            name="form_in_modal2"
             initialValues={{
+              materialId:1
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -623,6 +613,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   <Select
                     // allowClear
                     showSearch
+                    name="materialId"
                     onChange={changeMaterialId2}
                   >
                     {materialList.map(function (item, index) {
@@ -636,10 +627,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} hidden={show2} >
                   <Tag color="volcano">  盒码模板:</Tag>40X60
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode} hidden={show2_1}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
 
@@ -648,6 +639,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowKey="id"
+            rowSelection={{
+              ...rowSelection2
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -664,8 +658,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             // onFinish={(e) => handleSearch(e, 'tankSearch')}
             onFinish={boxSearch}
             form={form3}
-            name="form_in_modal"
+            name="form_in_modal3"
             initialValues={{
+              materialId:1
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -718,6 +713,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   <Select
                     // allowClear
                     showSearch
+                    name="materialId"
                     onChange={changeMaterialId3}
                   >
                     {materialList.map(function (item, index) {
@@ -733,10 +729,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
                 {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode} hidden={show3}>
                   <Tag color="volcano">  箱码模板:</Tag>60X80
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode} hidden={show3_1}><ArrowDownOutlined />点击打印</Button>
               </Col>
 
             </Row>
@@ -745,6 +741,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
             style={{ padding: "0 20px" }}
             rowKey="id"
+            rowSelection={{
+              ...rowSelection3
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -762,6 +761,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   );
 };
 
-export default connect(({ printMakeCopy, user }) => ({ printMakeCopy, user }))(
+export default connect(({ printMake, user }) => ({ printMake, user }))(
   printMakeCopyComponent
 );

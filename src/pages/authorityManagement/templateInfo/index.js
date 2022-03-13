@@ -113,7 +113,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     {
       title: "模板代码",
       dataIndex: "tempCode",
-      valueType: "text",
+      valueType: "textarea",
       align: "center",
       width: 200,
       ellipsis:true,

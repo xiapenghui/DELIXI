@@ -56,7 +56,7 @@ const DetailForm = (props) => {
       
     );
 
-    debugger
+    
 
     useEffect(() => {
         if (detailModalVisible) {

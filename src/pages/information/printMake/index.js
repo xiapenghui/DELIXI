@@ -7,36 +7,31 @@ import ProTable from "@ant-design/pro-table";
 import globalConfig from '../../../../config/defaultSettings';
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-// import PrintFormZhi from "./components/PrintFormZhi"; //只码模板
-import { getLodop } from "../../../utils/LodopFuncs";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
+import { getLodop } from "../../../utils/LodopFuncs";
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
-  getBigBoxBarCodeList
-} from "@/services/information/printMake";
+  getBigBoxBarCodeList,
+  printBarCode
+} from "@/services/information/printMakeCopy";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
-const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
+const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const { materialList } = printMake
   const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
- 
-  
+
+
   // const [createModalVisible, handleModalVisible] = useState(false);
   const formItemLayout = globalConfig.table.formItemLayout
-  const [noStart, setNoStart] = useState('')
-  const [arr, setArr] = useState([
-    "22345678905",
-    "12345678901",
-    "12345678906",
-    // "12345678902",
-    // "12345678907",
-  ]);
+
+
+
   const columns = [
     {
       title: "打印批次",
@@ -93,8 +88,8 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
     },
     {
       title: "型号描述",
-      dataIndex: "modelDesc",
-      key: "modelDesc",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
       ellipsis: {
         showTitle: false,
       },
@@ -123,67 +118,76 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [dataSource3, setDataSource3] = useState([])
+  const [noStart, setNoStart] = useState('')
+  const [materialId1, setMaterialId1] = useState('');
+  const [materialId2, setMaterialId2] = useState('');
+  const [materialId3, setMaterialId3] = useState('');
+
+  const [materialId, setMaterialId] = useState(materialList.length > 0 ? materialList[0].key : 0);
+
+  const [zhiString, setZhiString] = useState('')
+  const [heString, setHeString] = useState('')
+  const [boxString, setBoxString] = useState('')
+
+  const [zhiID, setZhiID] = useState([])
+  const [heID, setHeID] = useState([])
+  const [boxID, setBoxID] = useState([])
+
+
+
+  //tab标签切换获取index/key
+  function callback(key) {
+    if (key == "1") {
+      zhiSearch()
+    } else if (key == "2") {
+      heSearch()
+    } else {
+      boxSearch()
+    }
+  }
+
+  useEffect(() => {
+    zhiSearch()
+  }, [])
+
+
+
+  //获取只码物料编号
+  const changeMaterialId1 = (value) => {
+    setMaterialId1(value)
+  }
+
+  //获取盒码物料编号
+  const changeMaterialId2 = (value) => {
+    setMaterialId2(value)
+  }
+
+  //获取箱码物料编号
+  const changeMaterialId3 = (value) => {
+    setMaterialId3(value)
+  }
 
 
   //多选条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setZhiID(selectedRowKeys)
     }
   };
 
   //多选盒码
   const rowSelection2 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setHeID(selectedRowKeys)
     }
   };
 
   //多选箱码
   const rowSelection3 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setBoxID(selectedRowKeys)
     }
   };
-
-
-
-  //tab标签切换获取index/key
-  function callback(key) {
-    console.log(key);
-  }
-
-  useEffect(() => {
-
-    setNoStart(
-      `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-      LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-      LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-      LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-      LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-      LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-      LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-      LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-      LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);`
-    )
-    zhiSearch()
-    heSearch()
-    boxSearch()
-  }, [])
-
-
-  
 
 
   //查询封装公用参数
@@ -193,11 +197,11 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         startDate: values.startDate,
         endDate: values.endDate,
         barCode: values.barCode,
-        materialId: values.materialId,
-        state:2,
+        materialId: values.materialId ? values.materialId : materialId,
+        state: 2,
       },
       pageNum: 1,
-      pageSize: 20,
+      pageSize: 1000,
       userId: user.currentUser.id
     }
   }
@@ -211,6 +215,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         let data = await getOnlyBarCodeList(params(values));
         if (data.status === 200) {
           setDataSource1(data.data.list)
+          setZhiString(data.data.tempCode)
         }
       })
   }
@@ -223,6 +228,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         let data = await getBoxBarCodeList(params(values));
         if (data.status === 200) {
           setDataSource2(data.data.list)
+          setHeString(data.data.tempCode)
         }
       })
   }
@@ -236,6 +242,8 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         let data = await getBigBoxBarCodeList(params(values));
         if (data.status === 200) {
           setDataSource3(data.data.list)
+          setBoxString(data.data.tempCode)
+
         }
       })
   }
@@ -244,58 +252,220 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
 
 
 
-  //点击打印只条码
-  const pintZhiCode = () => {
-    var zhiList = noStart.replace('123456789', arr[0])
-    eval(zhiList)
-    LODOP.PRINT();
-    for (var i = 0; i < arr.length; i++) {
-      if (i > 0) {
-        LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        zhiList = zhiList.replace(arr[i - 1], arr[i])
+  //点击打印只条码  只---开始
+  const pintZhiCode = async () => {
+    let content = noStart
+    if (content === "") {
+      eval(zhiString)
+      content = zhiString
+    }
+    if (zhiID.length > 0) {
+      let data = await printBarCode({
+        barCodeIdList: zhiID,
+        barCodeType: 1,
+        materialId: materialId1 === "" ? 1 : materialId1,
+        state: 2,
+        userId: user.currentUser.id
+      });
+      if (data.status == 200) {
+
+        var dataString = data.data.barCodeList
+        var zhiList = content.replaceAll('1234567890', dataString[0]).replace('2022-01-01', data.data.material.date);
         eval(zhiList)
         LODOP.PRINT();
-        LODOP.PRINT_INIT("");
+        for (var i = 0; i < 2; i++) {
+          if (i > 0) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]);
+            console.log('zhiList123', zhiList)
+            eval(zhiList)
+            LODOP.PRINT();
+            LODOP.PRINT_INIT("");
+          }
+        }
+      } else {
+        message.error('参数错误!')
       }
+    } else {
+      message.info('请选择要打印的数据!')
     }
+
+
   };
 
 
   //只条码模板
   const zhiCode = () => {
-    CreateOneFormPage()
+    zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStart(Value)
     }
     LODOP.PRINT_DESIGN();
   };
 
-  
-  const CreateOneFormPage = () => {
-    LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-    LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-    LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-    LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-    LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+
+  const zhiCreateOneFormPage = () => {
+    eval(zhiString)
+  };
+
+  // 只---结束
+
+
+
+
+
+
+  //点击打印盒条码  盒---开始
+  const pintHeCode = async () => {
+    let content = noStart
+    if (content === "") {
+      eval(heString)
+      content = heString
+    }
+    if (heID.length > 0) {
+      let data = await printBarCode({
+        barCodeIdList: heID,
+        barCodeType: 2,
+        materialId: materialId2 === "" ? 1 : materialId2,
+        state: 2,
+        userId: user.currentUser.id
+      });
+      if (data.status == 200) {
+        var dataString = data.data.barCodeList
+        var heList = content.replaceAll('1234567890', dataString[0]).
+          replace('2022-01-01', data.data.material.date).
+          replace('物料型号', data.data.material.materialType).
+          replace('物料型号描述', data.data.material.boxLabelDescription).
+          replace('装盒', data.data.material.boxesNumber).
+          replace('检验02', data.data.material.examination).
+          replace('GB/T', data.data.material.standard).
+          replace('2022-01-01', data.data.material.date).
+          replace('浙江省', data.data.material.address).
+          replace('德力西', data.data.material.productionPlant).
+          replace('690318519991', data.data.material.caseIEAN13)
+
+        eval(heList)
+        LODOP.PRINT();
+        for (var i = 0; i < 2; i++) {
+          if (i > 0) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            heList = heList.replaceAll(dataString[i - 1], dataString[i]);
+            console.log('heList123', heList)
+            eval(heList)
+            LODOP.PRINT();
+            LODOP.PRINT_INIT("");
+          }
+        }
+      } else {
+        message.error('参数错误!')
+      }
+    } else {
+      message.info('请选择要打印的数据!')
+    }
   };
 
 
- 
+
+  //盒条码模板
+  const heCode = () => {
+    heCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+
+  const heCreateOneFormPage = () => {
+    eval(heString)
+  };
+
+  // 盒---结束
+
+
+
+
+
+
+  //点击打印箱条码  箱---开始
+  const pintBoxCode = async () => {
+    let content = noStart
+    if (content === "") {
+      eval(boxString)
+      content = boxString
+    }
+    if (boxID.length > 0) {
+      let data = await printBarCode({
+        barCodeIdList: boxID,
+        barCodeType: 3,
+        materialId: materialId3 === "" ? 1 : materialId3,
+        state: 2,
+        userId: user.currentUser.id
+      });
+      if (data.status == 200) {
+
+        var dataString = data.data.barCodeList
+        var boxList = content.replaceAll('1234567890', dataString[0]).
+          replace('2022-01-01', data.data.material.date).
+          replace('物料型号', data.data.material.materialType).
+          replace('物料型号描述', data.data.material.boxLabelDescription).
+          replace('装盒数', data.data.material.boxesNumber).
+          replace('检验02', data.data.material.examination).
+          replace('GB/T', data.data.material.standard).
+          replace('2022-01-01', data.data.material.date).
+          replace('浙江省', data.data.material.address).
+          replace('德力西', data.data.material.productionPlant).
+          replace('690318519991', data.data.material.caseIEAN13).
+          replace('装箱数', data.data.material.packingQuantity).
+          replace('箱重', data.data.material.bigBoxWeight).
+          replace('系列123', data.data.material.serial)
+
+        eval(boxList)
+        LODOP.PRINT();
+        for (var i = 0; i < 2; i++) {
+
+          if (i > 0) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            boxList = boxList.replaceAll(dataString[i - 1], dataString[i]);
+            console.log('heList123', boxList)
+            eval(boxList)
+            LODOP.PRINT();
+            LODOP.PRINT_INIT("");
+          }
+        }
+      } else {
+        message.error('参数错误!')
+      }
+    } else {
+      message.info('请选择要打印的数据!')
+    }
+
+
+  };
+
+
+  //箱条码模板
+  const boxCode = () => {
+    boxCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+
+  const boxCreateOneFormPage = () => {
+    eval(boxString)
+  };
+
+  // 箱---结束
+
+
+
+
+
+
+
 
   return (
     <PageContainer>
@@ -307,6 +477,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form1}
             name="form_in_modal"
             initialValues={{
+              materialId: materialId
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -357,8 +528,9 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
+                    onChange={changeMaterialId1}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -384,7 +556,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
             rowSelection={{
               ...rowSelection1
             }}
-            // pagination= {{ pageSize: 10 }}
+            pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={dataSource1.length}
@@ -401,6 +573,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form2}
             name="form_in_modal"
             initialValues={{
+              materialId: materialId
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -451,8 +624,9 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
+                    onChange={changeMaterialId2}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -465,11 +639,10 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
-                {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >
                   <Tag color="volcano">  盒码模板:</Tag>40X60
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
 
@@ -477,10 +650,11 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
           </Form>
           <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
-            // rowKey="id"
+            rowKey="id"
             rowSelection={{
               ...rowSelection2
             }}
+            pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
@@ -498,6 +672,7 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form3}
             name="form_in_modal"
             initialValues={{
+              materialId: materialId
               // startDate: moment().subtract(1, "years"),
               // endDate: moment().endOf('day')
             }}
@@ -548,8 +723,9 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout}
                 >
                   <Select
-                    allowClear
+                    // allowClear
                     showSearch
+                    onChange={changeMaterialId3}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -564,21 +740,22 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
                 {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }}>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}>
                   <Tag color="volcano">  箱码模板:</Tag>60X80
                 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
 
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
+          <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowKey="id"
             rowSelection={{
               ...rowSelection3
             }}
+            pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
@@ -591,15 +768,10 @@ const printMakeComponent = ({ printMake, dispatch, user, pintCode }) => {
         </TabPane>
       </Tabs>
 
-
-
-
-
-
     </PageContainer>
   );
 };
 
 export default connect(({ printMake, user }) => ({ printMake, user }))(
-  printMakeComponent
+  printMakeCopyComponent
 );

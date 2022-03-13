@@ -46,10 +46,10 @@ const ImportForm = (props) => {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
-        debugger
+        
         message.loading('正在导入中...');
         if (info.file.response.status === 200) {
-          debugger
+          
           setTimeout(() => {
             message.success(`${info.file.name} 文件上传成功!`);
             onCancel()
@@ -63,7 +63,7 @@ const ImportForm = (props) => {
         }
 
       } else if (info.file.status === 'error') {
-        debugger
+        
         message.error(`${info.file.name} 文件上传失败!`);
       }
     },
