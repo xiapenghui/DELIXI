@@ -266,8 +266,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             LODOP.PRINT_INIT("");
           }
         }
-      } else {
-        message.error('参数错误!')
       }
     }
 
@@ -326,13 +324,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('物料型号', data.data.material.materialType).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
+          replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
           replace('GB/T', data.data.material.standard).
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13)
-
+          replace('690318519991', data.data.material.caseIEAN13).
+          replace('中文名称', data.data.material.materialName)
         eval(heList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
@@ -415,8 +414,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('690318519991', data.data.material.caseIEAN13).
           replace('装箱数', data.data.material.packingQuantity).
           replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial)
-
+          replace('系列123', data.data.material.serial).
+          replace('中文名称', data.data.material.materialName)
         eval(boxList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
@@ -430,9 +429,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             LODOP.PRINT_INIT("");
           }
         }
-      } else {
-        message.error('参数错误!')
-      }
+      } 
     }
 
 

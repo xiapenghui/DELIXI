@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import {Divider, Button,  message } from 'antd';
+import { Divider, Button, message } from 'antd';
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, connect } from 'umi';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
@@ -91,7 +91,7 @@ const RoleInfoComponent = ({
           }}
           >编辑</a>
           <Divider type="vertical" />
-           <a onClick={() => {
+          <a onClick={() => {
           }}
           >详情</a>
         </>
@@ -228,7 +228,7 @@ const RoleInfoComponent = ({
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-scroll={{ y: 500 }}
+        scroll={{ y: 500 }}
         rowKey="id"
         search={{
           labelWidth: 120,

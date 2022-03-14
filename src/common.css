@@ -14,3 +14,7 @@
  .ant-pagination{
      text-align: right;
  }
+
+ .formStyleTbale .ant-table-wrapper{
+     height: 53vh !important;
+ }

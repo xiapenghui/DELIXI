@@ -79,15 +79,15 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       },
     },
 
-    {
-      title: "上传时间",
-      dataIndex: "shiftdec",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.shiftdec : "",
-    },
+    // {
+    //   title: "上传时间",
+    //   dataIndex: "shiftdec",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 120,
+    //   hideInSearch: true,
+    //   initialValue: IsUpdate ? UpdateDate.shiftdec : "",
+    // },
     {
       title: "只码",
       dataIndex: "onlyBarCode",
@@ -224,7 +224,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
 
     try {
       let data = await deleted({
-        shiftIDs: selectedRows.map((row) => row.shiftID),
+        id: selectedRows.map((row) => row.id),
       });
 
       if (data.status == "200") {

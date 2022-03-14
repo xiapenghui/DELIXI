@@ -231,7 +231,7 @@ const Components = ({ roleInfo, dispatch }) => {
   };
   console.log(`${TableName}-component`, TableModelsData, form);
   return (
-    <PageContainer>
+    <PageContainer  className="formStyleTbale">
       <div className="formStyle">
         <Form
           className="ant-advanced-search-form"

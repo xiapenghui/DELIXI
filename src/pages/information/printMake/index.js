@@ -263,7 +263,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       let data = await printBarCode({
         barCodeIdList: zhiID,
         barCodeType: 1,
-        materialId: materialId1 === "" ? 1 : materialId1,
+        materialId: materialId1 === "" ? materialList[0].key : materialId1,
         state: 2,
         userId: user.currentUser.id
       });
@@ -283,8 +283,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             LODOP.PRINT_INIT("");
           }
         }
-      } else {
-        message.error('参数错误!')
       }
     } else {
       message.info('请选择要打印的数据!')
@@ -326,7 +324,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       let data = await printBarCode({
         barCodeIdList: heID,
         barCodeType: 2,
-        materialId: materialId2 === "" ? 1 : materialId2,
+        materialId: materialId2 === "" ? materialList[0].key : materialId2,
         state: 2,
         userId: user.currentUser.id
       });
@@ -342,7 +340,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13)
+          replace('690318519991', data.data.material.caseIEAN13).
+          replace('中文名称', data.data.material.materialName)
 
         eval(heList)
         LODOP.PRINT();
@@ -356,8 +355,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             LODOP.PRINT_INIT("");
           }
         }
-      } else {
-        message.error('参数错误!')
       }
     } else {
       message.info('请选择要打印的数据!')
@@ -398,18 +395,17 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       let data = await printBarCode({
         barCodeIdList: boxID,
         barCodeType: 3,
-        materialId: materialId3 === "" ? 1 : materialId3,
+        materialId: materialId3 === "" ? materialList[0].key : materialId3,
         state: 2,
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-
+         debugger
         var dataString = data.data.barCodeList
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
           replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
           replace('GB/T', data.data.material.standard).
           replace('2022-01-01', data.data.material.date).
@@ -417,8 +413,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('德力西', data.data.material.productionPlant).
           replace('690318519991', data.data.material.caseIEAN13).
           replace('装箱数', data.data.material.packingQuantity).
+          replace('装盒数', data.data.material.boxesNumber).
           replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial)
+          replace('系列123', data.data.material.serial).
+          replace('中文名称', data.data.material.materialName)
 
         eval(boxList)
         LODOP.PRINT();
@@ -433,8 +431,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             LODOP.PRINT_INIT("");
           }
         }
-      } else {
-        message.error('参数错误!')
       }
     } else {
       message.info('请选择要打印的数据!')

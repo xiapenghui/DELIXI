@@ -50,7 +50,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
     {
       title: "中文名称",
-      dataIndex: "chineseName",
+      dataIndex: "materialName",
       valueType: "text",
       align: "center",
       ellipsis: true,
@@ -60,7 +60,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
     {
       title: "英文名称",
-      dataIndex: "englishName",
+      dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
       width: 150,
@@ -197,7 +197,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
     {
       title: "工厂",
-      dataIndex: "factory",
+      dataIndex: "factoryName",
       valueType: "text",
       align: "center",
       width: 150,
@@ -215,7 +215,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
     {
       title: "地址",
-      dataIndex: "adress",
+      dataIndex: "address",
       valueType: "text",
       align: "center",
       ellipsis: true,
@@ -249,7 +249,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
     {
       title: "变更标记",
-      dataIndex: "sign",
+      dataIndex: "state",
       valueType: "text",
       align: "center",
       width: 120,

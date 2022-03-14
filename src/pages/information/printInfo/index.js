@@ -59,7 +59,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     {
       title: "中文名称",
-      dataIndex: "chineseName",
+      dataIndex: "materialName",
       valueType: "text",
       align: "center",
       ellipsis: true,
@@ -69,7 +69,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     {
       title: "英文名称",
-      dataIndex: "englishName",
+      dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
       width: 150,
