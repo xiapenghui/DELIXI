@@ -418,6 +418,13 @@ const Component = ({ userInfo, dispatch, user }) => {
     }
   };
 
+
+  const rowSelection = {
+    getCheckboxProps: (record) => ({
+      disabled: record.account === 'admin',
+      name: record.account,
+    }),
+  };
  
 
   return (
@@ -446,6 +453,7 @@ const Component = ({ userInfo, dispatch, user }) => {
         columns={getColumns()}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+          ...rowSelection
         }}
       />
       {selectedRowsState?.length > 0 && (

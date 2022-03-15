@@ -266,10 +266,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             LODOP.PRINT_INIT("");
           }
         }
+        zhiSearch()
       }
     }
-
-
   };
 
 
@@ -323,6 +322,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
           replace('物料型号描述', data.data.material.boxLabelDescription).
+          replace('物料描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
           replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
@@ -344,6 +344,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             LODOP.PRINT_INIT("");
           }
         }
+        heSearch()
       }
     }
   };
@@ -401,6 +402,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       if (data.status == 200) {
 
         var dataString = data.data.barCodeList
+        let newImage = ''
+
+        if (data.data.material.threeC == 0) {
+          newImage = ``
+        } else if (data.data.material.threeC == 1) {
+          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/3c.png'>"`
+        } else {
+          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/oem.png'>"`
+        }
+
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
@@ -415,11 +426,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('装箱数', data.data.material.packingQuantity).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
-          replace('中文名称', data.data.material.materialName)
+          replace('中文名称', data.data.material.materialName).
+          replace(newImage, data.data.threeC)
         eval(boxList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
-
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
             boxList = boxList.replaceAll(dataString[i - 1], dataString[i]);
@@ -429,11 +440,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             LODOP.PRINT_INIT("");
           }
         }
-      } 
+        boxSearch()
+      }
     }
-
-
-
   };
 
 
@@ -539,9 +548,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={8} offset={8} style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>
-                  <Tag color="volcano">  只码模板:</Tag>成品条码
-                </Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
@@ -633,9 +640,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >
-                  <Tag color="volcano">  盒码模板:</Tag>40X60
-                </Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
             </Row>
@@ -730,9 +735,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
                 {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}>
-                  <Tag color="volcano">  箱码模板:</Tag>60X80
-                </Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}> 箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
               </Col>
 

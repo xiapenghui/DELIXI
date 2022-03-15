@@ -278,7 +278,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
             </div>
           }
         >
-          <Button
+          {/* <Button
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -286,7 +286,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
             }}
           >
             批量删除
-          </Button>
+          </Button> */}
         </FooterToolbar>
       )}
        

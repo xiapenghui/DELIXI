@@ -82,10 +82,24 @@ export default defineConfig({
 
 
                 {
+                  path: '/information/printBag',
+                  name: '打印袋装条码',
+                  icon: 'smile',
+                  component: '../pages/information/printBag',
+                },
+
+                {
                   path: '/information/printMake',
                   name: '打印记录补打',
                   icon: 'smile',
                   component: '../pages/information/printMake',
+                },
+
+                {
+                  path: '/information/printMakeCopy',
+                  name: '打印信息状态',
+                  icon: 'smile',
+                  component: '../pages/information/printMakeCopy',
                 },
 
                 {

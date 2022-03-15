@@ -156,7 +156,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               textAlign: "center",
               width: "100px",
             }}
-            // onBlur={changeCartonsNumber}
             onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
           ></input>
         );
@@ -410,7 +409,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const changeCartonsNumber = async (value, id) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
-        item.changeCartonsNumber = value
+        item.cartonsNumber = value
       }
     })
   };
@@ -454,7 +453,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
         printDate: picker,
-  
         printQuantity: inputVal,
         userId: user.currentUser.id
       });
@@ -587,7 +585,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           // ...rowSelection,
         }}
       />
-      {selectedRowsState?.length > 0 && (
+      {/* {selectedRowsState?.length > 0 && (
         <FooterToolbar
           extra={
             <div>
@@ -614,7 +612,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             批量删除
           </Button>
         </FooterToolbar>
-      )}
+      )} */}
 
       <PrintForm
         onCancel={() => handleModalVisible(false)}

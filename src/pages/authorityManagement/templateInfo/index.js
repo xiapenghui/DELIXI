@@ -285,32 +285,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     }
   };
 
-  // 导出
-  const downloadExcel = async (selectedRows) => {
-    var option = {};
-    var dataTable = [];
-    if (selectedRows.length > 0) {
-      for (let i in selectedRows) {
-        let obj = {
-          shiftname: selectedRows[i].shiftname,
-          remark: selectedRows[i].remark,
-        };
-        dataTable.push(obj);
-      }
-    }
-    option.fileName = "班次信息";
-    option.datas = [
-      {
-        sheetData: dataTable,
-        sheetName: "sheet",
-        sheetFilter: ["shiftname", "remark"],
-        sheetHeader: ["班次名称", "备注"],
-      },
-    ];
-
-    var toExcel = new ExportJsonExcel(option);
-    toExcel.saveExcel();
-  };
 
   //下载模板
   const downloadTemp = async (fields) => {
@@ -374,7 +348,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             </div>
           }
         >
-          <Button
+          {/* <Button
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -382,17 +356,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             }}
           >
             批量删除
-          </Button>
-
-          <Button
-            onClick={async () => {
-              await downloadExcel(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量导出
-          </Button>
+          </Button> */}
         </FooterToolbar>
       )}
       <CreateForm

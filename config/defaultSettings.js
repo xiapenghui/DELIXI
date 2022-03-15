@@ -18,6 +18,7 @@ const proSettings = {
   iconfontUrl: '',
   CORS: [],
   ip: `http://192.168.1.18`,  
+  // ip: `http://192.168.1.150`,  
   // ip:`http://localhost`,
   //  ip:`http://smartflow.diskstation.me`,
   // ip: `http://10.177.34.15`,
@@ -35,9 +36,9 @@ const proSettings = {
     yshyerp_oilwater: 8080,
     yshyerp_location: 8081,
     yshyerp_invoice: 8082,
-    // sspalds_role: 8073,
+    sspalds_role: 8073,
     sspalds_role: 8088,
-    yshyerp_sspa: 9100,
+    // yshyerp_sspa: 9100,
     // yshyerp_sspa: 23111
   },
 

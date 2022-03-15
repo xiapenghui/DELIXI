@@ -6,13 +6,13 @@ import {
   deleted,
   getAddDropDownInit,
   addPost,
-} from '@/services/information/printInfo';
+} from '@/services/information/printBag';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 import { resolve } from 'path';
 
-const TableName = 'printInfo'
+const TableName = 'printBag'
 const Model = {
   namespace: TableName,
   state: {

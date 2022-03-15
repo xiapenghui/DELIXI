@@ -1,29 +1,35 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, message } from "antd";
+import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { Button, message, DatePicker, Form, Input, Popconfirm, Radio } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
+import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-import CreateForm from "./components/CreateForm";
+import PrintForm from "./components/PrintForm";
 import UpdateForm from "./components/UpdateForm";
+import "../../../../src/assets/commonStyle.css";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
   postListInit,
   deleted,
-  getAddDropDownInit,
-  addPost,
-  updatePut,
-} from "@/services/information/materialInfo";
+  generateBarCode
+} from "@/services/information/printBag";
 
-const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
-  const { TableList, typeList, riskList, isNoList } = materialInfo;
-  const { } = user;
+const printBagComponent = ({ printBag, dispatch, user }) => {
+  const { TableList, typeList, riskList, isNoList } = printBag;
+  const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
-  const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
+  const actionRef = useRef();
+  const [materialTypeRow, setMaterialTypeRow] = useState('')
+  const [materialTypeList, setMaterialTypeList] = useState([])
+  const [isDisabled, setIsDisabled] = useState(true)
+
+
+
   /**
    * 编辑初始化
    */
@@ -68,13 +74,25 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
+
     {
-      title: "物料型号",
+      title: () => <a style={{ color: "red" }}>物料型号</a>,
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"materialType" + record.id}
+            defaultValue={text}
+            style={{ border: "none", color: "red", textAlign: "center" }}
+            // disabled={isDisabled}
+            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     {
@@ -114,13 +132,31 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
+
+
+
     {
-      title: "装盒数量",
+      title: () => <a style={{ color: "red" }}>装盒数量</a>,
       dataIndex: "cartonsNumber",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"cartonsNumber" + record.id}
+            defaultValue={text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     {
@@ -256,20 +292,50 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
     {
-      title: "箱重量",
+      title: () => <a style={{ color: "red" }}>箱重量</a>,
       dataIndex: "boxWeight",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"boxWeight" + record.id}
+            defaultValue={text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
     {
-      title: "装箱数量",
+      title: () => <a style={{ color: "red" }}>装箱数量</a>,
       dataIndex: "packingQuantity",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"packingQuantity" + record.id}
+            defaultValue={text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
     {
       title: "生产日期",
@@ -280,12 +346,27 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
     {
-      title: "3C",
+      title: () => <a style={{ color: "red" }}>3C</a>,
       dataIndex: "threeC",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"threeC" + record.id}
+            defaultValue={text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     // {
@@ -293,8 +374,8 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     //   dataIndex: 'option',
     //   valueType: 'option',
     //   align: 'center',
-    //   width: 120,
     //   fixed:'right',
+    //   width:120,
     //   render: (_, record) => (
     //     <>
     //       <a onClick={() => {
@@ -308,7 +389,81 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     // },
   ];
 
+
+
+
+
+  //获取物料型号
+  const changeMater = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.materialType = value
+      }
+    })
+  };
+
+  //获取装盒数量
+  const changeCartonsNumber = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.cartonsNumber = value
+      }
+    })
+  };
+
+  //获取箱重量
+  const changeBoxWeight = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.boxWeight = value
+      }
+    })
+  };
+
+  //获取装箱数量
+  const changePacking = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.packingQuantity = value
+      }
+    })
+  };
+
+  //获取3C
+  const changethreeC = async (value, id) => {
+    selectedRowsState.map((item, key) => {
+      if (item.id == id) {
+        item.threeC = value
+      }
+    })
+  };
+
+
+
+
+  //点击确认生成条码
+  const confirm = async () => {
+    let inputVal = document.getElementById("inputVal").value;
+    let picker  = document.getElementById("PickerVal").value;
+    if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
+      handleModalVisible(true);
+      let data2 = await generateBarCode({
+        materialFactoryList: selectedRowsState,
+        printDate: picker,
+        printQuantity: inputVal,
+        userId: user.currentUser.id
+      });
+      if (data2.status == '200') {
+        setMaterialTypeList(data2.data)
+      }
+    } else {
+      message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
+    }
+  }
+
+
   const query = async (params, sorter, filter) => {
+
     const TableList = postListInit({
       data: {
         materialNo: params.materialNo,
@@ -328,84 +483,43 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       };
     });
   };
-  /**
-   * 添加节点
-   * @param fields
-   */
 
-  const handleAdd = async (fields) => {
-    const hide = message.loading("正在添加");
-    try {
-      let data = await addPost(fields);
-      if (data.status == "200") {
-        hide();
-        message.success(data.message);
-        return true;
-      } else {
-        message.error(data.message);
-        return false;
-      }
-    } catch (error) {
-      message.error("添加失败请重试！");
-      return false;
-    }
-  };
   /**
    * 更新节点
    * @param handleUpdate 编辑保存
    */
-
-  const handleUpdate = async (fields) => {
-    const hide = message.loading("正在编辑");
-    console.log("handleUpdate", fields);
-    try {
-      let data = await updatePut({
-        departmentid: UpdateDate.departmentid,
-        ...fields,
-      });
-      if (data.status == "200") {
-        hide();
-        message.success(data.message);
-        return true;
-      } else {
-        message.error(data.message);
-        return false;
-      }
-    } catch (error) {
-      message.error("编辑失败请重试！");
-      return false;
-    }
-  };
+ 
   /**
    *  删除节点
    * @param selectedRows
    */
 
-  const handleRemove = async (selectedRows) => {
-    const hide = message.loading("正在删除");
-    if (!selectedRows) return true;
+  // const handleRemove = async (selectedRows) => {
+  //   const hide = message.loading("正在删除");
+  //   if (!selectedRows) return true;
 
-    try {
-      let data = await deleted({
-        departmentids: selectedRows.map((row) => row.departmentid),
-      });
+  //   try {
+  //     let data = await deleted({
+  //       id: selectedRows.map((row) => row.id),
+  //     });
 
-      if (data.status == "200") {
-        hide();
-        message.success(data.message);
-        return true;
-      } else {
-        message.error(data.message);
-        return false;
-      }
-    } catch (error) {
-      hide();
-      message.error("删除失败，请重试");
-      return false;
-    }
-  };
+  //     if (data.status == "200") {
+  //       hide();
+  //       message.success(data.message);
+  //       return true;
+  //     } else {
+  //       message.error(data.message);
+  //       return false;
+  //     }
+  //   } catch (error) {
+  //     hide();
+  //     message.error("删除失败，请重试");
+  //     return false;
+  //   }
+  // };
 
- 
+
+
   return (
     <PageContainer>
       <ProTable
@@ -416,19 +530,41 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         search={{
           labelWidth: 120,
         }}
-        // toolBarRender={() => [
-        //   <Button type="primary" onClick={() => handleModalVisible(true)}>
-        //     <PlusOutlined /> 新建
-        //   </Button>,
+        toolBarRender={() => [
+          <Form.Item
+            style={{ marginBottom: "0px", marginRight: "40px" }}
+            label="打印日期:"
+            name="data"
+          >
+            <DatePicker defaultValue={moment(new Date())}  id="PickerVal"  allowClear={false}/>
+          </Form.Item>,
 
-        // ]}
+          <Form.Item
+            style={{ marginBottom: "0px" }}
+            label="打印张数:"
+            name="number"
+          >
+            <Input style={{ width: "70%" }} id="inputVal" defaultValue={10} />
+          </Form.Item>,
+
+          // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
+
+          <Popconfirm placement="top" title="您确定要生成条码吗?" onConfirm={confirm} okText="确定" cancelText="取消">
+            <Button type="primary">
+              <SnippetsOutlined /> 生成条码
+            </Button>
+          </Popconfirm>
+
+        ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{
+          type: 'radio',
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+          // ...rowSelection,
         }}
       />
-      {selectedRowsState?.length > 0 && (
+      {/* {selectedRowsState?.length > 0 && (
         <FooterToolbar
           extra={
             <div>
@@ -454,31 +590,16 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
           >
             批量删除
           </Button>
-
         </FooterToolbar>
-      )}
-      <CreateForm
+      )} */}
+
+      <PrintForm
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
-        title="新建"
-      >
-        <ProTable
-          onSubmit={async (value) => {
-            const success = await handleAdd(value);
+        materialTypeList={materialTypeList}
+        title="打印条码"
+      ></PrintForm>
 
-            if (success) {
-              handleModalVisible(false);
-
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
-          }}
-          rowKey="id"
-          type="form"
-          columns={getColumns()}
-        />
-      </CreateForm>
       {UpdateDate && Object.keys(UpdateDate).length ? (
         <UpdateForm
           onCancel={() => {
@@ -512,6 +633,4 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   );
 };
 
-export default connect(({ materialInfo, user }) => ({ materialInfo, user }))(
-  materialInfoComponent
-);
+export default connect(({ printBag, user }) => ({ printBag, user }))(printBagComponent);

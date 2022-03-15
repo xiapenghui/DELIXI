@@ -49,7 +49,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInForm: true,
     },
@@ -59,7 +59,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "factoryId",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInTable: true,
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
@@ -98,7 +98,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "factoryName",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       ellipsis: true,
       hideInSearch: true,
       hideInForm: true,
@@ -110,7 +110,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInForm: true,
     },
@@ -120,7 +120,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
+      // ellipsis:true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
       initialValue: IsUpdate ? UpdateDate.materialId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -157,7 +158,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInForm: true,
       initialValue: IsUpdate ? UpdateDate.materialType : "",
@@ -166,11 +167,62 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
     {
+      title: "袋码模板",
+      dataIndex: "bagTemp",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+      hideInTable: true,
+      valueEnum: onlyTempList.length == 0 ? {} : [onlyTempList],
+      initialValue: IsUpdate ? UpdateDate.bagTemp : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {onlyTempList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "袋码模板不能为空!",
+          },
+        ],
+      },
+    },
+
+    {
+      title: "袋码模板",
+      dataIndex: "bagTempName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      ellipsis: true,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
+
+
+
+    {
       title: "只码模板",
       dataIndex: "onlyTemp",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInTable: true,
       valueEnum: onlyTempList.length == 0 ? {} : [onlyTempList],
@@ -275,7 +327,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "bigBoxTemp",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInTable: true,
       valueEnum: bigBoxTempList.length == 0 ? {} : [bigBoxTempList],
@@ -326,7 +378,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "maintainTime",
       valueType: "date",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInForm: true
     },
@@ -336,7 +388,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       dataIndex: "operator",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       hideInForm: true
     },
@@ -347,7 +399,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueType: "option",
       align: "center",
       fixed: "right",
-      width: 120,
+      width: 150,
       render: (_, record) => (
         <>
           <a
@@ -481,44 +533,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     }
   };
 
-  // 导出
-  const downloadExcel = async (selectedRows) => {
-    var option = {};
-    var dataTable = [];
-    if (selectedRows.length > 0) {
-      for (let i in selectedRows) {
-        let obj = {
-          timefrom: selectedRows[i].timefrom,
-          timeto: selectedRows[i].timeto,
-          shiftname: selectedRows[i].shiftname,
-          timeaxis: selectedRows[i].timeaxis,
-          timeorder: selectedRows[i].timeorder,
-          remark: selectedRows[i].remark,
-        };
-        dataTable.push(obj);
-      }
-    }
-    option.fileName = "时间信息";
-    option.datas = [
-      {
-        sheetData: dataTable,
-        sheetName: "sheet",
-        sheetFilter: [
-          "timefrom",
-          "timeto",
-          "shiftname",
-          "timeaxis",
-          "timeorder",
-          "remark",
-        ],
-        sheetHeader: ["时间从", "时间至", "班次", "时间段", "顺序", "备注"],
-      },
-    ];
-
-    var toExcel = new ExportJsonExcel(option);
-    toExcel.saveExcel();
-  };
-
+ 
  
   //下载模板
   const downloadTemp = async (fields) => {
@@ -586,16 +601,6 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
             }}
           >
             批量删除
-          </Button>
-
-          <Button
-            onClick={async () => {
-              await downloadExcel(selectedRowsState);
-              setSelectedRows([]);
-              actionRef.current?.reloadAndRest?.();
-            }}
-          >
-            批量导出
           </Button>
         </FooterToolbar>
       )}
