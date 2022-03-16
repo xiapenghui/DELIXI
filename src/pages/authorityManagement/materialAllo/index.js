@@ -29,7 +29,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     materialList,
     onlyTempList,
     boxTempList,
-    bigBoxTempList
+    bigBoxTempList,
+    bagTempList
   } = materialAllo;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -174,7 +175,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       width: 150,
       hideInSearch: true,
       hideInTable: true,
-      valueEnum: onlyTempList.length == 0 ? {} : [onlyTempList],
+      valueEnum: bagTempList.length == 0 ? {} : [bagTempList],
       initialValue: IsUpdate ? UpdateDate.bagTemp : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
 
@@ -184,7 +185,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
             showSearch
             optionFilterProp='children'
           >
-            {onlyTempList.map(function (item, index) {
+            {bagTempList.map(function (item, index) {
               return <Select.Option key={item.key} value={item.key}>
                 {item.label}
               </Select.Option>
@@ -451,6 +452,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         materialId: fields.materialId,
         onlyTemp: fields.onlyTemp,
         boxTemp: fields.boxTemp,
+        bagTemp:fields.bagTemp,
         bigBoxTemp: fields.bigBoxTemp,
       },
       userId: user.currentUser.id
@@ -487,6 +489,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
           materialId: fields.materialId,
           onlyTemp: fields.onlyTemp,
           boxTemp: fields.boxTemp,
+          bagTemp:fields.bagTemp,
           bigBoxTemp: fields.bigBoxTemp,
         },
         userId: user.currentUser.id

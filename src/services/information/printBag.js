@@ -11,9 +11,8 @@ export async function getDropDownInit(params) {
     data: { ...params },
   });
 }
-/**
- * 查询
- */
+
+//打印获取条码
 export async function postListInit(params) {
   return request(`${ip}/DLX_OEM/api/printBagBarCode/postListInit`, {
     method: 'POST',
@@ -22,14 +21,12 @@ export async function postListInit(params) {
 }
 
 
- 
-//打印获取条码
-export async function generateBarCode(params) {
-  return request(`${ip}/DLX_OEM/api/barCode/generateBarCode`, {
+ //打印条码
+ export async function printBarCode(params) {
+  return request(`${ip}/DLX_OEM/api/printRecord/printBarCode`, {
     method: 'POST',
     data: { ...params },
   });
 }
  
-
 

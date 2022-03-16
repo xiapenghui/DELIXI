@@ -10,6 +10,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import { getLodop } from "../../../utils/LodopFuncs";
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
@@ -69,6 +70,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       title: "物料编号",
       dataIndex: "materialNo",
       key: "materialNo",
+      align: "center",
+    },
+    {
+      title: "物料名称",
+      dataIndex: "materialName",
+      key: "materialName",
       align: "center",
     },
     {
@@ -133,6 +140,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [heID, setHeID] = useState([])
   const [boxID, setBoxID] = useState([])
 
+  const [newImage, setNewImage] = useState('')
 
 
   //tab标签切换获取index/key
@@ -241,14 +249,20 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       .then(async (values) => {
         let data = await getBigBoxBarCodeList(params(values));
         if (data.status === 200) {
+         
+          if (data.data.threeC === "0") {
+            setNewImage('')
+          } else if (data.data.threeC === "1") {
+            setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`)
+          } else {
+            setNewImage(`<img src='${ip}/DLX_OEM/api/oem.png'>`)
+          }
           setDataSource3(data.data.list)
           setBoxString(data.data.tempCode)
 
         }
       })
   }
-
-
 
 
 
@@ -269,13 +283,17 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var zhiList = content.replaceAll('1234567890', dataString[0]).replace('2022-01-01', data.data.material.date);
+        var qrCodeList = data.data.qrCodeList
+        var zhiList = content.replaceAll('9876543210', dataString[0]).
+          replaceAll('1234567890', qrCodeList[0]).
+          replace('2022-01-01', data.data.material.date)
         eval(zhiList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]);
+            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
+              replaceAll(qrCodeList[i - 1], qrCodeList[i])
             console.log('zhiList123', zhiList)
             eval(zhiList)
             LODOP.PRINT();
@@ -401,15 +419,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        let newImage = ''
-        if (data.data.material.threeC == 0) {
-          newImage = ``
-        } else if (data.data.material.threeC == 1) {
-          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/oem.png'>"`
-        } else {
-          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/oem.png'>"`
-        }
-
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
@@ -428,8 +437,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
-          replace(newImage, data.data.threeC)
-        eval(boxList)
+          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+          eval(boxList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
 
@@ -530,7 +539,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -622,7 +631,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -718,7 +727,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >

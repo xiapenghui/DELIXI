@@ -21,7 +21,8 @@ const Model = {
     materialList: [],
     onlyTempList: [],
     boxTempList: [],
-    bigBoxTempList: []
+    bigBoxTempList: [],
+    bagTempList:[]
   },
 
   subscriptions: {
@@ -88,7 +89,8 @@ const Model = {
           materialList: payload.data.materialList,
           onlyTempList: payload.data.onlyTempList,
           boxTempList: payload.data.boxTempList,
-          bigBoxTempList: payload.data.bigBoxTempList
+          bigBoxTempList: payload.data.bigBoxTempList,
+          bagTempList:payload.data.bagTempList
         }
       } else if (payload.type === 'postListInit') {
 

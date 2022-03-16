@@ -6,30 +6,27 @@ import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
-import PrintForm from "./components/PrintForm";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
-import ExportJsonExcel from "js-export-excel";
+import { getLodop } from "../../../utils/LodopFuncs";
 import {
   getDropDownInit,
   postListInit,
   deleted,
-  generateBarCode
+  generateBarCode,
+  printBarCode
 } from "@/services/information/printBag";
 
 const printBagComponent = ({ printBag, dispatch, user }) => {
   const { TableList, typeList, riskList, isNoList } = printBag;
   const { currentUser } = user;
-  const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
-  const [materialTypeRow, setMaterialTypeRow] = useState('')
-  const [materialTypeList, setMaterialTypeList] = useState([])
   const [isDisabled, setIsDisabled] = useState(true)
-
-
-
+  const [bagString, setBagString] = useState('')
+  const [noStart, setNoStart] = useState('')
+  const [bagID, setBagID] = useState([])
   /**
    * 编辑初始化
    */
@@ -52,6 +49,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
+      hideInSearch: true,
     },
 
     {
@@ -72,6 +70,16 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       width: 150,
       ellipsis: true,
       hideInSearch: true,
+    },
+
+
+    {
+      title:"物料型号",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInTable: true,
     },
 
 
@@ -390,9 +398,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   ];
 
 
-
-
-
   //获取物料型号
   const changeMater = async (value, id) => {
     selectedRowsState.map((item, key) => {
@@ -439,27 +444,33 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   };
 
 
+  //多选袋条码
+  const rowSelection1 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setBagID(selectedRowKeys)
+    }
+  };
 
 
   //点击确认生成条码
-  const confirm = async () => {
-    let inputVal = document.getElementById("inputVal").value;
-    let picker  = document.getElementById("PickerVal").value;
-    if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
-      handleModalVisible(true);
-      let data2 = await generateBarCode({
-        materialFactoryList: selectedRowsState,
-        printDate: picker,
-        printQuantity: inputVal,
-        userId: user.currentUser.id
-      });
-      if (data2.status == '200') {
-        setMaterialTypeList(data2.data)
-      }
-    } else {
-      message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
-    }
-  }
+  // const confirm = async () => {
+  //   let inputVal = document.getElementById("inputVal").value;
+  //   let picker  = document.getElementById("PickerVal").value;
+  //   if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
+  //     handleModalVisible(true);
+  //     let data2 = await generateBarCode({
+  //       materialFactoryList: selectedRowsState,
+  //       printDate: picker,
+  //       printQuantity: inputVal,
+  //       userId: user.currentUser.id
+  //     });
+  //     if (data2.status == '200') {
+  //       setMaterialTypeList(data2.data)
+  //     }
+  //   } else {
+  //     message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
+  //   }
+  // }
 
 
   const query = async (params, sorter, filter) => {
@@ -474,6 +485,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       userId: user.currentUser.id
     });
     return TableList.then(function (value) {
+      setBagString(value.data.list[0].bagTempCode)
       return {
         data: value.data.list,
         current: value.pageNum,
@@ -488,7 +500,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
    * 更新节点
    * @param handleUpdate 编辑保存
    */
- 
+
   /**
    *  删除节点
    * @param selectedRows
@@ -519,6 +531,77 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   // };
 
 
+  //点击打印只条码  只---开始
+  const pintBagCode = async () => {
+    let inputVal = document.getElementById("inputVal").value;
+    // let picker = document.getElementById("PickerVal").value;
+    if (bagID.length > 0 && Number(inputVal) > 0) {
+      let content = noStart
+      if (content === "") {
+        eval(bagString)
+        content = bagString
+      }
+
+      let data = await printBarCode({
+        barCodeIdList: bagID,
+        // printDate: picker,
+        printQuantity: inputVal,
+        barCodeType: 1,
+        state: 1,
+        userId: user.currentUser.id
+      });
+      if (data.status == 200) {
+        var dataString = data.data.barCodeList
+        var bagList = content.replaceAll('1234567890', dataString[0]).
+          replace('2022-01-01', data.data.material.date).
+          replace('物料型号', data.data.material.materialType).
+          replace('物料型号描述', data.data.material.boxLabelDescription).
+          replace('物料描述', data.data.material.boxLabelDescription).
+          replace('装盒', data.data.material.boxesNumber).
+          replace('装盒数', data.data.material.boxesNumber).
+          replace('检验02', data.data.material.examination).
+          replace('GB/T', data.data.material.standard).
+          replace('浙江省', data.data.material.address).
+          replace('德力西', data.data.material.productionPlant).
+          replace('690318519991', data.data.material.caseIEAN13).
+          replace('中文名称', data.data.material.materialName)
+        eval(bagList)
+        LODOP.PRINT();
+        for (var i = 0; i < 2; i++) {
+          if (i > 0) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
+            console.log('bagList123', bagList)
+            eval(bagList)
+            LODOP.PRINT();
+            LODOP.PRINT_INIT("");
+          }
+        }
+        query()
+      }
+    } else {
+      message.warning('请勾选一条数据!')
+    }
+  };
+
+
+  //只条码模板
+  const bagCode = () => {
+    zhiCreateOneFormPage()
+    LODOP.On_Return = (TaskID, Value) => {
+      setNoStart(Value)
+    }
+    LODOP.PRINT_DESIGN();
+  };
+
+
+  const zhiCreateOneFormPage = () => {
+    eval(bagString)
+  };
+
+  // 只---结束
+
+
 
   return (
     <PageContainer>
@@ -531,29 +614,24 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Form.Item
-            style={{ marginBottom: "0px", marginRight: "40px" }}
-            label="打印日期:"
-            name="data"
-          >
-            <DatePicker defaultValue={moment(new Date())}  id="PickerVal"  allowClear={false}/>
-          </Form.Item>,
+          // <Form.Item
+          //   style={{ marginBottom: "0px", marginRight: "40px" }}
+          //   label="打印日期:"
+          //   name="data"
+          // >
+          //   <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
+          // </Form.Item>,
 
           <Form.Item
             style={{ marginBottom: "0px" }}
             label="打印张数:"
             name="number"
           >
-            <Input style={{ width: "70%" }} id="inputVal" defaultValue={10} />
+            <Input id="inputVal" defaultValue={10} />
           </Form.Item>,
 
-          // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
-
-          <Popconfirm placement="top" title="您确定要生成条码吗?" onConfirm={confirm} okText="确定" cancelText="取消">
-            <Button type="primary">
-              <SnippetsOutlined /> 生成条码
-            </Button>
-          </Popconfirm>
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCode}>袋码模板</Button>,
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBagCode}><SnippetsOutlined />点击打印</Button>
 
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
@@ -561,7 +639,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         rowSelection={{
           type: 'radio',
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-          // ...rowSelection,
+          ...rowSelection1,
         }}
       />
       {/* {selectedRowsState?.length > 0 && (
@@ -593,12 +671,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         </FooterToolbar>
       )} */}
 
-      <PrintForm
-        onCancel={() => handleModalVisible(false)}
-        modalVisible={createModalVisible}
-        materialTypeList={materialTypeList}
-        title="打印条码"
-      ></PrintForm>
+
 
       {UpdateDate && Object.keys(UpdateDate).length ? (
         <UpdateForm

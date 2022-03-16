@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, message } from "antd";
+import { Button, message ,Select  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -18,7 +18,7 @@ import {
 } from "@/services/information/materialInfo";
 
 const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
-  const { TableList, typeList, riskList, isNoList } = materialInfo;
+  const { materialList } = materialInfo;
   const { } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -30,6 +30,8 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
 
+debugger
+
   const getColumns = () => [
     {
       title: "物料编号",
@@ -38,6 +40,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       align: "center",
       width: 120,
       fixed: "left",
+      hideInSearch: true,
     },
 
     {
@@ -46,16 +49,45 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
+      hideInSearch: true,
     },
 
     {
-      title: "中文名称",
-      dataIndex: "materialName",
+      title: "物料名称",
+      dataIndex: "materialId",
       valueType: "text",
       align: "center",
-      ellipsis: true,
       width: 150,
-      hideInSearch: true,
+      // ellipsis:true,
+      valueEnum: materialList.length == 0 ? {} : [materialList],
+      initialValue: IsUpdate ? UpdateDate.materialId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {materialList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.materialName
+      },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "物料名称不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -74,7 +106,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -311,8 +343,8 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
-        materialNo: params.materialNo,
-        supplierName: params.supplierName,
+        materialId: params.materialId,
+        materialType: params.materialType,
       },
       pageNum: params.current,
       pageSize: params.pageSize,

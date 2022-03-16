@@ -55,6 +55,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
+      hideInSearch: true,
     },
 
     {
@@ -75,6 +76,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 150,
       ellipsis: true,
       hideInSearch: true,
+    },
+
+    {
+      title:"物料型号",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInTable: true,
     },
 
 
@@ -106,6 +116,22 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 150,
       ellipsis: true,
       hideInSearch: true,
+    },
+
+    {
+      title: "是否只码",
+      dataIndex: "only",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+      render: (text) => {
+        if (text == true) {
+          return text = "是"
+        } else {
+          return text = "否"
+        }
+      }
     },
 
     {
@@ -447,8 +473,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   //点击确认生成条码
   const confirm = async () => {
     let inputVal = document.getElementById("inputVal").value;
-    let picker  = document.getElementById("PickerVal").value;
-    if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
+    let picker = document.getElementById("PickerVal").value;
+    if (selectedRowsState?.length > 0 && Number(inputVal) > 0) {
       handleModalVisible(true);
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
@@ -470,7 +496,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     const TableList = postListInit({
       data: {
         materialNo: params.materialNo,
-        supplierName: params.supplierName,
+        materialType: params.materialType,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -557,7 +583,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="打印日期:"
             name="data"
           >
-            <DatePicker defaultValue={moment(new Date())}  id="PickerVal"  allowClear={false}/>
+            <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
           </Form.Item>,
 
           <Form.Item

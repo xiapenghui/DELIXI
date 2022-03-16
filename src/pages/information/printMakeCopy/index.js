@@ -10,6 +10,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import { getLodop } from "../../../utils/LodopFuncs";
+const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
@@ -71,6 +72,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       key: "materialNo",
       align: "center",
     },
+
+    {
+      title: "物料名称",
+      dataIndex: "materialName",
+      key: "materialName",
+      align: "center",
+    },
+
     {
       title: "物料型号",
       dataIndex: "batchNumber",
@@ -126,7 +135,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
-
+  const [newImage, setNewImage] = useState('')
 
 
 
@@ -143,17 +152,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-  //获取只码物料编号
+  //获取只码物料名称
   const changeMaterialId1 = (value) => {
     setMaterialId1(value)
   }
 
-  //获取盒码物料编号
+  //获取盒码物料名称
   const changeMaterialId2 = (value) => {
     setMaterialId2(value)
   }
 
-  //获取箱码物料编号
+  //获取箱码物料名称
   const changeMaterialId3 = (value) => {
     setMaterialId3(value)
   }
@@ -183,7 +192,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
+          message.warning('请先选择物料名称')
         } else {
           let data = await getOnlyBarCodeList(params(values));
           if (data.status === 200) {
@@ -200,7 +209,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
+          message.warning('请先选择物料名称')
         } else {
           let data = await getBoxBarCodeList(params(values));
           if (data.status === 200) {
@@ -218,10 +227,18 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编号')
+          message.warning('请先选择物料名称')
         } else {
           let data = await getBigBoxBarCodeList(params(values));
           if (data.status === 200) {
+            if (data.data.threeC === "0") {
+              setNewImage('')
+            } else if (data.data.threeC === "1") {
+              setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`)
+            } else {
+              setNewImage(`<img src='${ip}/DLX_OEM/api/oem.png'>`)
+            }
+
             setDataSource3(data.data.list)
             setBoxString(data.data.tempCode)
           }
@@ -236,7 +253,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
     if (materialId1 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
 
       let content = noStart
@@ -253,13 +270,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var zhiList = content.replaceAll('1234567890', dataString[0]).replace('2022-01-01', data.data.material.date);
+        var qrCodeList = data.data.qrCodeList
+        var zhiList = content.replaceAll('9876543210', dataString[0]).
+          replaceAll('1234567890', qrCodeList[0]).
+          replace('2022-01-01', data.data.material.date)
         eval(zhiList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]);
+            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
+              replaceAll(qrCodeList[i - 1], qrCodeList[i])
             console.log('zhiList123', zhiList)
             eval(zhiList)
             LODOP.PRINT();
@@ -275,7 +296,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //只条码模板
   const zhiCode = () => {
     if (materialId1 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
       zhiCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -301,7 +322,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const pintHeCode = async () => {
 
     if (materialId2 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
 
       let content = noStart
@@ -354,7 +375,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //盒条码模板
   const heCode = () => {
     if (materialId2 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
       heCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -384,7 +405,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const pintBoxCode = async () => {
 
     if (materialId3 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
 
       let content = noStart
@@ -400,18 +421,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-
         var dataString = data.data.barCodeList
-        let newImage = ''
-
-        if (data.data.material.threeC == 0) {
-          newImage = ``
-        } else if (data.data.material.threeC == 1) {
-          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/3c.png'>"`
-        } else {
-          newImage = `<img border='0' "<img border='0' src='http://192.168.1.18:8088/DLX_OEM/api/oem.png'>"`
-        }
-
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
@@ -427,7 +437,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
-          replace(newImage, data.data.threeC)
+          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         eval(boxList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
@@ -449,7 +459,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //箱条码模板
   const boxCode = () => {
     if (materialId3 == "") {
-      message.warning('请先选择物料编号')
+      message.warning('请先选择物料名称')
     } else {
       boxCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -529,7 +539,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -620,7 +630,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -713,7 +723,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编号"
+                  label="物料名称"
                   hasFeedback
                   {...formItemLayout}
                 >
