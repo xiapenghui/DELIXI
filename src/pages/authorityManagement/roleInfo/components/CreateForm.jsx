@@ -42,7 +42,7 @@ const CreateForm = (props) => {
     const params = {
       roleName: values.roleName,
       companyId: values.companyId,
-      userId: values.user,
+      userIdList: values.user,
       sysMenuIdList: checkedMenu,
     };
     props.dispatch({
@@ -157,6 +157,7 @@ const CreateForm = (props) => {
             {...formItemLayout}
           >
             <Select           
+              mode="multiple"
               getPopupContainer={(triggerNode) => triggerNode.parentElement}
               allowClear
               showSearch

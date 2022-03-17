@@ -23,7 +23,7 @@ const UpdateForm = (props) => {
       id: data.record.id,
       roleName: values.roleName,
       companyId: values.companyId,
-      userId: values.user,
+      userIdList: values.user,
       menuIdList: checkedMenu
     }
     props.dispatch({
@@ -84,13 +84,13 @@ const UpdateForm = (props) => {
     if (updateModalVisible) {
       console.log('result', result)
       // setCheckedKeys(data.EditData.menuIdList)
-      
+      debugger
       setCheckedKeys(result)
       form.setFieldsValue({
         id: data.EditData.id,
         roleName: data.EditData.roleName,
         companyId: data.EditData.companyId,
-        user: data.EditData.userId
+        user: data.EditData.userIdList
       })
     }
     return () => {
@@ -126,7 +126,7 @@ const UpdateForm = (props) => {
             id: data.EditData.id,
             roleName: data.EditData.roleName,
             companyId: data.EditData.companyId,
-            user: data.EditData.userId
+            user: data.EditData.userIdList
           }}
         >
           <Form.Item
@@ -173,7 +173,7 @@ const UpdateForm = (props) => {
             hasFeedback
             {...formItemLayout}
           >
-            <Select  
+            <Select mode="multiple"
               getPopupContainer={triggerNode => triggerNode.parentElement}
               allowClear
               showSearch

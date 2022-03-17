@@ -38,7 +38,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
   const getColumns = () => [
     {
-      title: "编号",
+      title: "模板编号",
       dataIndex: "tempNo",
       valueType: "text",
       align: "center",
@@ -55,11 +55,11 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     },
 
     {
-      title: "名称",
+      title: "模板名称",
       dataIndex: "tempName",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       initialValue: IsUpdate ? UpdateDate.tempName : "",
       formItemProps: {
         rules: [
@@ -348,7 +348,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             </div>
           }
         >
-          {/* <Button
+          <Button
             onClick={async () => {
               await handleRemove(selectedRowsState);
               setSelectedRows([]);
@@ -356,7 +356,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             }}
           >
             批量删除
-          </Button> */}
+          </Button>
         </FooterToolbar>
       )}
       <CreateForm

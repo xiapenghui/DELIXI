@@ -20,6 +20,7 @@ const DetailForm = (props) => {
     const onExpand = (expandedKeysValue) => {
         console.log('onExpand', expandedKeysValue); // if not set autoExpandParent to false, if children expanded, parent can not collapse.
         // or, you can remove all expanded children keys.
+
         setExpandedKeys(expandedKeysValue);
         setAutoExpandParent(false);
     };
@@ -52,11 +53,8 @@ const DetailForm = (props) => {
     //data.menuList所有的树结构
     //data.EditData.sysMenuIdList后端给的要展示的父子节点
     const result = [...new Set(requestList(data.menuList))].filter((item) =>
-        new Set(eval(data.EditData.menuIdList)).has(item)
-      
+        new Set(eval(data.EditData.sysMenuIdList)).has(item)
     );
-
-    
 
     useEffect(() => {
         if (detailModalVisible) {
@@ -66,7 +64,7 @@ const DetailForm = (props) => {
                 id: data.DetailData.id,
                 roleName: data.DetailData.roleName,
                 companyId: data.DetailData.companyId,
-                user: data.DetailData.userId
+                user: data.DetailData.userIdList
             })
         }
         return () => {
@@ -93,7 +91,7 @@ const DetailForm = (props) => {
                         id: data.DetailData.id,
                         roleName: data.DetailData.roleName,
                         companyId: data.DetailData.companyId,
-                        user: data.DetailData.userId
+                        user: data.DetailData.userIdList
                     }}
                 >
                     <Form.Item
@@ -130,7 +128,7 @@ const DetailForm = (props) => {
                         hasFeedback
                         {...formItemLayout}
                     >
-                        <Select  showSearch disabled>
+                        <Select mode="multiple" showSearch disabled>
                             {data.userList.map(function (item, index) {
                                 return <Select.Option key={index} value={item.id}>{item.text}</Select.Option>
                             })}

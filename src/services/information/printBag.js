@@ -6,7 +6,7 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
  * 查询条件初始化
  */
  export async function getDropDownInit() {
-  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit`, {
+  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit/bag`, {
     method: 'GET',
   })
 }

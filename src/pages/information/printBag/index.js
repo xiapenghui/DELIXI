@@ -33,6 +33,12 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
 
+  const [materialType1, setMaterialType1] = useState('')
+  const [cartonsNumber1, setCartonsNumber1] = useState('')
+  const [boxWeight1, setBoxWeight1] = useState('')
+  const [packingQuantity1, setPackingQuantity1] = useState('')
+  const [threeC1, setThreeC1] = useState('')
+
   const getColumns = () => [
     {
       title: "物料编号",
@@ -62,7 +68,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       width: 150,
       // ellipsis:true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
-      initialValue: IsUpdate ? UpdateDate.materialId : materialList[0].key,
+      initialValue: IsUpdate ? UpdateDate.materialId : (materialList[0] === undefined ? '' : materialList[0].key),
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
         if (type === 'form' || type === 'table') {
           return <Select
@@ -432,6 +438,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
         item.materialType = value
+        setMaterialType1(value)
       }
     })
   };
@@ -441,6 +448,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
         item.cartonsNumber = value
+        setCartonsNumber1(cartonsNumber)
       }
     })
   };
@@ -450,15 +458,19 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
         item.boxWeight = value
+        setBoxWeight1(value)
       }
     })
   };
+
+
 
   //获取装箱数量
   const changePacking = async (value, id) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
         item.packingQuantity = value
+        setPackingQuantity1(value)
       }
     })
   };
@@ -468,6 +480,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     selectedRowsState.map((item, key) => {
       if (item.id == id) {
         item.threeC = value
+        setThreeC1(value)
       }
     })
   };
@@ -479,6 +492,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       setBagID(selectedRowKeys)
     }
   };
+
 
 
   //点击确认生成条码
@@ -506,8 +520,9 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
     const TableList = postListInit({
       data: {
+        bagged: true,
         materialId: params.materialId,
-        supplierName: params.supplierName,
+        materialType: params.materialType,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -560,10 +575,10 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   // };
 
 
-  //点击打印只条码  只---开始
+  //点击打印袋条码  只---开始
   const pintBagCode = async () => {
     let inputVal = document.getElementById("inputVal").value;
-    // let picker = document.getElementById("PickerVal").value;
+    let picker = document.getElementById("PickerVal").value;
     if (bagID.length > 0 && Number(inputVal) > 0) {
       let content = noStart
       if (content === "") {
@@ -573,17 +588,18 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
       let data = await printBarCode({
         barCodeIdList: bagID,
-        // printDate: picker,
+        printDate: picker,
         printQuantity: inputVal,
         barCodeType: 1,
         state: 1,
         userId: user.currentUser.id
       });
       if (data.status == 200) {
+        debugger
         var dataString = data.data.barCodeList
         var bagList = content.replaceAll('1234567890', dataString[0]).
-          replace('2022-01-01', data.data.material.date).
-          replace('物料型号', data.data.material.materialType).
+          replace('2022-01-01', picker).
+          replace('物料型号', data.data.material.materialType === data.data.material.materialType ?  data.data.material.materialType : materialType1).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
@@ -592,7 +608,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           replace('GB/T', data.data.material.standard).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
+          replace('8888888888', data.data.material.caseIEAN13).
           replace('中文名称', data.data.material.materialName)
         eval(bagList)
         LODOP.PRINT();
@@ -643,13 +659,13 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          // <Form.Item
-          //   style={{ marginBottom: "0px", marginRight: "40px" }}
-          //   label="打印日期:"
-          //   name="data"
-          // >
-          //   <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
-          // </Form.Item>,
+          <Form.Item
+            style={{ marginBottom: "0px", marginRight: "40px" }}
+            label="打印日期:"
+            name="data"
+          >
+            <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
+          </Form.Item>,
 
           <Form.Item
             style={{ marginBottom: "0px" }}

@@ -6,7 +6,7 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
  * 查询条件初始化
  */
 export async function getDropDownInit() {
-  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit`, {
+  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit/zhx`, {
     method: 'GET',
   })
 }
@@ -16,13 +16,13 @@ export async function getDropDownInit() {
  * 查询
  */
 export async function postListInit(params) {
-  return request(`${ip}/DLX_OEM/api/material/postListInit`, {
+  return request(`${ip}/DLX_OEM/api/printBagBarCode/postListInit`, {
     method: 'POST',
     data: { ...params },
   });
 }
 
-
+ 
 
 /**
  * 新建保存

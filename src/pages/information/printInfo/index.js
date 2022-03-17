@@ -503,7 +503,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (selectedRowsState?.length > 0 && Number(inputVal) > 0) {
-      handleModalVisible(true);
+     
       let data2 = await generateBarCode({
         materialFactoryList: selectedRowsState,
         printDate: picker,
@@ -511,7 +511,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         userId: user.currentUser.id
       });
       if (data2.status == '200') {
+        handleModalVisible(true);
         setMaterialTypeList(data2.data)
+      }else{
+        message.error(data2.message);
       }
     } else {
       message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
@@ -523,6 +526,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     const TableList = postListInit({
       data: {
+        bagged: false,
         materialId: params.materialId,
         materialType: params.materialType,
       },
