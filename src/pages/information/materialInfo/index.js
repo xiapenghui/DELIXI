@@ -17,6 +17,7 @@ import {
   updatePut,
 } from "@/services/information/materialInfo";
 
+
 const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const { materialList } = materialInfo;
   const { } = user;
@@ -29,9 +30,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
-
-debugger
-
+ 
   const getColumns = () => [
     {
       title: "物料编号",

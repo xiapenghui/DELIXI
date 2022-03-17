@@ -351,7 +351,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
+          replace('8888888888', data.data.material.caseIEAN13).
+          replace('9999999999', data.data.material.caseITF14).
           replace('中文名称', data.data.material.materialName)
         eval(heList)
         LODOP.PRINT();
@@ -432,7 +433,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
+          replace('8888888888', data.data.material.caseIEAN13).
+          replace('9999999999', data.data.material.caseITF14).
           replace('装箱数', data.data.material.packingQuantity).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).

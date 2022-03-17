@@ -12,7 +12,7 @@ export default () => (
           textAlign: 'center',
         }}
       >
-        <SmileTwoTone /> Lean Digitization System（SSPA 生产数字平台） <HeartTwoTone twoToneColor="#eb2f96" /> You
+        <SmileTwoTone /> Delixi OEM System（德力西 OEM 系统） <HeartTwoTone twoToneColor="#eb2f96" /> 
       </Typography.Title>
     </Card>
     <p

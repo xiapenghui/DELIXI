@@ -1,5 +1,5 @@
 import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Popconfirm, Radio } from "antd";
+import { Button, message, DatePicker, Form, Input, Popconfirm,Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -21,7 +21,7 @@ import {
 } from "@/services/information/printInfo";
 
 const printInfoComponent = ({ printInfo, dispatch, user }) => {
-  const { TableList, typeList, riskList, isNoList } = printInfo;
+  const { materialList } = printInfo;
   const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -46,7 +46,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      fixed: "left",
+      hideInSearch: true,
     },
 
     {
@@ -59,13 +59,41 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title: "中文名称",
-      dataIndex: "materialName",
+      title: "物料名称",
+      dataIndex: "materialId",
       valueType: "text",
       align: "center",
-      ellipsis: true,
       width: 150,
-      hideInSearch: true,
+      // ellipsis:true,
+      valueEnum: materialList.length == 0 ? {} : [materialList],
+      initialValue: IsUpdate ? UpdateDate.materialId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {materialList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      render: (text, record) => {
+        return record.materialName
+      },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "物料名称不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -495,7 +523,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     const TableList = postListInit({
       data: {
-        materialNo: params.materialNo,
+        materialId: params.materialId,
         materialType: params.materialType,
       },
       pageNum: params.current,

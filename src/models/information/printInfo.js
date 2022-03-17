@@ -1,11 +1,7 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
-  getDropDownInit,
-  postListInit,
-  deleted,
-  getAddDropDownInit,
-  addPost,
+  getDropDownInit
 } from '@/services/information/printInfo';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -16,19 +12,18 @@ const TableName = 'printInfo'
 const Model = {
   namespace: TableName,
   state: {
-    TableList: [],
-    customerList: {},
-    isNoList:{}
+    materialList:[]
   },
 
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname == `/information/${TableName}`) {
-          // dispatch({
-          //   type: 'getDropDownInit',
-          //   payload: {}
-          // })
+          dispatch({
+            type: 'getDropDownInit',
+            payload: {}
+          })
+
         }
       })
     },
@@ -39,64 +34,34 @@ const Model = {
      * @param {getDropDownInit} 查询初始化
      * @param {query} 查询
      */
-    // * getDropDownInit({
-    //   payload,
-    // }, { call, put, select }) {
-    //   const data = yield call(getDropDownInit)
-    //   if (data.status !== '200') {
-    //     return message.error(data.message);
-    //   } else if (data.status == '200') {
-    //     yield put({
-    //       type: 'querySuccessed',
-    //       payload: {
-    //         type: 'getDropDownInit',
-    //         data: data.list,
-    //       }
-    //     })
-    //     return message.success(data.message);
-    //   }
-    // },
-
-    * query({
+    * getDropDownInit({
       payload,
     }, { call, put, select }) {
-      const data = yield call(postListInit, payload)
-      if (data.status !== '200') {
+      const data = yield call(getDropDownInit)
+      if (data.status !== 200) {
         return message.error(data.message);
-      } else if (data.status == '200') {
+      } else if (data.status === 200) {
         yield put({
-          type: 'querySuccessed',
+          type: 'querySuccess',
           payload: {
-            type: 'postListInit',
-            data: data.list
+            type: 'getDropDownInit',
+            data: data.data,
           }
         })
-        return message.success(data.message);
       }
     },
+ 
   },
+  
+
+
   reducers: {
-    querySuccessed(state, { payload }) {
-      // if (payload.type === 'getDropDownInit') {
-      //   return {
-      //     ...state, ...payload,
-      //     customerList: payload.data.customerList,
-      //     isNoList:payload.data.isNoList
-      //   }
-      // } else 
-      if (payload.type === 'postListInit') {
+    querySuccess(state, { payload }) {
+      if (payload.type === 'getDropDownInit') {
         return {
-          ...state,
-          TableList: new Promise(resolve => {
-            resolve({
-              data: payload.data.list,
-              current: payload.data.pageNum,
-              pageSize: payload.data.pageSize,
-              success: true,
-              total: payload.data.total
-            })
-          })
-        };
+          ...state, ...payload,
+          materialList: payload.data.materialList
+        }
       }
 
     },

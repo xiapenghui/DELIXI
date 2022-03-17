@@ -44,8 +44,8 @@ const Login = (props) => {
 
   return (
     <div className={styles.main}>
-      <div className="sysName">Lean Digitization System </div>
-      <div className="sysName sysNameCn">德力西信息管理平台</div>
+      <div className="sysName">Delixi OEM System </div>
+      <div className="sysName sysNameCn">德力西 OEM 系统</div>
       <div id='backgroundBox' style={styles2.backgroundBox} />
 
       <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>

@@ -346,6 +346,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
+        debugger
         var dataString = data.data.barCodeList
         var heList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
@@ -358,7 +359,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
+          replace('8888888888', data.data.material.caseIEAN13).
+          replace('9999999999', data.data.material.caseITF14).
           replace('中文名称', data.data.material.materialName)
 
         eval(heList)
@@ -418,6 +420,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
+        
         var dataString = data.data.barCodeList
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
@@ -429,7 +432,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
-          replace('690318519991', data.data.material.caseIEAN13).
+          replace('8888888888', data.data.material.caseIEAN13).
+          replace('9999999999', data.data.material.caseITF14).
           replace('装箱', data.data.material.packingQuantity).
           replace('装箱数', data.data.material.packingQuantity).
           replace('装盒', data.data.material.boxesNumber).
