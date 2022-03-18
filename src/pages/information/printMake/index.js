@@ -9,7 +9,9 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
-import { getLodop } from "../../../utils/LodopFuncs";
+import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+// import  {getLodop}  from "../../../utils/LodopFuncs.js";
+// console.log('getLodop',LodopFuncs.getLodop())
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
@@ -268,6 +270,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
+    LodopFuncs.getLodop()
     let content = noStart
     if (content === "") {
       eval(zhiString)
@@ -311,6 +314,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //只条码模板
   const zhiCode = () => {
+    LodopFuncs.getLodop()
     zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStart(Value)
@@ -332,6 +336,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
+    LodopFuncs.getLodop()
     let content = noStart
     if (content === "") {
       eval(heString)
@@ -346,7 +351,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-        debugger
         var dataString = data.data.barCodeList
         var heList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
@@ -356,7 +360,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
           replace('GB/T', data.data.material.standard).
-          replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
@@ -385,6 +388,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //盒条码模板
   const heCode = () => {
+    LodopFuncs.getLodop()
     heCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStart(Value)
@@ -406,6 +410,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //点击打印箱条码  箱---开始
   const pintBoxCode = async () => {
+    LodopFuncs.getLodop()
     let content = noStart
     if (content === "") {
       eval(boxString)
@@ -429,7 +434,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('检验02', data.data.material.examination).
           replace('GB/T', data.data.material.standard).
-          replace('2022-01-01', data.data.material.date).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
@@ -466,6 +470,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //箱条码模板
   const boxCode = () => {
+    LodopFuncs.getLodop()
     boxCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStart(Value)
@@ -551,6 +556,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId1}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -643,6 +649,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId2}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -739,6 +746,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId3}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>

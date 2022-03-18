@@ -550,6 +550,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                     showSearch
                     name="materialId"
                     onChange={changeMaterialId1}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -640,6 +641,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                     // allowClear
                     showSearch
                     onChange={changeMaterialId2}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
@@ -733,6 +735,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                     // allowClear
                     showSearch
                     onChange={changeMaterialId3}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
                     {materialList.map(function (item, index) {
                       return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>

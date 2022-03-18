@@ -131,7 +131,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
             id={"materialType" + record.id}
             defaultValue={text}
             style={{ border: "none", color: "red", textAlign: "center" }}
-            // disabled={isDisabled}
+            disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
           ></input>
         );
@@ -190,6 +190,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           <input
             id={"cartonsNumber" + record.id}
             defaultValue={text}
+            disabled={bagID[0] == record.id ? false : true}
             style={{
               border: "none",
               color: "red",
@@ -346,6 +347,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           <input
             id={"boxWeight" + record.id}
             defaultValue={text}
+            disabled={bagID[0] == record.id ? false : true}
             style={{
               border: "none",
               color: "red",
@@ -369,6 +371,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           <input
             id={"packingQuantity" + record.id}
             defaultValue={text}
+            disabled={bagID[0] == record.id ? false : true}
             style={{
               border: "none",
               color: "red",
@@ -399,6 +402,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         return (
           <input
             id={"threeC" + record.id}
+            disabled={bagID[0] == record.id ? false : true}
             defaultValue={text}
             style={{
               border: "none",
@@ -492,6 +496,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       setBagID(selectedRowKeys)
     }
   };
+
 
 
 
@@ -599,7 +604,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         var dataString = data.data.barCodeList
         var bagList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', picker).
-          replace('物料型号', data.data.material.materialType === data.data.material.materialType ?  data.data.material.materialType : materialType1).
+          replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
