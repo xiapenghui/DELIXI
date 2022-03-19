@@ -41,11 +41,11 @@ const Login = (props) => {
 
     location.reload()
   };
-
+ 
   return (
     <div className={styles.main}>
-      <div className="sysName">Delixi OEM System </div>
-      <div className="sysName sysNameCn">德力西 OEM 系统</div>
+      <div className="sysName"> Delixi OEM barcode printing system </div>
+      <div className="sysName sysNameCn">德力西OEM条码打印系统</div>
       <div id='backgroundBox' style={styles2.backgroundBox} />
 
       <LoginForm activeKey={type} onTabChange={setType} onSubmit={handleSubmit}>

@@ -9,7 +9,8 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
-import { getLodop } from "../../../utils/LodopFuncs";
+// import { getLodop } from "../../../utils/LodopFuncs";
+import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
@@ -74,7 +75,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     },
 
     {
-      title: "物料名称",
+      title: "物料编码",
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
@@ -82,16 +83,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
     {
       title: "物料型号",
-      dataIndex: "batchNumber",
-      key: "batchNumber",
-      align: "center",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "materialType",
       ellipsis: {
         showTitle: false,
       },
       align: "center",
-      render: batchNumber => (
-        <Tooltip placement="topLeft" title={batchNumber}>
-          {batchNumber}
+      render: materialType => (
+        <Tooltip placement="topLeft" title={materialType}>
+          {materialType}
         </Tooltip>
       ),
     },
@@ -152,17 +153,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-  //获取只码物料名称
+  //获取只码物料编码
   const changeMaterialId1 = (value) => {
     setMaterialId1(value)
   }
 
-  //获取盒码物料名称
+  //获取盒码物料编码
   const changeMaterialId2 = (value) => {
     setMaterialId2(value)
   }
 
-  //获取箱码物料名称
+  //获取箱码物料编码
   const changeMaterialId3 = (value) => {
     setMaterialId3(value)
   }
@@ -177,6 +178,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         endDate: values.endDate,
         barCode: values.barCode,
         materialId: values.materialId,
+        materialType:values.materialType,
         state: 1,
       },
       pageNum: 1,
@@ -192,7 +194,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料名称')
+          message.warning('请先选择物料编码')
         } else {
           let data = await getOnlyBarCodeList(params(values));
           if (data.status === 200) {
@@ -209,7 +211,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料名称')
+          message.warning('请先选择物料编码')
         } else {
           let data = await getBoxBarCodeList(params(values));
           if (data.status === 200) {
@@ -227,7 +229,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料名称')
+          message.warning('请先选择物料编码')
         } else {
           let data = await getBigBoxBarCodeList(params(values));
           if (data.status === 200) {
@@ -252,8 +254,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
+    LodopFuncs.getLodop()
     if (materialId1 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
 
       let content = noStart
@@ -295,8 +298,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //只条码模板
   const zhiCode = () => {
+    LodopFuncs.getLodop()
     if (materialId1 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
       zhiCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -320,9 +324,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
-
+    LodopFuncs.getLodop()
     if (materialId2 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
 
       let content = noStart
@@ -375,8 +379,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //盒条码模板
   const heCode = () => {
+    LodopFuncs.getLodop()
     if (materialId2 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
       heCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -404,9 +409,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   const pintBoxCode = async () => {
-
+    LodopFuncs.getLodop()
     if (materialId3 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
 
       let content = noStart
@@ -460,8 +465,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //箱条码模板
   const boxCode = () => {
+    LodopFuncs.getLodop()
     if (materialId3 == "") {
-      message.warning('请先选择物料名称')
+      message.warning('请先选择物料编码')
     } else {
       boxCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -496,8 +502,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form1}
             name="form_in_modal"
             initialValues={{
-              // startDate: moment().subtract(1, "years"),
-              // endDate: moment().endOf('day')
+              startDate: moment().subtract("years"),
+              endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
@@ -541,7 +547,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -559,7 +565,20 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} offset={8} style={{ textAlign: 'center' }}>
+
+              <Col span={8} style={{ display: 'block' }}>
+                <Form.Item
+                  name="materialType"
+                  label="物料型号"
+                  hasFeedback
+                  {...formItemLayout}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={8}  style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
@@ -588,8 +607,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form2}
             name="form_in_modal"
             initialValues={{
-              // startDate: moment().subtract(1, "years"),
-              // endDate: moment().endOf('day')
+              startDate: moment().subtract("years"),
+              endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
@@ -633,7 +652,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -650,7 +669,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} offset={8} style={{ textAlign: 'center' }}>
+              <Col span={8} style={{ display: 'block' }}>
+                <Form.Item
+                  name="materialType"
+                  label="物料型号"
+                  hasFeedback
+                  {...formItemLayout}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={8}  style={{ textAlign: 'center' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
 
@@ -682,8 +713,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form3}
             name="form_in_modal"
             initialValues={{
-              // startDate: moment().subtract(1, "years"),
-              // endDate: moment().endOf('day')
+              startDate: moment().subtract("years"),
+              endDate: moment().endOf('day')
             }}
           >
             <Row gutter={40}>
@@ -727,7 +758,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -744,7 +775,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} offset={8} style={{ textAlign: 'center' }}>
+              <Col span={8} style={{ display: 'block' }}>
+                <Form.Item
+                  name="materialType"
+                  label="物料型号"
+                  hasFeedback
+                  {...formItemLayout}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={8}  style={{ textAlign: 'center' }}>
 
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}

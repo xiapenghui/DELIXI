@@ -12,7 +12,7 @@ export default () => (
           textAlign: 'center',
         }}
       >
-        <SmileTwoTone /> Delixi OEM System（德力西 OEM 系统） <HeartTwoTone twoToneColor="#eb2f96" /> 
+        <SmileTwoTone /> Delixi OEM barcode printing system（德力西OEM条码打印系统） <HeartTwoTone twoToneColor="#eb2f96" /> 
       </Typography.Title>
     </Card>
     <p

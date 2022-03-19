@@ -8,7 +8,7 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
-import { getLodop } from "../../../utils/LodopFuncs";
+import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 import {
   getDropDownInit,
   postListInit,
@@ -61,7 +61,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: "物料名称",
+      title: "物料编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
@@ -92,7 +92,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         rules: [
           {
             required: true,
-            message: "物料名称不能为空!",
+            message: "物料编码不能为空!",
           },
         ],
       },
@@ -582,6 +582,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
   //点击打印袋条码  只---开始
   const pintBagCode = async () => {
+    LodopFuncs.getLodop()
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (bagID.length > 0 && Number(inputVal) > 0) {
@@ -637,6 +638,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
   //只条码模板
   const bagCode = () => {
+    LodopFuncs.getLodop()
     zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
       setNoStart(Value)

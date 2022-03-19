@@ -10,8 +10,6 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
-// import  {getLodop}  from "../../../utils/LodopFuncs.js";
-// console.log('getLodop',LodopFuncs.getLodop())
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
@@ -75,7 +73,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       align: "center",
     },
     {
-      title: "物料名称",
+      title: "物料编码",
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
@@ -292,7 +290,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('2022-01-01', data.data.material.date)
         eval(zhiList)
         LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < 10; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
             zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
@@ -548,7 +546,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -641,7 +639,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >
@@ -738,7 +736,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               <Col span={8} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料名称"
+                  label="物料编码"
                   hasFeedback
                   {...formItemLayout}
                 >

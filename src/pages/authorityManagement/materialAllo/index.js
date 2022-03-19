@@ -107,7 +107,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
     {
-      title: "物料编号",
+      title: "物料代码",
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
@@ -155,7 +155,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     },
 
     {
-      title: "物料型号",
+      title: "物料编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",

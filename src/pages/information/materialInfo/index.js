@@ -52,7 +52,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料名称",
+      title: "物料编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
@@ -83,7 +83,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         rules: [
           {
             required: true,
-            message: "物料名称不能为空!",
+            message: "物料编码不能为空!",
           },
         ],
       },
