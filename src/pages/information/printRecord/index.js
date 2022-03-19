@@ -34,7 +34,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       // valueType: 'dateTime',
       valueType: "date",
       align: "center",
-      width: 120,
+      width: 150,
       hideInTable: true,
       // initialValue: new Date(),
       // initialValue: moment(UpdateDate.tsdateStart),
@@ -46,7 +46,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       // valueType: 'dateTime',
       valueType: "date",
       align: "center",
-      width: 120,
+      width: 150,
       hideInTable: true,
       // initialValue: new Date(),
       // initialValue: moment(UpdateDate.tsdateEnd),
@@ -58,7 +58,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "batchNumber",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
     },
 
@@ -67,7 +67,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "state",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
         render: (text, record) => {
         let color = text ==="未打印" ? "red" : "green";
@@ -84,7 +84,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     //   dataIndex: "shiftdec",
     //   valueType: "text",
     //   align: "center",
-    //   width: 120,
+    //   width: 150,
     //   hideInSearch: true,
     //   initialValue: IsUpdate ? UpdateDate.shiftdec : "",
     // },
@@ -93,7 +93,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "onlyBarCode",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
     },
 
     {
@@ -101,7 +101,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "boxBarCode",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
     },
 
     {
@@ -109,7 +109,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "bigBoxBarCode",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
     },
 
     {
@@ -117,7 +117,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
     },
 
     {
@@ -125,7 +125,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
     },
 
     {
@@ -133,7 +133,8 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
-      width: 120,
+      ellipsis:true,
+      width: 200,
       hideInSearch: true,
     },
 
@@ -142,7 +143,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "printDateTime",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
     },
 
@@ -151,7 +152,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "printer",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
     },
 
@@ -160,7 +161,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     //   dataIndex: 'option',
     //   valueType: 'option',
     //   align: 'center',
-    //   width:120,
+    //   width:150,
     //   fixed:'right',
     //   render: (_, record) => (
     //     <>
@@ -248,12 +249,12 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
-        scroll={{ y: 430 }}
+        scroll={{ y: 480 }}
         rowKey="id"
         search={{
-          collapsed: false,
-          collapseRender: false,
-          labelWidth: 120,
+          // collapsed: false,
+          // collapseRender: false,
+          labelWidth: 150,
         }}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}

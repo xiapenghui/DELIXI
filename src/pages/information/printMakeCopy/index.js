@@ -1,4 +1,4 @@
-import { PlusOutlined, ArrowDownOutlined } from "@ant-design/icons";
+import {  ArrowDownOutlined ,ArrowUpOutlined   } from "@ant-design/icons";
 import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -11,6 +11,7 @@ import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 // import { getLodop } from "../../../utils/LodopFuncs";
 import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+import "../printMakeCopy/components/modal.css";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
@@ -30,7 +31,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   // const [createModalVisible, handleModalVisible] = useState(false);
-  const formItemLayout = globalConfig.table.formItemLayout
+  const formItemLayout2 = globalConfig.table.formItemLayout2
 
 
 
@@ -85,7 +86,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       title: "物料型号",
       dataIndex: "materialType",
       key: "materialType",
-      align: "materialType",
+      align: "center",
       ellipsis: {
         showTitle: false,
       },
@@ -137,7 +138,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
   const [newImage, setNewImage] = useState('')
-
+  const [zhiHidden1 ,setZhiHidden1 ] =useState(true)
+  const [zhiHidden2 ,setZhiHidden2 ] =useState(false)
+  const [heHidden1 ,setHeHidden1 ] =useState(true)
+  const [heHidden2 ,setHeHidden2 ] =useState(false)
+  const [boxHidden1 ,setBoxHidden1 ] =useState(true)
+  const [boxHidden2 ,setBoxHidden2 ] =useState(false)
 
 
   //tab标签切换获取index/key
@@ -487,8 +493,36 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
+  // 只搜索折叠
+  const zhiToggol =()=>{
+    setZhiHidden1(false) 
+    setZhiHidden2(true) 
+  }
+  const zhiToggo2 =()=>{
+    setZhiHidden1(true) 
+    setZhiHidden2(false) 
+  }
 
 
+   // 盒子搜索折叠
+   const heToggol =()=>{
+    setHeHidden1(false) 
+    setHeHidden2(true) 
+  }
+  const heToggo2 =()=>{
+    setHeHidden1(true) 
+    setHeHidden2(false) 
+  }
+
+    // 箱子搜索折叠
+    const boxToggol =()=>{
+      setBoxHidden1(false) 
+      setBoxHidden2(true) 
+    }
+    const boxToggo2 =()=>{
+      setBoxHidden1(true) 
+      setBoxHidden2(false) 
+    }
 
 
 
@@ -506,26 +540,26 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               endDate: moment().endOf('day')
             }}
           >
-            <Row gutter={40}>
+            <Row>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} >
                 <Form.Item
                   name="startDate"
                   label="开始时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
@@ -534,27 +568,26 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="barCode"
                   label="只条码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
                 </Form.Item>
               </Col>
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="物料编码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Select
                     // allowClear
                     showSearch
-                    name="materialId"
                     onChange={changeMaterialId1}
                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
@@ -566,30 +599,35 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               </Col>
 
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
                   label="物料型号"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
 
                 </Form.Item>
               </Col>
 
-              <Col span={8}  style={{ textAlign: 'center' }}>
+           
+              <Col span={6}  style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol}  hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2}  hidden={zhiHidden1}> <ArrowUpOutlined/></Button>
               </Col>
             </Row>
           </Form>
 
           <Table dataSource={dataSource1} columns={columns}
-            scroll={{ y: 450 }}
             style={{ padding: "0 20px" }}
             rowKey="id"
+            scroll={{
+              y: '100%'
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -611,25 +649,25 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               endDate: moment().endOf('day')
             }}
           >
-            <Row gutter={40}>
-              <Col span={8} style={{ display: 'block' }}>
+            <Row>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="startDate"
                   label="开始时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} >
                 <Form.Item
                   name="endDate"
                   label="结束时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
@@ -638,23 +676,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="barCode"
                   label="盒条码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
 
                 </Form.Item>
               </Col>
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="物料编码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Select
                     // allowClear
@@ -669,32 +707,35 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="materialType"
                   label="物料型号"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
 
                 </Form.Item>
               </Col>
 
-              <Col span={8}  style={{ textAlign: 'center' }}>
+              <Col span={6}  style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
-
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol}  hidden={heHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2}  hidden={heHidden1}> <ArrowUpOutlined/></Button>
               </Col>
             </Row>
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns} scroll={{ y: 450 }}
+          <Table dataSource={dataSource2} columns={columns} 
             style={{ padding: "0 20px" }}
             rowKey="id"
+            scroll={{
+              y: '100%'
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -708,7 +749,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         </TabPane>
         <TabPane tab="箱条码" key="3">
           <Form
-            // onFinish={(e) => handleSearch(e, 'tankSearch')}
             onFinish={boxSearch}
             form={form3}
             name="form_in_modal"
@@ -717,25 +757,25 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               endDate: moment().endOf('day')
             }}
           >
-            <Row gutter={40}>
-              <Col span={8} style={{ display: 'block' }}>
+            <Row>
+              <Col span={6} style={{ display: 'block' }} >
                 <Form.Item
                   name="startDate"
                   label="开始时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <DatePicker
                     style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
@@ -744,23 +784,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="barCode"
                   label="箱条码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
 
                 </Form.Item>
               </Col>
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="物料编码"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Select
                     // allowClear
@@ -775,34 +815,36 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ display: 'block' }}>
+              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialType"
                   label="物料型号"
                   hasFeedback
-                  {...formItemLayout}
+                  {...formItemLayout2}
                 >
                   <Input></Input>
 
                 </Form.Item>
               </Col>
 
-              <Col span={8}  style={{ textAlign: 'center' }}>
-
+              <Col span={6}  style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                {/* <Button style={{ marginLeft: '7px' }} onClick={() => handleResetFields()}><ClearOutlined />重置</Button> */}
-
-                {/* <Button type="primary" style={{ marginLeft: '7px' }} loading={loadings1} onClick={() => handleExportExcelGoods()}><UploadOutlined />导出Excel</Button> */}
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}> 箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol}  hidden={boxHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2}  hidden={boxHidden1}> <ArrowUpOutlined/></Button>
+
               </Col>
 
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns} scroll={{ y: 450 }} pagination={true}
+          <Table dataSource={dataSource3} columns={columns}  
             style={{ padding: "0 20px" }}
             rowKey="id"
+            scroll={{
+              y: '100%'
+            }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination

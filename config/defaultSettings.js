@@ -48,6 +48,10 @@ const proSettings = {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
     },
+    formItemLayout2: {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 17 },
+    },
   },
   modal: {
     maskStyles: {

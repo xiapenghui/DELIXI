@@ -2,6 +2,7 @@ import React from 'react'
 import { Player } from 'video-react';
 import { Carousel } from 'antd'
 import url from '../assets/bgi2.png';
+
 import './Welcome.less'
 
 const imgs = [
@@ -18,7 +19,7 @@ class Home extends React.Component {
       <div  className='home'>
         {/* <video src="http://10.177.34.15:23111/Resource/movie.mp4" width="100%"   enableProgressGesture="false" objectFit="fill" controls="false" autoplay="autoplay" loop='loop'></video> */}
         {/* <video src="http://192.168.1.18:9000/Resource/movie.mp4" width="100%" enableProgressGesture="false" objectFit="fill" controls="false" autoplay="autoplay" loop='loop'></video> */}
-        <img src="http://www.delixi.com/upload/202109/25/202109251116314486.jpg" alt="" style={{width:'100%',height:'88vh'}}/>
+        {/* <img src={imgs.url1} alt="" style={{width:'100%',height:'88vh'}}/> */}
       </div>
     )
   }
