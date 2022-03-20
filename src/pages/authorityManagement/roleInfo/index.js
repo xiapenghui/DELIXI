@@ -29,7 +29,6 @@ import UpdateForm from "./components/UpdateForm";
 import DetailForm from "./components/DetailForm";
 import { red } from "@umijs/deps/compiled/chalk";
 import "../../../../src/common.css";
-
 const formItemLayout = globalConfig.table.formItemLayout;
 const TableName = "roleInfo";
 

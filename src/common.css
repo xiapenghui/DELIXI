@@ -15,6 +15,7 @@
      text-align: right;
  }
 
- .formStyleTbale .ant-table-wrapper{
-     height: 53vh !important;
+ .formStyleTbale .ant-table-content {
+    height: 53vh !important;
+    overflow-y: auto !important;
  }

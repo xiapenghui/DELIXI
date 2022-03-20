@@ -188,7 +188,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         state: 1,
       },
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100000,
       userId: user.currentUser.id
     }
   }
@@ -206,6 +206,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource1(data.data.list)
             setZhiString(data.data.tempCode)
+            message.success(data.message)
           }
         }
       })
@@ -223,6 +224,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource2(data.data.list)
             setHeString(data.data.tempCode)
+            message.success(data.message)
           }
         }
       })
@@ -249,6 +251,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
             setDataSource3(data.data.list)
             setBoxString(data.data.tempCode)
+            message.success(data.message)
           }
         }
       })
@@ -297,6 +300,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           }
         }
         zhiSearch()
+      }else {
+        message.error(data.message)
       }
     }
   };
@@ -640,7 +645,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         </TabPane>
         <TabPane tab="盒条码" key="2">
           <Form
-            // onFinish={(e) => handleSearch(e, 'tankSearch')}
             onFinish={heSearch}
             form={form2}
             name="form_in_modal"

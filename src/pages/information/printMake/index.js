@@ -1,4 +1,4 @@
-import {  ArrowDownOutlined ,ArrowUpOutlined   } from "@ant-design/icons";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -9,7 +9,7 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
-import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 import "../printMakeCopy/components/modal.css";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
@@ -131,7 +131,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [materialId2, setMaterialId2] = useState('');
   const [materialId3, setMaterialId3] = useState('');
 
-  const [materialId, setMaterialId] = useState(materialList.length > 0 ? materialList[0].key : 0);
+  const [materialId, setMaterialId] = useState(materialList.length > 0 ? materialList[0].key : "");
+
 
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
@@ -142,12 +143,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [boxID, setBoxID] = useState([])
 
   const [newImage, setNewImage] = useState('')
-  const [zhiHidden1 ,setZhiHidden1 ] =useState(true)
-  const [zhiHidden2 ,setZhiHidden2 ] =useState(false)
-  const [heHidden1 ,setHeHidden1 ] =useState(true)
-  const [heHidden2 ,setHeHidden2 ] =useState(false)
-  const [boxHidden1 ,setBoxHidden1 ] =useState(true)
-  const [boxHidden2 ,setBoxHidden2 ] =useState(false)
+  const [zhiHidden1, setZhiHidden1] = useState(true)
+  const [zhiHidden2, setZhiHidden2] = useState(false)
+  const [heHidden1, setHeHidden1] = useState(true)
+  const [heHidden2, setHeHidden2] = useState(false)
+  const [boxHidden1, setBoxHidden1] = useState(true)
+  const [boxHidden2, setBoxHidden2] = useState(false)
 
 
   //tab标签切换获取index/key
@@ -162,9 +163,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   }
 
   useEffect(() => {
+    setMaterialId(materialList[0].key)
     zhiSearch()
   }, [])
 
+  
 
 
   //获取只码物料编号
@@ -207,17 +210,18 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //查询封装公用参数
   const params = (values) => {
+    
     return {
       data: {
         startDate: values.startDate,
         endDate: values.endDate,
         barCode: values.barCode,
         materialId: values.materialId ? values.materialId : materialId,
-        materialType:values.materialType,
+        materialType: values.materialType,
         state: 2,
       },
       pageNum: 1,
-      pageSize: 1000,
+      pageSize: 100000,
       userId: user.currentUser.id
     }
   }
@@ -232,6 +236,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         if (data.status === 200) {
           setDataSource1(data.data.list)
           setZhiString(data.data.tempCode)
+          message.success(data.message)
         }
       })
   }
@@ -245,6 +250,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         if (data.status === 200) {
           setDataSource2(data.data.list)
           setHeString(data.data.tempCode)
+          message.success(data.message)
         }
       })
   }
@@ -257,7 +263,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       .then(async (values) => {
         let data = await getBigBoxBarCodeList(params(values));
         if (data.status === 200) {
-         
           if (data.data.threeC === "0") {
             setNewImage('')
           } else if (data.data.threeC === "1") {
@@ -267,6 +272,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           }
           setDataSource3(data.data.list)
           setBoxString(data.data.tempCode)
+          message.success(data.message)
 
         }
       })
@@ -277,10 +283,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
     LodopFuncs.getLodop()
-    let content = noStart
+    let content = noStart;
     if (content === "") {
       eval(zhiString)
-      content = zhiString
+      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+    } else {
+      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
     }
     if (zhiID.length > 0) {
       let data = await printBarCode({
@@ -293,22 +301,55 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var qrCodeList = data.data.qrCodeList
-        var zhiList = content.replaceAll('9876543210', dataString[0]).
-          replaceAll('1234567890', qrCodeList[0]).
-          replace('2022-01-01', data.data.material.date)
-        eval(zhiList)
+        var zhiLeftList = content[0].replaceAll('9876543210', dataString[0]).replaceAll('1234567890', qrCodeList[0])
+        if (data.data.barCodeList.length == 1) {
+          eval(zhiLeftList)
+        } else {
+          var zhiRightList = content[1].replaceAll('kjihgfedcba', dataString[1]).replaceAll('abcdefghijk', qrCodeList[1])
+          eval(zhiLeftList + zhiRightList)
+        }
         LODOP.PRINT();
-        for (var i = 0; i < 10; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
-              replaceAll(qrCodeList[i - 1], qrCodeList[i])
-            console.log('zhiList123', zhiList)
-            eval(zhiList)
+
+        for (let i = 2; i < data.data.barCodeList.length; i++) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          if (i % 2 == 0) {
+            // 左边
+            zhiLeftList = zhiLeftList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
+            if (i == data.data.barCodeList.length - 1) {
+              eval(zhiLeftList)
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
+          } else {
+            zhiRightList = zhiRightList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
+            eval(zhiLeftList + zhiRightList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
           }
         }
+        message.info("打印中，请稍等...")
+
+
+
+        // var zhiList = content.replaceAll('9876543210', dataString[0]).
+        //   replaceAll('1234567890', qrCodeList[0]).
+        //   replace('2022-01-01', data.data.material.date)
+        // eval(zhiList)
+        // LODOP.PRINT();
+        // for (var i = 0; i < 2; i++) {
+        //   if (i > 0) {
+        //     
+        //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        //     zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
+        //       replaceAll(qrCodeList[i - 1], qrCodeList[i])
+        //     console.log('zhiList123', zhiList)
+        //     eval(zhiList)
+        //     LODOP.PRINT();
+        //     LODOP.PRINT_INIT("");
+        //   }
+        // }
+      } else {
+        message.error(data.message)
       }
     } else {
       message.info('请选择要打印的数据!')
@@ -323,6 +364,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     LodopFuncs.getLodop()
     zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
+      
       setNoStart(Value)
     }
     LODOP.PRINT_DESIGN();
@@ -431,7 +473,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-        
+
         var dataString = data.data.barCodeList
         var boxList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', data.data.material.date).
@@ -452,7 +494,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-          eval(boxList)
+        eval(boxList)
         LODOP.PRINT();
         for (var i = 0; i < 2; i++) {
 
@@ -492,35 +534,35 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   // 箱---结束
 
 
- // 只搜索折叠
- const zhiToggol =()=>{
-  setZhiHidden1(false) 
-  setZhiHidden2(true) 
-}
-const zhiToggo2 =()=>{
-  setZhiHidden1(true) 
-  setZhiHidden2(false) 
-}
+  // 只搜索折叠
+  const zhiToggol = () => {
+    setZhiHidden1(false)
+    setZhiHidden2(true)
+  }
+  const zhiToggo2 = () => {
+    setZhiHidden1(true)
+    setZhiHidden2(false)
+  }
 
 
- // 盒子搜索折叠
- const heToggol =()=>{
-  setHeHidden1(false) 
-  setHeHidden2(true) 
-}
-const heToggo2 =()=>{
-  setHeHidden1(true) 
-  setHeHidden2(false) 
-}
+  // 盒子搜索折叠
+  const heToggol = () => {
+    setHeHidden1(false)
+    setHeHidden2(true)
+  }
+  const heToggo2 = () => {
+    setHeHidden1(true)
+    setHeHidden2(false)
+  }
 
   // 箱子搜索折叠
-  const boxToggol =()=>{
-    setBoxHidden1(false) 
-    setBoxHidden2(true) 
+  const boxToggol = () => {
+    setBoxHidden1(false)
+    setBoxHidden2(true)
   }
-  const boxToggo2 =()=>{
-    setBoxHidden1(true) 
-    setBoxHidden2(false) 
+  const boxToggo2 = () => {
+    setBoxHidden1(true)
+    setBoxHidden2(false)
   }
 
 
@@ -529,7 +571,7 @@ const heToggo2 =()=>{
 
   return (
     <PageContainer>
-      <Tabs onChange={callback} type="card" style={{ background: "#fff"}}>
+      <Tabs onChange={callback} type="card" style={{ background: "#fff" }}>
         <TabPane tab="只条码" key="1">
 
           <Form
@@ -538,6 +580,7 @@ const heToggo2 =()=>{
             name="form_in_modal"
             initialValues={{
               materialId: materialId,
+              // startDate: moment().subtract(1, "years"),
               startDate: moment().subtract("years"),
               endDate: moment().endOf('day')
             }}
@@ -599,7 +642,7 @@ const heToggo2 =()=>{
                   </Select>
                 </Form.Item>
               </Col>
-               <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
                   label="物料型号"
@@ -611,12 +654,12 @@ const heToggo2 =()=>{
                 </Form.Item>
               </Col>
 
-              <Col span={6}  style={{ textAlign: 'right' }}>
+              <Col span={6} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol}  hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2}  hidden={zhiHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button>
               </Col>
             </Row>
           </Form>
@@ -630,7 +673,7 @@ const heToggo2 =()=>{
             rowSelection={{
               ...rowSelection1
             }}
-            // pagination={{ pageSize: 20 }}
+          // pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={dataSource1.length}
@@ -719,18 +762,18 @@ const heToggo2 =()=>{
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ textAlign: 'right' }}> 
+              <Col span={6} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板 </Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol}  hidden={heHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2}  hidden={heHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol} hidden={heHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2} hidden={heHidden1}> <ArrowUpOutlined /></Button>
               </Col>
             </Row>
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns}  
+          <Table dataSource={dataSource2} columns={columns}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -739,7 +782,7 @@ const heToggo2 =()=>{
             rowSelection={{
               ...rowSelection2
             }}
-            // pagination={{ pageSize: 20 }}
+          // pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
@@ -789,7 +832,7 @@ const heToggo2 =()=>{
 
 
 
-              <Col span={6} style={{ display: 'block' }}  hidden={boxHidden1}>
+              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="barCode"
                   label="箱条码"
@@ -820,7 +863,7 @@ const heToggo2 =()=>{
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }}  hidden={boxHidden1}>
+              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialType"
                   label="物料型号"
@@ -832,19 +875,19 @@ const heToggo2 =()=>{
                 </Form.Item>
               </Col>
 
-              <Col span={6}  style={{ textAlign: 'right' }}>
+              <Col span={6} style={{ textAlign: 'right' }}>
 
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}>箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol}  hidden={boxHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2}  hidden={boxHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol} hidden={boxHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2} hidden={boxHidden1}> <ArrowUpOutlined /></Button>
               </Col>
 
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns} 
+          <Table dataSource={dataSource3} columns={columns}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -853,7 +896,7 @@ const heToggo2 =()=>{
             rowSelection={{
               ...rowSelection3
             }}
-            // pagination={{ pageSize: 20 }}
+          // pagination={{ pageSize: 20 }}
           />
           {/* <Pagination
             total={15}
