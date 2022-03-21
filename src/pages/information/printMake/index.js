@@ -213,11 +213,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     
     return {
       data: {
-        startDate: values.startDate,
-        endDate: values.endDate,
+        startDate:  moment(values.startDate).format(globalConfig.form.onlyDateFormat),
+        endDate: moment(values.endDate).format(globalConfig.form.onlyDateFormat),
         barCode: values.barCode,
         materialId: values.materialId ? values.materialId : materialId,
         materialType: values.materialType,
+        batchNumber:values.batchNumber,
         state: 2,
       },
       pageNum: 1,
@@ -286,9 +287,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     let content = noStart;
     if (content === "") {
       eval(zhiString)
-      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
     } else {
-      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+      content = noStart.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
     }
     if (zhiID.length > 0) {
       let data = await printBarCode({
@@ -400,9 +401,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var heList = content.replaceAll('1234567890', dataString[0]).
+        var printDateList  = data.data.printDateList
+        var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
+          replace('物料描述', data.data.material.boxLabelDescription).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
           replace('装盒数', data.data.material.boxesNumber).
@@ -413,10 +416,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('8888888888', data.data.material.caseIEAN13).
           replace('9999999999', data.data.material.caseITF14).
           replace('中文名称', data.data.material.materialName)
-
         eval(heList)
         LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < dataString.length; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
             heList = heList.replaceAll(dataString[i - 1], dataString[i]);
@@ -580,8 +582,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             name="form_in_modal"
             initialValues={{
               materialId: materialId,
-              // startDate: moment().subtract(1, "years"),
-              startDate: moment().subtract("years"),
+              startDate: moment().subtract(1, "years"),
+              // startDate: moment().subtract("years"),
               endDate: moment().endOf('day')
             }}
           >
@@ -595,7 +597,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
                 </Form.Item>
               </Col>
 
@@ -607,7 +609,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -646,6 +648,18 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 <Form.Item
                   name="materialType"
                   label="物料型号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
+                <Form.Item
+                  name="batchNumber"
+                  label="打印批次"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -704,7 +718,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
                 </Form.Item>
               </Col>
 
@@ -716,7 +730,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
                 </Form.Item>
               </Col>
 
@@ -754,6 +768,18 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 <Form.Item
                   name="materialType"
                   label="物料型号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
+                <Form.Item
+                  name="batchNumber"
+                  label="打印批次"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -814,7 +840,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
                 </Form.Item>
               </Col>
 
@@ -826,7 +852,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} />
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
                 </Form.Item>
               </Col>
 
@@ -867,6 +893,18 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 <Form.Item
                   name="materialType"
                   label="物料型号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
+                <Form.Item
+                  name="batchNumber"
+                  label="打印批次"
                   hasFeedback
                   {...formItemLayout2}
                 >
