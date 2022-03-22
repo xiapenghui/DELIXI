@@ -167,7 +167,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     zhiSearch()
   }, [])
 
-  
+
 
 
   //获取只码物料编号
@@ -210,15 +210,15 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //查询封装公用参数
   const params = (values) => {
-    
+
     return {
       data: {
-        startDate:  moment(values.startDate).format(globalConfig.form.onlyDateFormat),
+        startDate: moment(values.startDate).format(globalConfig.form.onlyDateFormat),
         endDate: moment(values.endDate).format(globalConfig.form.onlyDateFormat),
         barCode: values.barCode,
         materialId: values.materialId ? values.materialId : materialId,
         materialType: values.materialType,
-        batchNumber:values.batchNumber,
+        batchNumber: values.batchNumber,
         state: 2,
       },
       pageNum: 1,
@@ -303,7 +303,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         var dataString = data.data.barCodeList
         var qrCodeList = data.data.qrCodeList
         var zhiLeftList = content[0].replaceAll('9876543210', dataString[0]).replaceAll('1234567890', qrCodeList[0])
-        if (data.data.barCodeList.length == 1) {
+        if (dataString.length == 1) {
           eval(zhiLeftList)
         } else {
           var zhiRightList = content[1].replaceAll('kjihgfedcba', dataString[1]).replaceAll('abcdefghijk', qrCodeList[1])
@@ -311,12 +311,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         }
         LODOP.PRINT();
 
-        for (let i = 2; i < data.data.barCodeList.length; i++) {
+        for (let i = 2; i < dataString.length; i++) {
           LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
           if (i % 2 == 0) {
             // 左边
             zhiLeftList = zhiLeftList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
-            if (i == data.data.barCodeList.length - 1) {
+            if (i == dataString.length - 1) {
               eval(zhiLeftList)
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
@@ -365,7 +365,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     LodopFuncs.getLodop()
     zhiCreateOneFormPage()
     LODOP.On_Return = (TaskID, Value) => {
-      
+
       setNoStart(Value)
     }
     LODOP.PRINT_DESIGN();
@@ -401,14 +401,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var printDateList  = data.data.printDateList
+        var printDateList = data.data.printDateList
         var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
-          replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
           replace('GB/T', data.data.material.standard).
           replace('浙江省', data.data.material.address).
@@ -475,10 +473,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-
+         debugger
         var dataString = data.data.barCodeList
-        var boxList = content.replaceAll('1234567890', dataString[0]).
-          replace('2022-01-01', data.data.material.date).
+        var printDateList = data.data.printDateList
+        var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
           replace('物料型号', data.data.material.materialType).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('物料型号描述', data.data.material.boxLabelDescription).
@@ -489,16 +487,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('8888888888', data.data.material.caseIEAN13).
           replace('9999999999', data.data.material.caseITF14).
           replace('装箱', data.data.material.packingQuantity).
-          replace('装箱数', data.data.material.packingQuantity).
           replace('装盒', data.data.material.boxesNumber).
-          replace('装盒数', data.data.material.boxesNumber).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         eval(boxList)
         LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < dataString.length; i++) {
 
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
@@ -597,7 +593,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -718,7 +714,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -730,7 +726,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -840,7 +836,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -852,7 +848,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
