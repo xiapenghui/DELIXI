@@ -1,4 +1,4 @@
-import {  ArrowDownOutlined ,ArrowUpOutlined   } from "@ant-design/icons";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -10,7 +10,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
 
-import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 import "../printMakeCopy/components/modal.css";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
@@ -76,14 +76,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     },
 
     {
-      title: "物料编码",
+      title: "中文名称",
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
     },
 
     {
-      title: "物料型号",
+      title: "物料代码",
       dataIndex: "materialType",
       key: "materialType",
       align: "center",
@@ -138,12 +138,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
   const [newImage, setNewImage] = useState('')
-  const [zhiHidden1 ,setZhiHidden1 ] =useState(true)
-  const [zhiHidden2 ,setZhiHidden2 ] =useState(false)
-  const [heHidden1 ,setHeHidden1 ] =useState(true)
-  const [heHidden2 ,setHeHidden2 ] =useState(false)
-  const [boxHidden1 ,setBoxHidden1 ] =useState(true)
-  const [boxHidden2 ,setBoxHidden2 ] =useState(false)
+  const [zhiHidden1, setZhiHidden1] = useState(true)
+  const [zhiHidden2, setZhiHidden2] = useState(false)
+  const [heHidden1, setHeHidden1] = useState(true)
+  const [heHidden2, setHeHidden2] = useState(false)
+  const [boxHidden1, setBoxHidden1] = useState(true)
+  const [boxHidden2, setBoxHidden2] = useState(false)
 
 
   //tab标签切换获取index/key
@@ -161,16 +161,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   //获取只码物料编码
   const changeMaterialId1 = (value) => {
+    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId1(value)
   }
 
   //获取盒码物料编码
   const changeMaterialId2 = (value) => {
+    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId2(value)
   }
 
   //获取箱码物料编码
   const changeMaterialId3 = (value) => {
+    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId3(value)
   }
 
@@ -180,12 +183,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const params = (values) => {
     return {
       data: {
-        startDate:  moment(values.startDate).format(globalConfig.form.onlyDateFormat),
+        startDate: moment(values.startDate).format(globalConfig.form.onlyDateFormat),
         endDate: moment(values.endDate).format(globalConfig.form.onlyDateFormat),
         barCode: values.barCode,
         materialId: values.materialId,
-        materialType:values.materialType,
-        batchNumber:values.batchNumber,
+        materialType: values.materialType,
+        batchNumber: values.batchNumber,
         state: 1,
       },
       pageNum: 1,
@@ -294,7 +297,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         }
         LODOP.PRINT();
 
-        for (let i = 2; i <dataString.length; i++) {
+        for (let i = 2; i < dataString.length; i++) {
           LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
           if (i % 2 == 0) {
             // 左边
@@ -315,10 +318,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       } else {
         message.error(data.message)
       }
-    } 
+    }
   };
-       
-   
+
+
 
 
   //只条码模板
@@ -368,10 +371,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var printDateList  = data.data.printDateList
+        var printDateList = data.data.printDateList
         var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
           replace('2022-01-01', data.data.material.date).
-          replace('物料型号', data.data.material.materialType).          
+          replace('物料型号', data.data.material.materialType).
           replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('物料型号描述', data.data.material.boxLabelDescription).
@@ -385,7 +388,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('中文名称', data.data.material.materialName)
         eval(heList)
         LODOP.PRINT();
-        for (var i = 0; i <dataString.length; i++) {
+        for (var i = 0; i < dataString.length; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
             heList = heList.replaceAll(dataString[i - 1], dataString[i]);
@@ -425,6 +428,24 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   // 盒---结束
 
 
+    //测试盒模板
+    const heCodeTest = () => {
+      LodopFuncs.getLodop()
+      var heList = heString.replace('1234567890', "1234567890").
+        replaceAll('2022-01-01', "2022-01-01").
+        replace('物料型号', "CDCH6i16201N").
+        replace('物料描述', "CDCH6i16A2P1NC220-240V").
+        replace('装盒', 10).
+        replace('检验02', '检验02').
+        replace('GB/T', "GB/T").
+        replace('浙江省', "浙江省").
+        replace('德力西', "德力西").
+        replace('X85220322A00030001', "X85220322A00030001").
+        replace('X85220322A00030001', "X85220322A00030001").
+        replace('中文名称', "家用交流电接触器")
+      eval(heList)
+      LODOP.PRINT_DESIGN();
+    }
 
 
 
@@ -453,7 +474,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
-        var printDateList  = data.data.printDateList
+        var printDateList = data.data.printDateList
         var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
           replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
@@ -509,40 +530,64 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     eval(boxString)
   };
 
+  
+  //测试箱子模板
+  const boxCodeTest = () => {
+    LodopFuncs.getLodop()
+    var boxList = boxString.replace('1234567890', "1234567890").
+      replaceAll('2022-01-01', "2022-01-01").
+      replace('物料型号', "CDCH6i16201N").
+      replace('物料描述', "CDCH6i16A2P1NC220-240V").
+      replace('装盒', 10).
+      replace('检验02', '检验02').
+      replace('GB/T', "GB/T").
+      replace('浙江省', "浙江省").
+      replace('德力西', "德力西").
+      replace('X85220322A00030001', "X85220322A00030001").
+      replace('X85220322A00030001', "X85220322A00030001").
+      replace('中文名称', "家用交流电接触器").
+      replace('装箱', 10).
+      replace('装盒', 10).
+      replace('箱重', 10).
+      replace('系列123', "领航者").
+      replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
+    eval(boxList)
+    LODOP.PRINT_DESIGN();
+  }
   // 箱---结束
 
 
 
   // 只搜索折叠
-  const zhiToggol =()=>{
-    setZhiHidden1(false) 
-    setZhiHidden2(true) 
+  const zhiToggol = () => {
+    setZhiHidden1(false)
+    setZhiHidden2(true)
   }
-  const zhiToggo2 =()=>{
-    setZhiHidden1(true) 
-    setZhiHidden2(false) 
-  }
-
-
-   // 盒子搜索折叠
-   const heToggol =()=>{
-    setHeHidden1(false) 
-    setHeHidden2(true) 
-  }
-  const heToggo2 =()=>{
-    setHeHidden1(true) 
-    setHeHidden2(false) 
+  const zhiToggo2 = () => {
+    setZhiHidden1(true)
+    setZhiHidden2(false)
   }
 
-    // 箱子搜索折叠
-    const boxToggol =()=>{
-      setBoxHidden1(false) 
-      setBoxHidden2(true) 
-    }
-    const boxToggo2 =()=>{
-      setBoxHidden1(true) 
-      setBoxHidden2(false) 
-    }
+
+  // 盒子搜索折叠
+  const heToggol = () => {
+    setHeHidden1(false)
+    setHeHidden2(true)
+  }
+  const heToggo2 = () => {
+    setHeHidden1(true)
+    setHeHidden2(false)
+  }
+
+  // 箱子搜索折叠
+  const boxToggol = () => {
+    setBoxHidden1(false)
+    setBoxHidden2(true)
+  }
+  const boxToggo2 = () => {
+    setBoxHidden1(true)
+    setBoxHidden2(false)
+  }
 
 
 
@@ -570,7 +615,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}   allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -582,7 +627,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -622,7 +667,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料型号"
+                  label="物料代码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -641,18 +686,21 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-           
-              <Col span={6}  style={{ textAlign: 'right' }}>
+
+              <Col span={6} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol}  hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2}  hidden={zhiHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button>
               </Col>
             </Row>
           </Form>
 
-          <Table dataSource={dataSource1} columns={columns}
+          <Table
+            className="flex-table"
+            dataSource={dataSource1}
+            columns={columns}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -679,7 +727,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             }}
           >
             <Row>
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -687,11 +735,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }} >
+              <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -699,13 +747,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
 
 
-              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="barCode"
                   label="盒条码"
@@ -716,7 +764,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="物料编码"
@@ -736,10 +784,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料型号"
+                  label="物料代码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -748,7 +796,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -759,18 +807,22 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-              <Col span={6}  style={{ textAlign: 'right' }}>
+              <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol}  hidden={heHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2}  hidden={heHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCodeTest} >测试盒码 </Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol} hidden={heHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2} hidden={heHidden1}> <ArrowUpOutlined /></Button>
               </Col>
             </Row>
 
 
           </Form>
-          <Table dataSource={dataSource2} columns={columns} 
+          <Table
+            className="flex-table"
+            dataSource={dataSource2}
+            columns={columns}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -798,7 +850,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             }}
           >
             <Row>
-              <Col span={6} style={{ display: 'block' }} >
+              <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -806,11 +858,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}  allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -818,13 +870,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat}   allowClear={false}/>
+                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
                 </Form.Item>
               </Col>
 
 
 
-              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="barCode"
                   label="箱条码"
@@ -835,7 +887,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="物料编码"
@@ -855,10 +907,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料型号"
+                  label="物料代码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -866,7 +918,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-              <Col span={6} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -878,19 +930,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6}  style={{ textAlign: 'right' }}>
+              <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}> 箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol}  hidden={boxHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2}  hidden={boxHidden1}> <ArrowUpOutlined/></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCodeTest} >测试箱码 </Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol} hidden={boxHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2} hidden={boxHidden1}> <ArrowUpOutlined /></Button>
 
               </Col>
 
             </Row>
 
           </Form>
-          <Table dataSource={dataSource3} columns={columns}  
+          <Table
+            className="flex-table"
+            dataSource={dataSource3}
+            columns={columns}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{

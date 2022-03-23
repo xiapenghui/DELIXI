@@ -57,6 +57,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 150,
+      hideInTable: true,
       // ellipsis:true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
       initialValue: IsUpdate ? UpdateDate.materialId : "",
@@ -76,18 +77,22 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.materialName
-      },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料编码不能为空!",
-          },
-        ],
-      },
     },
+
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+      ellipsis:true,
+    },
+
+
+
+
 
     {
       title: "英文名称",
@@ -100,7 +105,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料型号",
+      title: "物料代码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",

@@ -8,7 +8,7 @@ import moment from "moment";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import ImportForm from "../../../components/ImportExcel/ImportForm";
-
+import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 // import "../../../../src/assets/commonStyle.css";
 import ExportJsonExcel from "js-export-excel";
 import {
@@ -35,6 +35,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+  const [stringCode, setStringCode] = useState("");
 
   const getColumns = () => [
     {
@@ -108,7 +109,29 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         ],
       },
     },
-    
+
+
+    {
+      title: "设计模板",
+      dataIndex: "tempCode",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
+      hideInTable: true,
+      initialValue: IsUpdate ? UpdateDate.tempCode : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        debugger
+        if (type === 'form') {
+          if (IsUpdate === true) {
+            setStringCode(_.initialValue)
+            return <Button type="primary" onClick={tempEdit}>编辑模板</Button>
+          } else {
+            return <Button type="primary" onClick={tempAdd}>新增模板</Button>
+          }
+        }
+        return defaultRender(_);
+      },
+    },
 
     {
       title: "模板代码",
@@ -116,11 +139,13 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       valueType: "textarea",
       align: "center",
       width: 200,
-      ellipsis:true,
+      ellipsis: true,
       hideInSearch: true,
       // hideInForm:true
       initialValue: IsUpdate ? UpdateDate.tempCode : "",
     },
+
+
 
     {
       title: "尺寸",
@@ -288,7 +313,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
   //下载模板
   const downloadTemp = async (fields) => {
-    
+
     let data = await getTempl(fields);
     if (data.status === 200) {
 
@@ -300,6 +325,28 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       return false;
     }
   };
+
+
+  const tempAdd = async () => {
+    LodopFuncs.getLodop()
+    CreateOneFormPageAdd()
+    LODOP.PRINT_DESIGN();
+  }
+
+  const CreateOneFormPageAdd = async () => {
+    LODOP.PRINT_INITA(0, 0, "45mm", "60mm", "打印控件功能演示_Lodop功能");
+    LODOP.SET_SHOW_MODE("HIDE_GROUND_LOCK", true);
+  }
+
+
+  const tempEdit = async () => {
+    LodopFuncs.getLodop()
+    console.log('stringCode', stringCode)
+    eval(stringCode)
+    LODOP.PRINT_DESIGN();
+  }
+
+
 
 
   return (

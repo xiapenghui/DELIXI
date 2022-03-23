@@ -9,6 +9,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
+import "../printRecord/components/style.css";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
@@ -121,7 +122,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     },
 
     {
-      title: "物料型号",
+      title: "物料代码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
@@ -249,6 +250,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
+        className="flex-proTable"
         scroll={{ y: 480 }}
         rowKey="id"
         search={{

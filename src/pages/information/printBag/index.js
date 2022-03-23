@@ -109,7 +109,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: "物料型号",
+      title: "物料代码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
@@ -119,7 +119,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>物料型号</a>,
+      title: () => <a style={{ color: "red" }}>物料代码</a>,
       dataIndex: "materialType",
       valueType: "text",
       align: "center",

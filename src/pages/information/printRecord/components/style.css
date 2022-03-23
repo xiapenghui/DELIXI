@@ -1,0 +1,30 @@
+.flex-proTable{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 218px);
+    overflow: hidden;
+}
+.flex-proTable .ant-card{
+    flex: 1;
+    overflow: hidden;
+}
+.flex-proTable .ant-card-body,
+.flex-proTable .ant-spin-nested-loading,
+.flex-proTable .ant-spin-container,
+.flex-proTable .ant-table-container{
+    height: 100%;
+}
+.flex-proTable .ant-table-wrapper{
+    height: calc(100% - 65px);
+}
+.flex-proTable .ant-spin-container{
+    display: flex;
+    flex-direction: column;
+}
+.flex-proTable .ant-table{
+    flex: 1;
+    overflow: hidden;
+}
+.flex-proTable .ant-table-body{
+    height: calc(100% - 55px);
+}
