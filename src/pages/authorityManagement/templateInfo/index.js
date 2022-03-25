@@ -1,4 +1,4 @@
-import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined,ArrowDownOutlined, ArrowUpOutlined} from "@ant-design/icons";
 import { Button, message, DatePicker, Form, Input, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -16,6 +16,7 @@ import {
   postListInit,
   deleted,
   getAddDropDownInit,
+  exportTemp,
   getTempl,
   addPost,
   updatePut,
@@ -327,6 +328,27 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   };
 
 
+   //导出
+   const handleExport = async () => {
+    let data = await exportTemp({           
+      data: {
+        factoryNo: document.getElementById("tempNo").value,
+        factoryName: document.getElementById("tempName").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
+
   const tempAdd = async () => {
     LodopFuncs.getLodop()
     CreateOneFormPageAdd()
@@ -363,13 +385,15 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-
+           <Button type="primary" onClick={() => downloadTemp()}>
+           <FileWordOutlined /> 下载模板
+         </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <FileWordOutlined /> 导入
+            <ArrowDownOutlined /> 导入
           </Button>,
-          <Button type="primary" onClick={() => downloadTemp()}>
-            <FileWordOutlined /> 下载模板
-          </Button>,
+        <Button type="primary" onClick={() => handleExport()}>
+          <ArrowUpOutlined /> 导出
+        </Button>,
 
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}

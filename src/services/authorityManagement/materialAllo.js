@@ -70,5 +70,12 @@ export async function getTempl() {
  
 
 
-
-
+//导出物料
+export async function exportMaterialFactory(params) {
+  return request(`${ip}/DLX_OEM/api/materialFactory/exportMaterialFactory`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 
+ 

@@ -110,3 +110,14 @@ export async function importExcel(params) {
     data: { ...params },
   });
 }
+
+
+//导出用户
+export async function exportUser(params) {
+  return request(`${path}/DLX_OEM/api/user/exportUser`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 
+ 

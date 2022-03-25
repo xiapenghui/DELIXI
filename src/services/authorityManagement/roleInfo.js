@@ -71,6 +71,3 @@ export async function getDetail(params) {
     method: 'GET'
   });
 }
-
-
-

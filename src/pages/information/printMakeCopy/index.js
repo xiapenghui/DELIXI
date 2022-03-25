@@ -69,7 +69,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       ),
     },
     {
-      title: "物料编号",
+      title: "物料代号",
       dataIndex: "materialNo",
       key: "materialNo",
       align: "center",
@@ -210,7 +210,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource1(data.data.list)
             setZhiString(data.data.tempCode)
-            message.success(data.message)
+            message.success(data.message + data.data.tempName)
           }
         }
       })
@@ -228,7 +228,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource2(data.data.list)
             setHeString(data.data.tempCode)
-            message.success(data.message)
+            message.success(data.message + data.data.tempName)
           }
         }
       })
@@ -250,12 +250,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             } else if (data.data.threeC === "1") {
               setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`)
             } else {
-              setNewImage(`<img src='${ip}/DLX_OEM/api/oem.png'>`)
+              setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`)
             }
-
             setDataSource3(data.data.list)
             setBoxString(data.data.tempCode)
-            message.success(data.message)
+            message.success(data.message + data.data.tempName)
           }
         }
       })
@@ -373,18 +372,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.boxesNumber).
+          replace('装盒', data.data.material.cartonsNumber).
           replace('检验02', data.data.material.examination).
-          replace('GB/T', data.data.material.standard).
+          replace('GB/t', data.data.material.standard).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseIEAN14).
+          replace('9999999999', data.data.material.caseITF14).
           replace('中文名称', data.data.material.materialName)
         eval(heList)
         LODOP.PRINT();
@@ -437,7 +434,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         replace('物料描述', "CDCH6i16A2P1NC220-240V").
         replace('装盒', 10).
         replace('检验02', '检验02').
-        replace('GB/T', "GB/T").
+        replace('GB/t', "GB/t").
         replace('浙江省', "浙江省").
         replace('德力西', "德力西").
         replace('X85220322A00030001', "X85220322A00030001").
@@ -476,18 +473,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('2022-01-01', data.data.material.date).
           replace('物料型号', data.data.material.materialType).
           replace('物料描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.boxesNumber).
+          replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('检验02', data.data.material.examination).
-          replace('GB/T', data.data.material.standard).
-          replace('2022-01-01', data.data.material.date).
+          replace('GB/t', data.data.material.standard).
           replace('浙江省', data.data.material.address).
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseIEAN14).
+          replace('9999999999', data.data.material.caseITF14).
           replace('装箱', data.data.material.packingQuantity).
+          replace('装盒', data.data.material.cartonsNumber).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
@@ -540,7 +536,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('物料描述', "CDCH6i16A2P1NC220-240V").
       replace('装盒', 10).
       replace('检验02', '检验02').
-      replace('GB/T', "GB/T").
+      replace('GB/t', "GB/t").
       replace('浙江省', "浙江省").
       replace('德力西', "德力西").
       replace('X85220322A00030001', "X85220322A00030001").

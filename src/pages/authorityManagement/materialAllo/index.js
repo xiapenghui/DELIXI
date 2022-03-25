@@ -1,4 +1,4 @@
-import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Button, message, TimePicker, InputNumber, Select, DatePicker } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -16,6 +16,7 @@ import {
   postListInit,
   deleted,
   getTempl,
+  exportMaterialFactory,
   getAddDropDownInit,
   addPost,
   updatePut,
@@ -65,6 +66,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        debugger
         if (type === 'form' || type === 'table') {
           return <Select
             allowClear
@@ -117,12 +119,12 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     },
 
     {
-      title: "物料名称",
+      title: "物料编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
       width: 150,
-      // ellipsis:true,
+      hideInTable: true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
       initialValue: IsUpdate ? UpdateDate.materialId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -141,18 +143,18 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.materialName
-      },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "物料名称不能为空!",
-          },
-        ],
-      },
     },
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+      ellipsis:true,
+    },
+
 
     {
       title: "物料编码",
@@ -452,7 +454,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         materialId: fields.materialId,
         onlyTemp: fields.onlyTemp,
         boxTemp: fields.boxTemp,
-        bagTemp:fields.bagTemp,
+        bagTemp: fields.bagTemp,
         bigBoxTemp: fields.bigBoxTemp,
       },
       userId: user.currentUser.id
@@ -489,7 +491,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
           materialId: fields.materialId,
           onlyTemp: fields.onlyTemp,
           boxTemp: fields.boxTemp,
-          bagTemp:fields.bagTemp,
+          bagTemp: fields.bagTemp,
           bigBoxTemp: fields.bigBoxTemp,
         },
         userId: user.currentUser.id
@@ -536,8 +538,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     }
   };
 
- 
- 
+
+
   //下载模板
   const downloadTemp = async (fields) => {
     let data = await getTempl(fields);
@@ -551,6 +553,25 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     }
   };
 
+
+  //导出
+  const handleExport = async () => {
+    let data = await exportMaterialFactory({
+      data: {
+        factoryNo: document.getElementById("factoryId").value,
+        factoryName: document.getElementById("materialId").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
 
   return (
     <PageContainer>
@@ -566,11 +587,14 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <FileWordOutlined /> 导入
-          </Button>,
           <Button type="primary" onClick={() => downloadTemp()}>
             <FileWordOutlined /> 下载模板
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <ArrowDownOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
           </Button>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}

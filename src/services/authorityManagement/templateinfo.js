@@ -70,5 +70,13 @@ export async function getTempl() {
  
 
 
+//导出模板
+export async function exportTemp(params) {
+  return request(`${ip}/DLX_OEM/api/temp/exportTemp`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 
 
-
+ 

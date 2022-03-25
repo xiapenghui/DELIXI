@@ -62,3 +62,11 @@ export async function getTempl() {
   });
 }
  
+//导出工厂
+export async function exportFactory(params) {
+  return request(`${ip}/DLX_OEM/api/factory/exportFactory`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 

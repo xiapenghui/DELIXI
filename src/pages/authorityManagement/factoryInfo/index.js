@@ -1,5 +1,5 @@
-import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
-import { Button, message, Select ,Cascader  } from "antd";
+import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Button, message, Select, Cascader } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -14,13 +14,14 @@ import {
   postListInit,
   deleted,
   getTempl,
+  exportFactory,
   getAddDropDownInit,
   addPost,
   updatePut,
 } from "@/services/authorityManagement/factoryInfo";
 import city from '../../../utils/city'
 const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
-  const {currentUser } = user;
+  const { currentUser } = user;
 
   const { departmentList, areaList, lineList, shiftTypeList } = factoryInfo;
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -150,7 +151,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
       dataIndex: "sapCity",
       valueType: "text",
       align: "center",
-      width:150,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.sapCity : "",
     },
@@ -293,6 +294,31 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
     }
   };
 
+
+  //导出
+  const handleExport = async () => {
+    debugger
+    let data = await exportFactory({
+      data: {
+        factoryNo: document.getElementById("factoryNo").value,
+        factoryName: document.getElementById("factoryName").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
+
+
+
   return (
     <PageContainer>
       <ProTable
@@ -307,12 +333,16 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <FileWordOutlined /> 导入
-          </Button>,
           <Button type="primary" onClick={() => downloadTemp()}>
             <FileWordOutlined /> 下载模板
           </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <ArrowDownOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
+          </Button>,
+
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
@@ -401,8 +431,8 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
       ) : null}
 
 
-       {/* 导入  */}
-       <ImportForm
+      {/* 导入  */}
+      <ImportForm
         onCancel={() => handleImportModalVisible(false)}
         modalVisible={importModalVisible}
         currentUser={currentUser}

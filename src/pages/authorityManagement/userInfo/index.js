@@ -1,4 +1,4 @@
-import { PlusOutlined, FileWordOutlined } from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Divider, Button, message, Popconfirm, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -15,6 +15,7 @@ import {
   deleted,
   getAddDropDownInit,
   getTempl,
+  exportUser,
   addPost,
   updatePut,
   resetPassword,
@@ -266,7 +267,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       };
     });
 
- 
+
     // await dispatch({
     //   type: 'scustomerInfo/query',
     //   payload: {
@@ -419,13 +420,33 @@ const Component = ({ userInfo, dispatch, user }) => {
   };
 
 
+  //导出
+  const handleExport = async () => {
+    let data = await exportUser({
+      data: {
+        factoryNo: document.getElementById("userNo").value,
+        factoryName: document.getElementById("userName").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
+
   const rowSelection = {
     getCheckboxProps: (record) => ({
       disabled: record.account === 'admin',
       name: record.account,
     }),
   };
- 
+
 
   return (
     <PageContainer>
@@ -441,11 +462,15 @@ const Component = ({ userInfo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
-            <FileWordOutlined /> 导入
-          </Button>,
+
           <Button type="primary" onClick={() => downloadTemp()}>
             <FileWordOutlined /> 下载模板
+          </Button>,
+          <Button type="primary" onClick={() => handleImportModalVisible(true)}>
+            <ArrowDownOutlined /> 导入
+          </Button>,
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
           </Button>,
 
         ]}
@@ -547,7 +572,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       >
       </ImportForm>
 
-     
+
 
     </PageContainer>
   );

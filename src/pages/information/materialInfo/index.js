@@ -33,7 +33,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
  
   const getColumns = () => [
     {
-      title: "物料编号",
+      title: "物料代号",
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
@@ -91,9 +91,6 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
 
-
-
-
     {
       title: "英文名称",
       dataIndex: "materialDescription",
@@ -105,12 +102,12 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料代码",
+      title: "物料编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 200,
-      // hideInSearch: true,
+      hideInSearch: true,
     },
 
     {

@@ -23,7 +23,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
-  const [isDisabled, setIsDisabled] = useState(true)
   const [bagString, setBagString] = useState('')
   const [noStart, setNoStart] = useState('')
   const [bagID, setBagID] = useState([])
@@ -41,7 +40,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
   const getColumns = () => [
     {
-      title: "物料编号",
+      title: "物料代号",
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
@@ -66,7 +65,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 150,
-      // ellipsis:true,
+      hideInTable: true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
       initialValue: IsUpdate ? UpdateDate.materialId : (materialList[0] === undefined ? '' : materialList[0].key),
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
@@ -97,6 +96,19 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         ],
       },
     },
+
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+      ellipsis: true,
+    },
+
+
     {
       title: "英文名称",
       dataIndex: "materialDescription",
