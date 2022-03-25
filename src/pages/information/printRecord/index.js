@@ -122,7 +122,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     },
 
     {
-      title: "物料代码",
+      title: "商品编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",

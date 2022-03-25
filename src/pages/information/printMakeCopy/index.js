@@ -83,7 +83,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     },
 
     {
-      title: "物料代码",
+      title: "商品编码",
       dataIndex: "materialType",
       key: "materialType",
       align: "center",
@@ -159,21 +159,18 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-  //获取只码物料编码
+  //获取只码商品编码
   const changeMaterialId1 = (value) => {
-    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId1(value)
   }
 
-  //获取盒码物料编码
+  //获取盒码商品编码
   const changeMaterialId2 = (value) => {
-    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId2(value)
   }
 
-  //获取箱码物料编码
+  //获取箱码商品编码
   const changeMaterialId3 = (value) => {
-    message.warning('如果需要打印,请同时修改打印机对应模板')
     setMaterialId3(value)
   }
 
@@ -204,7 +201,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编码')
+          message.warning('请先选择商品编码')
         } else {
           let data = await getOnlyBarCodeList(params(values));
           if (data.status === 200) {
@@ -212,10 +209,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setZhiString(data.data.tempCode)
             message.success(data.message)
             notification.open({
-              message: 'Notification Title',
+              message: '如果需要打印,请同时修改打印机对应模板!',
               description: data.data.tempName,
-              
-              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+              duration: 8,
+              icon: <SmileOutlined style={{ color: 'red' }} />,
             });
           }
         }
@@ -228,7 +225,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编码')
+          message.warning('请先选择商品编码')
         } else {
           let data = await getBoxBarCodeList(params(values));
           if (data.status === 200) {
@@ -236,9 +233,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setHeString(data.data.tempCode)
             message.success(data.message)
             notification.open({
-              message: 'Notification Title',
+              message: '如果需要打印,请同时修改打印机对应模板!',
               description: data.data.tempName,
-              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+              duration: 8,
+              icon: <SmileOutlined style={{ color: 'red' }} />,
             });
           }
         }
@@ -252,7 +250,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       .validateFields()
       .then(async (values) => {
         if (values.materialId === undefined) {
-          message.warning('请先选择物料编码')
+          message.warning('请先选择商品编码')
         } else {
           let data = await getBigBoxBarCodeList(params(values));
           if (data.status === 200) {
@@ -267,9 +265,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setBoxString(data.data.tempCode)
             message.success(data.message)
             notification.open({
-              message: 'Notification Title',
+              message: '如果需要打印,请同时修改打印机对应模板!',
               description: data.data.tempName,
-              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+              duration: 8,
+              icon: <SmileOutlined style={{ color: 'red' }} />,
             });
           }
         }
@@ -284,7 +283,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const pintZhiCode = async () => {
     LodopFuncs.getLodop()
     if (materialId1 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
 
       let content = noStart;
@@ -343,7 +342,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const zhiCode = () => {
     LodopFuncs.getLodop()
     if (materialId1 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
       zhiCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -369,7 +368,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const pintHeCode = async () => {
     LodopFuncs.getLodop()
     if (materialId2 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
 
       let content = noStart
@@ -387,38 +386,22 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
-        if (data.data.material.standard === "无") {
-          var heList = content.replace("执行标准", "").replace("GB/t", "").replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('中文名称', data.data.material.materialName).
-          replace('箱盒数', data.data.material.boxesNumber)
-        eval(heList)
-        }else{
-          var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('箱盒数', data.data.material.boxesNumber).
-          replace('中文名称', data.data.material.materialName)
-        eval(heList)
-        }
-       
+        var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
+        replaceAll('物料型号', data.data.material.materialType).
+        replaceAll('物料描述', data.data.material.boxLabelDescription).
+        replaceAll('物料型号描述', data.data.material.boxLabelDescription).
+        replaceAll('装盒', data.data.material.cartonsNumber).
+        replaceAll('检02', data.data.material.examination).
+        replaceAll('GB/t', data.data.material.standard).
+        replaceAll('浙江省', data.data.material.address).
+        replaceAll('上海灵娃', data.data.material.productionPlant).
+        replaceAll('8888888888', data.data.material.caseIEAN13).
+        replaceAll('9999999999', data.data.material.caseITF14).
+        replaceAll('中文名称', data.data.material.materialName)
+      if (data.data.material.standard === "无" || data.data.material.standard === "") {
+        heList = heList.replace("执行标准:", "").replace('无', '')
+      }
+      eval(heList)
         LODOP.PRINT();
         for (var i = 0; i < dataString.length; i++) {
           if (i > 0) {
@@ -441,7 +424,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const heCode = () => {
     LodopFuncs.getLodop()
     if (materialId2 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
       heCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -468,10 +451,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         replace('物料型号', "CDCH6i16201N").
         replace('物料描述', "CDCH6i16A2P1NC220-240V").
         replace('装盒', 10).
-        replace('检验02', '检验02').
+        replace('检02', '检02').
         replace('GB/t', "GB/t").
         replace('浙江省', "浙江省").
-        replace('德力西', "德力西").
+        replace('上海灵娃', "上海灵娃").
         replace('X85220322A00030001', "X85220322A00030001").
         replace('X85220322A00030001', "X85220322A00030001").
         replace('中文名称', "家用交流电接触器").
@@ -490,7 +473,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const pintBoxCode = async () => {
     LodopFuncs.getLodop()
     if (materialId3 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
 
       let content = noStart
@@ -506,47 +489,36 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         userId: user.currentUser.id
       });
       if (data.status == 200) {
+        debugger
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
-        if (data.data.material.standard === "无") {
-          var boxList = content.replace("执行标准", "").replace("GB/t", "").replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('装箱', data.data.material.packingQuantity).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial).
-          replace('中文名称', data.data.material.materialName).
-          replace('箱盒数', data.data.material.boxesNumber).
-          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-        eval(boxList)
-        }else{
-          var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('装箱', data.data.material.packingQuantity).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial).
-          replace('中文名称', data.data.material.materialName).
-          replace('箱盒数', data.data.material.boxesNumber).
-          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-        eval(boxList)
-        }
+        var countList = data.data.countList
+        var boxList = content.replaceAll('1234567890', dataString[0]).
+        replaceAll('2022-01-01', printDateList[0]).
+        replaceAll('装箱', countList[0]).
+        replace('物料型号', data.data.material.materialType).
+        replace('物料描述', data.data.material.boxLabelDescription).
+        replace('物料型号描述', data.data.material.boxLabelDescription).
+        replace('检02', data.data.material.examination).
+        replace('浙江省', data.data.material.address).
+        replace('GB/t', data.data.material.standard).
+        replace('系列123', data.data.material.serial).
+        replace('上海灵娃', data.data.material.productionPlant).
+        replace('8888888888', data.data.material.caseIEAN13).
+        replace('9999999999', data.data.material.caseITF14).
+        // replace('装箱', data.data.material.packingQuantity).
+        replace('装盒', data.data.material.cartonsNumber).
+        replace('箱重', data.data.material.bigBoxWeight).
+        replace('中文名称', data.data.material.materialName).
+        replace('箱盒数', data.data.material.boxesNumber).
+        replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+      if (data.data.material.standard === "无" || data.data.material.standard === "") {
+        boxList = boxList.replace("执行标准:", "").replace('无', '')
+      }
+      if (data.data.material.serial === "") {
+        boxList = boxList.replace('系列', '')
+      }
+      eval(boxList)
        
         LODOP.PRINT();
         for (var i = 0; i < dataString.length; i++) {
@@ -569,7 +541,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const boxCode = () => {
     LodopFuncs.getLodop()
     if (materialId3 == "") {
-      message.warning('请先选择物料编码')
+      message.warning('请先选择商品编码')
     } else {
       boxCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
@@ -586,7 +558,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   };
 
   
-  //测试箱子模板
+  //测试箱箱模板
   const boxCodeTest = () => {
     LodopFuncs.getLodop()
     var boxList = boxString.replace('1234567890', "1234567890").
@@ -594,10 +566,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('物料型号', "CDCH6i16201N").
       replace('物料描述', "CDCH6i16A2P1NC220-240V").
       replace('装盒', 10).
-      replace('检验02', '检验02').
+      replace('检02', '检02').
       replace('GB/t', "GB/t").
       replace('浙江省', "浙江省").
-      replace('德力西', "德力西").
+      replace('上海灵娃', "上海灵娃").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('中文名称', "家用交流电接触器").
@@ -702,7 +674,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={6} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -723,7 +695,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料代码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -823,7 +795,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -843,7 +815,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料代码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -946,7 +918,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
-                  label="物料编码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -966,7 +938,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialType"
-                  label="物料代码"
+                  label="商品编码"
                   hasFeedback
                   {...formItemLayout2}
                 >

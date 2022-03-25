@@ -59,7 +59,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料编码",
+      title: "商品编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
@@ -106,7 +106,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料代码",
+      title: "商品编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
@@ -116,7 +116,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>物料代码</a>,
+      title: () => <a style={{ color: "red" }}>商品编码</a>,
       dataIndex: "materialType",
       valueType: "text",
       align: "center",

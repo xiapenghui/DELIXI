@@ -52,7 +52,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料编码",
+      title: "商品编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
@@ -102,7 +102,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料编码",
+      title: "商品编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
