@@ -1,4 +1,4 @@
-import { PlusOutlined, FileWordOutlined,ArrowDownOutlined, ArrowUpOutlined} from "@ant-design/icons";
+import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Button, message, DatePicker, Form, Input, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -166,23 +166,23 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       },
     },
 
-    {
-      title: "单位",
-      dataIndex: "tempUnit",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      initialValue: IsUpdate ? UpdateDate.tempUnit : "",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "单位不能为空!",
-          },
-        ],
-      },
-    },
+    // {
+    //   title: "单位",
+    //   dataIndex: "tempUnit",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 120,
+    //   hideInSearch: true,
+    //   initialValue: IsUpdate ? UpdateDate.tempUnit : "",
+    //   formItemProps: {
+    //     rules: [
+    //       {
+    //         required: true,
+    //         message: "单位不能为空!",
+    //       },
+    //     ],
+    //   },
+    // },
 
     {
       title: "备注",
@@ -328,9 +328,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   };
 
 
-   //导出
-   const handleExport = async () => {
-    let data = await exportTemp({           
+  //导出
+  const handleExport = async () => {
+    let data = await exportTemp({
       data: {
         factoryNo: document.getElementById("tempNo").value,
         factoryName: document.getElementById("tempName").value
@@ -369,7 +369,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   }
 
 
-
+  //盒条码模板
+ 
+ 
 
   return (
     <PageContainer>
@@ -385,15 +387,15 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-           <Button type="primary" onClick={() => downloadTemp()}>
-           <FileWordOutlined /> 下载模板
-         </Button>,
+          <Button type="primary" onClick={() => downloadTemp()}>
+            <FileWordOutlined /> 下载模板
+          </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ArrowDownOutlined /> 导入
           </Button>,
-        <Button type="primary" onClick={() => handleExport()}>
-          <ArrowUpOutlined /> 导出
-        </Button>,
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
+          </Button>,
 
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}

@@ -405,19 +405,36 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
-        var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('中文名称', data.data.material.materialName)
-        eval(heList)
+        if (data.data.material.standard === "无") {
+          var heList = content.replace("执行标准", "").replace("GB/t", "").replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
+            replace('物料型号', data.data.material.materialType).
+            replace('物料描述', data.data.material.boxLabelDescription).
+            replace('物料型号描述', data.data.material.boxLabelDescription).
+            replace('装盒', data.data.material.cartonsNumber).
+            replace('检验02', data.data.material.examination).
+            replace('GB/t', data.data.material.standard).
+            replace('浙江省', data.data.material.address).
+            replace('德力西', data.data.material.productionPlant).
+            replace('8888888888', data.data.material.caseIEAN13).
+            replace('9999999999', data.data.material.caseITF14).
+            replace('中文名称', data.data.material.materialName)
+          eval(heList)
+        } else {
+          var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
+            replace('物料型号', data.data.material.materialType).
+            replace('物料描述', data.data.material.boxLabelDescription).
+            replace('物料型号描述', data.data.material.boxLabelDescription).
+            replace('装盒', data.data.material.cartonsNumber).
+            replace('检验02', data.data.material.examination).
+            replace('GB/t', data.data.material.standard).
+            replace('浙江省', data.data.material.address).
+            replace('德力西', data.data.material.productionPlant).
+            replace('8888888888', data.data.material.caseIEAN13).
+            replace('9999999999', data.data.material.caseITF14).
+            replace('中文名称', data.data.material.materialName)
+          eval(heList)
+        }
+
         LODOP.PRINT();
         for (var i = 0; i < dataString.length; i++) {
           if (i > 0) {
@@ -497,26 +514,46 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-        debugger
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
-        var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('检验02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('装箱', data.data.material.packingQuantity).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('箱重', data.data.material.bigBoxWeight).
-          replace('系列123', data.data.material.serial).
-          replace('中文名称', data.data.material.materialName).
-          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-        eval(boxList)
+        if (data.data.material.standard === "无") {
+          var boxList = content.replace("执行标准", "").replace("GB/t", "").replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
+            replace('物料型号', data.data.material.materialType).
+            replace('物料描述', data.data.material.boxLabelDescription).
+            replace('物料型号描述', data.data.material.boxLabelDescription).
+            replace('检验02', data.data.material.examination).
+            replace('GB/t', data.data.material.standard).
+            replace('浙江省', data.data.material.address).
+            replace('德力西', data.data.material.productionPlant).
+            replace('8888888888', data.data.material.caseIEAN13).
+            replace('9999999999', data.data.material.caseITF14).
+            replace('装箱', data.data.material.packingQuantity).
+            replace('装盒', data.data.material.cartonsNumber).
+            replace('箱重', data.data.material.bigBoxWeight).
+            replace('系列123', data.data.material.serial).
+            replace('中文名称', data.data.material.materialName).
+            replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+          eval(boxList)
+        } else {
+          var boxList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
+            replace('物料型号', data.data.material.materialType).
+            replace('物料描述', data.data.material.boxLabelDescription).
+            replace('物料型号描述', data.data.material.boxLabelDescription).
+            replace('检验02', data.data.material.examination).
+            replace('GB/t', data.data.material.standard).
+            replace('浙江省', data.data.material.address).
+            replace('德力西', data.data.material.productionPlant).
+            replace('8888888888', data.data.material.caseIEAN13).
+            replace('9999999999', data.data.material.caseITF14).
+            replace('装箱', data.data.material.packingQuantity).
+            replace('装盒', data.data.material.cartonsNumber).
+            replace('箱重', data.data.material.bigBoxWeight).
+            replace('系列123', data.data.material.serial).
+            replace('中文名称', data.data.material.materialName).
+            replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+          eval(boxList)
+        }
+
         LODOP.PRINT();
         for (var i = 0; i < dataString.length; i++) {
 

@@ -26,6 +26,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
+  const [selectedObj, setSelectedObj] = useState({});
   const actionRef = useRef();
   const [materialTypeRow, setMaterialTypeRow] = useState('')
   const [materialTypeList, setMaterialTypeList] = useState([])
@@ -810,23 +811,26 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
       setBagID(selectedRowKeys)
+      setSelectedObj(selectedRows)
     }
   };
 
 
   //点击确认生成条码
   const confirm = async () => {
+    
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
-    if (selectedRowsState?.length > 0 && Number(inputVal) > 0) {
-
+    if (selectedObj.length > 0 && Number(inputVal) > 0) {
+      
       let data2 = await generateBarCode({
-        materialFactoryList: selectedRowsState,
+        materialFactoryList: selectedObj,
         printDate: picker,
         printQuantity: inputVal,
         userId: user.currentUser.id
       });
       if (data2.status == '200') {
+        
         handleModalVisible(true);
         setMaterialTypeList(data2.data)
       } else {
