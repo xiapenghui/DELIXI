@@ -1,5 +1,5 @@
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip } from "antd";
+import { ArrowDownOutlined, ArrowUpOutlined ,SmileOutlined } from "@ant-design/icons";
+import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip ,notification} from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -210,7 +210,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource1(data.data.list)
             setZhiString(data.data.tempCode)
-            message.success(data.message + data.data.tempName)
+            message.success(data.message)
+            notification.open({
+              message: 'Notification Title',
+              description: data.data.tempName,
+              
+              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+            });
           }
         }
       })
@@ -228,7 +234,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           if (data.status === 200) {
             setDataSource2(data.data.list)
             setHeString(data.data.tempCode)
-            message.success(data.message + data.data.tempName)
+            message.success(data.message)
+            notification.open({
+              message: 'Notification Title',
+              description: data.data.tempName,
+              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+            });
           }
         }
       })
@@ -254,7 +265,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             }
             setDataSource3(data.data.list)
             setBoxString(data.data.tempCode)
-            message.success(data.message + data.data.tempName)
+            message.success(data.message)
+            notification.open({
+              message: 'Notification Title',
+              description: data.data.tempName,
+              icon: <SmileOutlined style={{ color: '#108ee9' }} />,
+            });
           }
         }
       })
@@ -383,7 +399,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
           replace('9999999999', data.data.material.caseITF14).
-          replace('中文名称', data.data.material.materialName)
+          replace('中文名称', data.data.material.materialName).
+          replace('箱盒数', data.data.material.boxesNumber)
         eval(heList)
         }else{
           var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
@@ -397,6 +414,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('德力西', data.data.material.productionPlant).
           replace('8888888888', data.data.material.caseIEAN13).
           replace('9999999999', data.data.material.caseITF14).
+          replace('箱盒数', data.data.material.boxesNumber).
           replace('中文名称', data.data.material.materialName)
         eval(heList)
         }
@@ -456,7 +474,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         replace('德力西', "德力西").
         replace('X85220322A00030001', "X85220322A00030001").
         replace('X85220322A00030001', "X85220322A00030001").
-        replace('中文名称', "家用交流电接触器")
+        replace('中文名称', "家用交流电接触器").
+        replace('箱盒数', 10)
       eval(heList)
       LODOP.PRINT_DESIGN();
     }
@@ -505,6 +524,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
+          replace('箱盒数', data.data.material.boxesNumber).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         eval(boxList)
         }else{
@@ -523,6 +543,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replace('箱重', data.data.material.bigBoxWeight).
           replace('系列123', data.data.material.serial).
           replace('中文名称', data.data.material.materialName).
+          replace('箱盒数', data.data.material.boxesNumber).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         eval(boxList)
         }
@@ -583,6 +604,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('装箱', 10).
       replace('装盒', 10).
       replace('箱重', 10).
+      replace('箱盒数',10).
       replace('系列123', "领航者").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
