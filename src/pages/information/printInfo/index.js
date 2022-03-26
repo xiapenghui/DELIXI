@@ -26,7 +26,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
-  const [selectedObj, setSelectedObj] = useState({});
+  const [selectedObj, setSelectedObj] = useState([]);
   const actionRef = useRef();
   const [materialTypeRow, setMaterialTypeRow] = useState('')
   const [materialTypeList, setMaterialTypeList] = useState([])
@@ -648,8 +648,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取物料型号
   const changeMater = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    debugger
+    selectedObj.map((item, key) => {
       if (item.id == id) {
+        debugger
         item.materialType = value
       }
     })
@@ -657,7 +659,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取装盒数量
   const changeCartonsNumber = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.cartonsNumber = value
       }
@@ -666,7 +668,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取箱重量
   const changeBoxWeight = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.boxWeight = value
       }
@@ -675,7 +677,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取装箱数量
   const changePacking = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.packingQuantity = value
       }
@@ -684,7 +686,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取3C
   const changethreeC = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.threeC = value
       }
@@ -693,7 +695,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 物料描述
   const changeDescrip = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.boxLabelDescription = value
       }
@@ -702,7 +704,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 系列
   const changeSerial = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.serial = value
       }
@@ -711,7 +713,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 装袋数量
   const changeBasicQuantity = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.basicQuantity = value
       }
@@ -720,7 +722,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 盒重量
   const changeWeight = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.weight = value
       }
@@ -729,7 +731,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // EAN13码
   const changeBoxIEAN13 = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.boxIEAN13 = value
       }
@@ -738,7 +740,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 箱ITF14码
   const changeBoxITF14 = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.boxITF14 = value
       }
@@ -747,7 +749,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   // 箱ITF14码
   const changeCaseITF14 = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.caseITF14 = value
       }
@@ -757,7 +759,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //生产企业
   const changeProductionPlant = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.productionPlant = value
       }
@@ -766,7 +768,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //  地址
   const changeAddress = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.address = value
       }
@@ -775,7 +777,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //  执行标准
   const changeStandard = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.standard = value
       }
@@ -785,7 +787,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //  检验员
   const changeExamination = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.examination = value
       }
@@ -794,7 +796,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //  检验员
   const changeDate = async (value, id) => {
-    selectedRowsState.map((item, key) => {
+    selectedObj.map((item, key) => {
       if (item.id == id) {
         item.date = value
       }
