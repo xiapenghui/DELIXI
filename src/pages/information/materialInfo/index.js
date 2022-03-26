@@ -1,5 +1,5 @@
-import { PlusOutlined } from "@ant-design/icons";
-import { Button, message ,Select  } from "antd";
+import { PlusOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Button, message, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -12,6 +12,7 @@ import {
   getDropDownInit,
   postListInit,
   deleted,
+  exportMaterial,
   getAddDropDownInit,
   addPost,
   updatePut,
@@ -30,7 +31,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
- 
+
   const getColumns = () => [
     {
       title: "物料代号",
@@ -87,7 +88,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       align: "center",
       width: 150,
       hideInSearch: true,
-      ellipsis:true,
+      ellipsis: true,
     },
 
 
@@ -107,7 +108,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -438,6 +439,27 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     }
   };
 
+
+
+  //导出
+  const handleExport = async () => {
+    let data = await exportMaterial({
+      data: {
+        materialId: document.getElementById("materialId").value,
+        materialType: document.getElementById("materialType").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+
  
   return (
     <PageContainer>
@@ -449,12 +471,16 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         search={{
           labelWidth: 120,
         }}
-        // toolBarRender={() => [
-        //   <Button type="primary" onClick={() => handleModalVisible(true)}>
-        //     <PlusOutlined /> 新建
-        //   </Button>,
+        toolBarRender={() => [
+          // <Button type="primary" onClick={() => handleModalVisible(true)}>
+          //   <PlusOutlined /> 新建
+          // </Button>,
 
-        // ]}
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
+          </Button>,
+
+        ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{

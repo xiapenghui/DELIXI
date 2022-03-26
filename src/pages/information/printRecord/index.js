@@ -1,4 +1,4 @@
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined , ArrowUpOutlined} from "@ant-design/icons";
 import { Button, message, TimePicker, DatePicker, Input ,Tag } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -13,7 +13,8 @@ import "../printRecord/components/style.css";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
-  postListInit
+  postListInit,
+  exportPrintInfoRecord
 } from "@/services/information/printRecord";
 
 const printRecordComponent = ({ printRecord, dispatch ,user}) => {
@@ -118,7 +119,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
     },
 
     {
@@ -126,7 +127,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
     },
 
     {
@@ -244,6 +245,32 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     }
   };
 
+
+   //导出
+   const handleExport = async () => {
+    let data = await exportPrintInfoRecord({
+      data: {
+        startDate: document.getElementById("startDate").value,
+        endDate: document.getElementById("endDate").value,
+        materialNo: document.getElementById("materialNo").value,
+        materialType: document.getElementById("materialType").value,
+        onlyBarCode: document.getElementById("onlyBarCode").value,
+        boxBarCode: document.getElementById("boxBarCode").value,
+        bigBoxBarCode: document.getElementById("bigBoxBarCode").value
+      },
+      userId: user.currentUser.id
+    });
+    if (data.status === 200) {
+      message.success(data.message);
+      window.location.href = data.data
+      return true;
+    } else {
+      message.error(data.message);
+      return false;
+    }
+  };
+ 
+
  
   return (
     <PageContainer>
@@ -258,6 +285,14 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
           // collapseRender: false,
           labelWidth: 150,
         }}
+        toolBarRender={() => [
+          // <Button type="primary" onClick={() => handleModalVisible(true)}>
+          //   <PlusOutlined /> 新建
+          // </Button>,
+          <Button type="primary" onClick={() => handleExport()}>
+            <ArrowUpOutlined /> 导出
+          </Button>,
+        ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{

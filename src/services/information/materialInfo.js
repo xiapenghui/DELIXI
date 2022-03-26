@@ -61,6 +61,13 @@ export async function deleted(params) {
 
  
 
-
+//导出物料信息管理
+export async function exportMaterial(params) {
+  return request(`${ip}/DLX_OEM/api/material/exportMaterial`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 
 
 

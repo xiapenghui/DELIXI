@@ -22,11 +22,15 @@ export async function postListInit(params) {
 }
 
 
-
  
-
+//导出打印信息记录
+export async function exportPrintInfoRecord(params) {
+  return request(`${ip}/DLX_OEM/api/printInfoRecord/exportPrintInfoRecord`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
  
-
 
 
  

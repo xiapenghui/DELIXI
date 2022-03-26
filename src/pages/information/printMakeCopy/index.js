@@ -357,7 +357,20 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     eval(zhiString)
   };
 
-  // 只---结束
+  //测试只模板
+  const zhiCodeTest = () => {
+    LodopFuncs.getLodop()
+    var zhiList = zhiString.replace('服务热线:', "服务热线:").
+      replace('4008268008', "4008268008").
+      replace('S/N:', "S/N:").
+      replace('1234567890', "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000011").
+      replace('abcdefghijk', "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000021").
+      replace('9876543210', "3vob10A00030000011").
+      replace('kjihgfedcba', "3vob10A00030000021")
+    eval(zhiList)
+    LODOP.PRINT_DESIGN();
+  }
+    // 只---结束
 
 
 
@@ -386,20 +399,28 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
-        var heList = content.replaceAll('1234567890', dataString[0]).replaceAll('2022-01-01', printDateList[0]).
-        replaceAll('物料型号', data.data.material.materialType).
-        replaceAll('物料描述', data.data.material.boxLabelDescription).
-        replaceAll('物料型号描述', data.data.material.boxLabelDescription).
-        replaceAll('装盒', data.data.material.cartonsNumber).
-        replaceAll('检02', data.data.material.examination).
-        replaceAll('GB/t', data.data.material.standard).
-        replaceAll('浙江省', data.data.material.address).
-        replaceAll('上海灵娃', data.data.material.productionPlant).
-        replaceAll('8888888888', data.data.material.caseIEAN13).
-        replaceAll('9999999999', data.data.material.caseITF14).
-        replaceAll('中文名称', data.data.material.materialName)
+        var countList = data.data.countList
+        var heList = content.replaceAll('1234567890', dataString[0]).
+        replaceAll('2022-01-01', printDateList[0]).
+        replaceAll('装盒', countList[0]).
+        replace('物料型号', data.data.material.materialType).
+        replace('物料描述', data.data.material.boxLabelDescription).
+        replace('物料型号描述', data.data.material.boxLabelDescription).
+        // replaceAll('装盒', data.data.material.cartonsNumber).
+        replace('系列123', data.data.material.serial).
+        replace('检02', data.data.material.examination).
+        replace('GB/t', data.data.material.standard).
+        replace('浙江省', data.data.material.address).
+        
+        replace('上海灵娃', data.data.material.productionPlant).
+        replace('8888888888', data.data.material.caseIEAN13).
+        replace('9999999999', data.data.material.caseITF14).
+        replace('中文名称', data.data.material.materialName)
       if (data.data.material.standard === "无" || data.data.material.standard === "") {
         heList = heList.replace("执行标准:", "").replace('无', '')
+      } 
+      if (data.data.material.serial === "") {
+        heList = heList.replace('系列', '')
       }
       eval(heList)
         LODOP.PRINT();
@@ -455,10 +476,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         replace('GB/t', "GB/t").
         replace('浙江省', "浙江省").
         replace('上海灵娃', "上海灵娃").
+        replace('系列', "系列").
+        replace('系列123', "领航者").
         replace('X85220322A00030001', "X85220322A00030001").
         replace('X85220322A00030001', "X85220322A00030001").
         replace('中文名称', "家用交流电接触器").
-        replace('箱盒数', 10)
+        replace('箱盒数', 10).
       eval(heList)
       LODOP.PRINT_DESIGN();
     }
@@ -635,7 +658,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           >
             <Row>
 
-              <Col span={6} style={{ display: 'block' }} >
+              <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -647,7 +670,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -661,7 +684,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="barCode"
                   label="只条码"
@@ -671,7 +694,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   <Input></Input>
                 </Form.Item>
               </Col>
-              <Col span={6} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
                   name="materialId"
                   label="商品编码"
@@ -692,7 +715,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               </Col>
 
 
-              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
                   label="商品编码"
@@ -703,7 +726,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
-              <Col span={6} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -715,10 +738,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={6} style={{ textAlign: 'right' }}>
+              <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCodeTest} >测试只码 </Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button>
               </Col>
