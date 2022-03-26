@@ -51,3 +51,15 @@ export async function getTempl() {
   });
 }
  
+
+//导出物料
+export async function exportPasswordRules(params) {
+  return request(`${path}/DLX_OEM/api/passwordRules/exportPasswordRules`, {
+    method: "POST",
+    data: { ...params },
+  });
+}
+ 
+ 
+
+ 

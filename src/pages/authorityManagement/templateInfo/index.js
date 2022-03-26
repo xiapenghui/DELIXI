@@ -37,6 +37,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
   const [stringCode, setStringCode] = useState("");
+  const [stringVal, setStringVal] = useState("");
 
   const getColumns = () => [
     {
@@ -144,6 +145,14 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       hideInSearch: true,
       // hideInForm:true
       initialValue: IsUpdate ? UpdateDate.tempCode : "",
+      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+      //   if (type === 'form') {
+      //     if (stringVal !== '') {
+      //       return  <textarea value={stringVal} row={3} className='ant-input'></textarea>
+      //     } 
+      //   }
+      //   return defaultRender(_);
+      // }
     },
 
 
@@ -365,6 +374,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     LodopFuncs.getLodop()
     console.log('stringCode', stringCode)
     eval(stringCode)
+    LODOP.On_Return = (TaskID, Value) => {
+      setStringVal(Value)
+    }
     LODOP.PRINT_DESIGN();
   }
 
