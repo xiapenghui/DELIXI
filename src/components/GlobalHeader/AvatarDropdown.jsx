@@ -118,7 +118,7 @@ class AvatarDropdown extends React.Component {
         </Menu.Item>
       </Menu>
     );
-    // debugger
+
 
     return currentUser && currentUser.account ? (
       <div>

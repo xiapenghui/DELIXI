@@ -297,7 +297,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
-    debugger
+    
     let data = await exportFactory({
       data: {
         factoryNo: document.getElementById("factoryNo").value,

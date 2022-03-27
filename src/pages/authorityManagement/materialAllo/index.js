@@ -66,7 +66,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        debugger
+        
         if (type === 'form' || type === 'table') {
           return <Select
             allowClear
@@ -109,7 +109,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
     {
       title: "供应商SAP代码",
-      dataIndex: " supplierSapCode鹏辉09:54",
+      dataIndex: "supplierSapCode",
       valueType: "text",
       align: "center",
       width: 200,
@@ -117,7 +117,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       hideInSearch: true,
       hideInForm: true,
     },
- 
+    
 
 
     {

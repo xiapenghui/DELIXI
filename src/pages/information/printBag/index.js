@@ -613,7 +613,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
-        debugger
+        
         var dataString = data.data.barCodeList
         var bagList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', picker).

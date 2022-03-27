@@ -648,10 +648,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //获取物料型号
   const changeMater = async (value, id) => {
-    debugger
+    
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        debugger
+        
         item.materialType = value
       }
     })

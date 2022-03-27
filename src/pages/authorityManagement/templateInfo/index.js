@@ -122,7 +122,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       hideInTable: true,
       initialValue: IsUpdate ? UpdateDate.tempCode : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        debugger
+        
         if (type === 'form') {
           if (IsUpdate === true) {
             setStringCode(_.initialValue)

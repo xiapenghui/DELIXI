@@ -84,7 +84,7 @@ const UpdateForm = (props) => {
     if (updateModalVisible) {
       console.log('result', result)
       // setCheckedKeys(data.EditData.menuIdList)
-      debugger
+      
       setCheckedKeys(result)
       form.setFieldsValue({
         id: data.EditData.id,
