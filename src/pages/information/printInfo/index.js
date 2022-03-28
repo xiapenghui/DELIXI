@@ -86,23 +86,45 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title: "中文名称",
+      title:() => <a style={{ color: "red" }}>中文名称</a>,
       dataIndex: "materialName",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
       ellipsis: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"materialName" + record.id}
+            defaultValue={record.materialName}
+            style={{ border: "none", color: "red", textAlign: "center" }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeMaterialName(document.getElementById("materialName" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     {
-      title: "英文名称",
+      title:() => <a style={{ color: "red" }}>英文名称</a>,
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"materialDescription" + record.id}
+            defaultValue={record.materialDescription}
+            style={{ border: "none", color: "red", textAlign: "center" }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeMaterialDescription(document.getElementById("materialDescription" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     {
@@ -292,6 +314,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
+
     {
       title: "箱盒数量",
       dataIndex: "boxesNumber",
@@ -299,106 +322,61 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"boxesNumber" + record.id}
+            defaultValue={text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeBoxesNumber(document.getElementById("boxesNumber" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
+
     {
-      title: () => <a style={{ color: "red" }}>EAN13码</a>,
+      title: "箱EAN13码",
       dataIndex: "boxIEAN13",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"boxIEAN13" + record.id}
-            defaultValue={text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxIEAN13(document.getElementById("boxIEAN13" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+    },
+
+
+    {
+      title: "EAN13码",
+      dataIndex: "caseIEAN13",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
     },
 
     {
-      title: () => <a style={{ color: "red" }}>箱ITF14码</a>,
+      title: "箱ITF14码",
       dataIndex: "boxITF14",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"boxITF14" + record.id}
-            defaultValue={text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxITF14(document.getElementById("boxITF14" + record.id).value, record.id)}
-          ></input>
-        );
-      },
     },
 
-    // {
-    //   title: () => <a style={{ color: "red" }}>盒ITF13码</a>,
-    //   dataIndex: "boxIEAN13",
-    //   valueType: "text",
-    //   align: "center",
-    //   width: 200,
-    //   hideInSearch: true,
-    //   render: (text, record, index, key) => {
-    //     return (
-    //       <input
-    //         id={"boxIEAN13" + record.id}
-    //         defaultValue={text}
-    //         style={{
-    //           border: "none",
-    //           color: "red",
-    //           textAlign: "center",
-    //           width: "100px",
-    //         }}
-    //         disabled={bagID[0] == record.id ? false : true}
-    //         onBlur={() => changeboxIEAN13(document.getElementById("boxIEAN13" + record.id).value, record.id)}
-    //       ></input>
-    //     );
-    //   },
-    // },
-
+  
     {
-      title: () => <a style={{ color: "red" }}>盒ITF14码</a>,
+      title: "盒ITF14码",
       dataIndex: "caseITF14",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"caseITF14" + record.id}
-            defaultValue={text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeCaseITF14(document.getElementById("caseITF14" + record.id).value, record.id)}
-          ></input>
-        );
-      },
     },
 
     {
@@ -415,7 +393,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "productionPlant",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 250,
       ellipsis: true,
       hideInSearch: true,
       render: (text, record, index, key) => {
@@ -427,7 +405,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               border: "none",
               color: "red",
               textAlign: "center",
-              width: "100px",
+              width: "200px",
             }}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeProductionPlant(document.getElementById("productionPlant" + record.id).value, record.id)}
@@ -441,7 +419,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       ellipsis: true,
-      width: 200,
+      width: 250,
       hideInSearch: true,
       render: (text, record, index, key) => {
         return (
@@ -452,7 +430,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               border: "none",
               color: "red",
               textAlign: "center",
-              width: "100px",
+              width: "200px",
             }}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeAddress(document.getElementById("address" + record.id).value, record.id)}
@@ -644,6 +622,26 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
 
+  
+
+ //获取中文名称
+ const changeMaterialName = async (value, id) => {
+  selectedObj.map((item, key) => {
+    if (item.id == id) {
+      item.materialName = value
+    }
+  })
+};
+
+
+ //获取英文名称
+ const changeMaterialDescription = async (value, id) => {
+  selectedObj.map((item, key) => {
+    if (item.id == id) {
+      item.materialDescription = value
+    }
+  })
+};
 
 
   //获取物料型号
@@ -728,33 +726,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       }
     })
   };
-
-  // EAN13码
-  const changeBoxIEAN13 = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.boxIEAN13 = value
-      }
-    })
-  };
-
-  // 箱ITF14码
-  const changeBoxITF14 = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.boxITF14 = value
-      }
-    })
-  };
-
-  // 箱ITF14码
-  const changeCaseITF14 = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.caseITF14 = value
-      }
-    })
-  };
+  
 
 
   //生产企业
@@ -803,6 +775,16 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     })
   };
 
+
+  //箱盒数量
+  const changeBoxesNumber = async (value, id) => {
+    selectedObj.map((item, key) => {
+      if (item.id == id) {
+        item.boxesNumber = value
+      }
+    })
+  }
+  
 
 
 

@@ -579,13 +579,17 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('装盒', data.data.material.cartonsNumber).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('中文名称', data.data.material.materialName).
-          replace('箱盒数', data.data.material.boxesNumber).
+           // replace('箱盒数', data.data.material.boxesNumber).
+          replace('箱盒数', data.data.material.oneLogo).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
           boxList = boxList.replace("执行标准:", "").replace('无', '').replace(null, '')
         }
         if (data.data.material.serial === "" || data.data.material.serial === null) {
           boxList = boxList.replace('系列', '').replace(null, '')
+        }
+        if (data.data.material.oneLogo === "" || data.data.material.oneLogo === null) {
+          boxList = boxList.replace('箱盒数', '').replace(null, '')
         }
         eval(boxList)
         LODOP.PRINT();
