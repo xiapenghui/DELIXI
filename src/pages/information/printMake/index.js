@@ -349,8 +349,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         }
         message.info("打印中，请稍等...")
 
-
-
         // var zhiList = content.replaceAll('9876543210', dataString[0]).
         //   replaceAll('1234567890', qrCodeList[0]).
         //   replace('2022-01-01', data.data.material.date)
@@ -374,8 +372,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     } else {
       message.info('请选择要打印的数据!')
     }
-
-
   };
 
 
@@ -420,10 +416,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
     LodopFuncs.getLodop()
-    let content = noStart
+    let content = noStart;
     if (content === "") {
       eval(heString)
-      content = heString
+      content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
+    } else {
+      content = noStart.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
     }
     if (heID.length > 0) {
       let data = await printBarCode({
@@ -434,46 +432,126 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         userId: user.currentUser.id
       });
       if (data.status == 200) {
+
+        debugger
+        
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var countList = data.data.countList
-        var heList = content.replaceAll('1234567890', dataString[0]).
-          replaceAll('2022-01-01', printDateList[0]).
-          replaceAll('装盒', countList[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          // replaceAll('装盒', data.data.material.cartonsNumber).
-          replace('系列123', data.data.material.serial).
-          replace('检02', data.data.material.examination).
-          replace('GB/t', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('上海灵娃', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
-          replace('中文名称', data.data.material.materialName)
+        var heLeftList = content[0].replaceAll('1234567890A', dataString[0]).
+          replaceAll('2022-01-01A', printDateList[0]).
+          replaceAll('装盒A', countList[0]).
+          replace('物料型号A', data.data.material.materialType).
+          replace('物料描述A', data.data.material.boxLabelDescription).
+          replace('系列123A', data.data.material.serial).
+          replace('检02A', data.data.material.examination).
+          replace('GB/tA', data.data.material.standard).
+          replace('浙江省A', data.data.material.address).
+          replace('上海灵娃A', data.data.material.productionPlant).
+          replace('8888888888A', data.data.material.caseIEAN13).
+          replace('9999999999A', data.data.material.caseITF14).
+          replace('中文名称A', data.data.material.materialName)
         if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
-          heList = heList.replace("执行标准:", "").replace('无', '').replace(null, '')
+          heLeftList = heLeftList.replace("执行标准:", "").replace('无', '').replace(null, '')
         }
         if (data.data.material.serial === "" || data.data.material.serial === null) {
-          heList = heList.replace('系列', '').replace(null, '')
+          heLeftList = heLeftList.replace('系列', '').replace(null, '')
         }
-        eval(heList)
+        if (dataString.length == 1) {
+          eval(heLeftList)
+        } else {
+          debugger
+          var heRightList = content[1].replaceAll('1234567890B', dataString[1]).
+            replaceAll('2022-01-01B', printDateList[1]).
+            replaceAll('装盒B', countList[1]).
+            replace('物料型号B', data.data.material.materialType).
+            replace('物料描述B', data.data.material.boxLabelDescription).
+            replace('系列123B', data.data.material.serial).
+            replace('检02B', data.data.material.examination).
+            replace('GB/tB', data.data.material.standard).
+            replace('浙江省B', data.data.material.address).
+            replace('上海灵娃B', data.data.material.productionPlant).
+            replace('8888888888B', data.data.material.caseIEAN13).
+            replace('9999999999B', data.data.material.caseITF14).
+            replace('中文名称B', data.data.material.materialName)
+          if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
+            heRightList = heRightList.replace("执行标准:", "").replace('无', '').replace(null, '')
+          }
+          if (data.data.material.serial === "" || data.data.material.serial === null) {
+            heRightList = heRightList.replace('系列', '').replace(null, '')
+          }
+          eval(heLeftList + heRightList)
+        }
+
         LODOP.PRINT();
-        for (var i = 0; i < dataString.length; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            heList = heList.replaceAll(dataString[i - 1], dataString[i]);
-            console.log('heList123', heList)
-            eval(heList)
+        for (let i = 2; i < dataString.length; i++) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          if (i % 2 == 0) {
+            // 左边
+            heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i]).
+            replaceAll(printDateList[i - 2], printDateList[i]).
+            replaceAll(countList[i - 2], countList[i])
+
+            if (i == dataString.length - 1) {
+              eval(heLeftList)
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
+          } else {
+            heRightList = heRightList.replaceAll(dataString[i - 2], dataString[i]).
+            replaceAll(printDateList[i - 2], printDateList[i]).
+            replaceAll(countList[i - 2], countList[i])
+            eval(heLeftList + heRightList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
           }
         }
+        message.info("打印中，请稍等...")
+      } else {
+        message.error(data.message)
       }
     } else {
       message.info('请选择要打印的数据!')
     }
+
+
+    // var heList = content.replaceAll('1234567890', dataString[0]).
+    //   replaceAll('2022-01-01', printDateList[0]).
+    //   replaceAll('装盒', countList[0]).
+    //   replace('物料型号', data.data.material.materialType).
+    //   replace('物料描述', data.data.material.boxLabelDescription).
+    //   replace('物料型号描述', data.data.material.boxLabelDescription).
+    //   // replaceAll('装盒', data.data.material.cartonsNumber).
+    //   replace('系列123', data.data.material.serial).
+    //   replace('检02', data.data.material.examination).
+    //   replace('GB/t', data.data.material.standard).
+    //   replace('浙江省', data.data.material.address).
+    //   replace('上海灵娃', data.data.material.productionPlant).
+    //   replace('8888888888', data.data.material.caseIEAN13).
+    //   replace('9999999999', data.data.material.caseITF14).
+    //   replace('中文名称', data.data.material.materialName)
+    // if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
+    //   heList = heList.replace("执行标准:", "").replace('无', '').replace(null, '')
+    // }
+    // if (data.data.material.serial === "" || data.data.material.serial === null) {
+    //   heList = heList.replace('系列', '').replace(null, '')
+    // }
+    //     eval(heList)
+    //     LODOP.PRINT();
+    //     for (var i = 0; i < dataString.length; i++) {
+    //       if (i > 0) {
+    //         LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+    //         heList = heList.replaceAll(dataString[i - 1], dataString[i]);
+    //         console.log('heList123', heList)
+    //         eval(heList)
+    //         LODOP.PRINT();
+    //         LODOP.PRINT_INIT("");
+    //       }
+    //     }
+    //   }
+    // } else {
+    //   message.info('请选择要打印的数据!')
+    // }
   };
 
 
@@ -561,7 +639,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           countListNew.splice(index * 2, 0, item);
         })
 
-
+        debugger
         var boxList = content.replaceAll('1234567890', dataStringNew[0]).
           replaceAll('2022-01-01', printDateListNew[0]).
           replaceAll('装箱', countListNew[0]).
@@ -579,7 +657,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           replace('装盒', data.data.material.cartonsNumber).
           replace('箱重', data.data.material.bigBoxWeight).
           replace('中文名称', data.data.material.materialName).
-           // replace('箱盒数', data.data.material.boxesNumber).
+          // replace('箱盒数', data.data.material.boxesNumber).
           replace('箱盒数', data.data.material.oneLogo).
           replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
         if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
