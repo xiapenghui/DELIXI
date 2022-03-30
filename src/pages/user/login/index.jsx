@@ -7,6 +7,7 @@ import styles from './style.less';
 // import url from '../../../assets/bgi.jpg';
 // import url from '../../../assets/login.jpg';
 // const url = 'http://47.99.130.140/imgs/wallhaven-g83v2e.jpg'
+ 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginForm;
 
 
@@ -23,12 +24,12 @@ const LoginMessage = ({ content }) => (
 
 const Login = (props) => {
   const { userLogin = {}, submitting } = props;
-  const { status,type: loginType, message } = userLogin;
+  const { status, type: loginType, message } = userLogin;
   const [autoLogin, setAutoLogin] = useState(true);
   const [type, setType] = useState('account');
 
   const handleSubmit = async (values) => {
-  
+
     const { dispatch } = props;
     await dispatch({
       type: 'login/login',
@@ -41,7 +42,13 @@ const Login = (props) => {
 
     location.reload()
   };
- 
+
+  //下载
+  // const download = () => {
+  //   alert(13)
+  //   window.open("../../../../public/CLodopPrint64.exe")
+  // }
+
   return (
     <div className={styles.main}>
       <div className="sysName"> Delixi OEM barcode printing system </div>
@@ -78,20 +85,23 @@ const Login = (props) => {
 
 
         <div>
-          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)} style={{color:'#67be8e'}}>
+          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)} style={{ color: '#67be8e' }}>
             自动登录
           </Checkbox>
-          <a
+          {/* <a
             style={{
               float: 'right',
             }}
           >
             忘记密码
-          </a>
+          </a> */}
         </div>
         <Submit loading={submitting}>登录</Submit>
         <div className={styles.other}>
-
+          <a  href='../../../../public/CLodopPrint64.exe' download="CLodopPrint64.exe" > 插件本地下载</a>
+          <a className={styles.register} href="http://www.lodop.net/download.html" target="_blank">
+            插件官网下载
+          </a>
           {/* <Link className={styles.register} to="/user/register">
             注册账户
           </Link> */}
@@ -104,11 +114,11 @@ const Login = (props) => {
 
 const styles2 = {
   backgroundBox: {
-    position: 'fixed',
+    // position: 'fixed',
     top: '0',
     left: '0',
     width: '100vw',
-    height: '100vh',
+    // height: '100vh',
     // backgroundImage: `url(${url})`,
     // backgroundSize: 'cover',
     // transition:'all .5s'
@@ -136,7 +146,7 @@ const styles2 = {
   },
 }
 
-export default connect(({ login, loading ,user}) => ({
+export default connect(({ login, loading, user }) => ({
   userLogin: login,
   submitting: loading.effects['login/login'],
   user

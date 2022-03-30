@@ -1,38 +1,55 @@
-import { ArrowDownOutlined, ArrowUpOutlined, SmileOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input, Tabs, Table, Form, Row, Col, Select, Tag, Pagination, Tooltip, notification } from "antd";
+import {
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+  SmileOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  message,
+  TimePicker,
+  DatePicker,
+  Input,
+  Tabs,
+  Table,
+  Form,
+  Row,
+  Col,
+  Select,
+  Tag,
+  Pagination,
+  Tooltip,
+  notification,
+} from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
-import globalConfig from '../../../../config/defaultSettings';
+import globalConfig from "../../../../config/defaultSettings";
 import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
-import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+import * as LodopFuncs from "../../../utils/LodopFuncs.js";
 import "../printMakeCopy/components/modal.css";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
   getOnlyBarCodeList,
   getBoxBarCodeList,
   getBigBoxBarCodeList,
-  printBarCode
+  printBarCode,
 } from "@/services/information/printMakeCopy";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 
 const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
-  const { materialList } = printMake
+  const { materialList } = printMake;
   const { currentUser } = user;
   const { TabPane } = Tabs;
   const [form1] = Form.useForm();
   const [form2] = Form.useForm();
   const [form3] = Form.useForm();
 
-
   // const [createModalVisible, handleModalVisible] = useState(false);
-  const formItemLayout2 = globalConfig.table.formItemLayout2
-
-
+  const formItemLayout2 = globalConfig.table.formItemLayout2;
 
   const columns = [
     {
@@ -48,7 +65,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       key: "materialType",
       align: "center",
       render: (text, record) => {
-        return record.barCodeType
+        return record.barCodeType;
       },
     },
 
@@ -61,7 +78,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      render: barCode => (
+      render: (barCode) => (
         <Tooltip placement="topLeft" title={barCode}>
           {barCode}
         </Tooltip>
@@ -88,7 +105,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      render: materialType => (
+      render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
         </Tooltip>
@@ -102,7 +119,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      render: modelDesc => (
+      render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
         </Tooltip>
@@ -120,101 +137,114 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       key: "printer",
       align: "center",
     },
-
   ];
 
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
-  const [dataSource3, setDataSource3] = useState([])
-  const [noStart, setNoStart] = useState('')
-  const [materialId1, setMaterialId1] = useState('');
-  const [materialId2, setMaterialId2] = useState('');
-  const [materialId3, setMaterialId3] = useState('');
+  const [dataSource3, setDataSource3] = useState([]);
+  const [noStart, setNoStart] = useState("");
+  const [materialId1, setMaterialId1] = useState("");
+  const [materialId2, setMaterialId2] = useState("");
+  const [materialId3, setMaterialId3] = useState("");
 
-  const [materialId, setMaterialId] = useState(materialList.length > 0 ? materialList[0].key : "");
+  const [materialId, setMaterialId] = useState(
+    materialList.length > 0 ? materialList[0].key : ""
+  );
 
+  const [zhiString, setZhiString] = useState("");
+  const [heString, setHeString] = useState("");
+  const [boxString, setBoxString] = useState("");
 
-  const [zhiString, setZhiString] = useState('')
-  const [heString, setHeString] = useState('')
-  const [boxString, setBoxString] = useState('')
+  const [zhiID, setZhiID] = useState([]);
+  const [heID, setHeID] = useState([]);
+  const [boxID, setBoxID] = useState([]);
 
-  const [zhiID, setZhiID] = useState([])
-  const [heID, setHeID] = useState([])
-  const [boxID, setBoxID] = useState([])
+  const [newImage, setNewImage] = useState("");
+  const [zhiHidden1, setZhiHidden1] = useState(true);
+  const [zhiHidden2, setZhiHidden2] = useState(false);
+  const [heHidden1, setHeHidden1] = useState(true);
+  const [heHidden2, setHeHidden2] = useState(false);
+  const [boxHidden1, setBoxHidden1] = useState(true);
+  const [boxHidden2, setBoxHidden2] = useState(false);
 
-  const [newImage, setNewImage] = useState('')
-  const [zhiHidden1, setZhiHidden1] = useState(true)
-  const [zhiHidden2, setZhiHidden2] = useState(false)
-  const [heHidden1, setHeHidden1] = useState(true)
-  const [heHidden2, setHeHidden2] = useState(false)
-  const [boxHidden1, setBoxHidden1] = useState(true)
-  const [boxHidden2, setBoxHidden2] = useState(false)
-
-
+  const [printTypeName, setPrintTypeName] = useState(""); //设置打印单双排类型
+  const [printTypeTimes, setPrintTypeTimes] = useState(0); //设置printTypeName更新次数
   //tab标签切换获取index/key
   function callback(key) {
     if (key == "1") {
-      zhiSearch()
+      zhiSearch();
     } else if (key == "2") {
-      heSearch()
+      heSearch();
     } else {
-      boxSearch()
+      boxSearch();
     }
   }
 
   useEffect(() => {
     // setMaterialId(materialList[0].key)
-    zhiSearch()
-  }, [])
+    zhiSearch();
+  }, []);
 
-
-
+  useEffect(() => {
+    if (printTypeName !== "" && printTypeTimes > 1) {
+      notification.open({
+        message: "如果需要打印,请同时修改打印机对应模板!",
+        description: printTypeName,
+        duration: 8,
+        icon: <SmileOutlined style={{ color: "red" }} />,
+      });
+    }
+    setPrintTypeTimes((printTypeTimes) => {
+      return printTypeTimes + 1;
+    });
+  }, [printTypeName]);
 
   //获取只码物料编号
   const changeMaterialId1 = (value) => {
-    setMaterialId1(value)
-  }
+    setMaterialId1(value);
+  };
 
   //获取盒码物料编号
   const changeMaterialId2 = (value) => {
-    setMaterialId2(value)
-  }
+    setMaterialId2(value);
+  };
 
   //获取箱码物料编号
   const changeMaterialId3 = (value) => {
-    setMaterialId3(value)
-  }
-
+    setMaterialId3(value);
+  };
 
   //多选条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setZhiID(selectedRowKeys)
-    }
+      setZhiID(selectedRowKeys);
+    },
   };
 
   //多选盒码
   const rowSelection2 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setHeID(selectedRowKeys)
-    }
+      setHeID(selectedRowKeys);
+    },
   };
 
   //多选箱码
   const rowSelection3 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setBoxID(selectedRowKeys)
-    }
+      setBoxID(selectedRowKeys);
+    },
   };
-
 
   //查询封装公用参数
   const params = (values) => {
-
     return {
       data: {
-        startDate: moment(values.startDate).format(globalConfig.form.onlyDateFormat),
-        endDate: moment(values.endDate).format(globalConfig.form.onlyDateFormat),
+        startDate: moment(values.startDate).format(
+          globalConfig.form.onlyDateFormat
+        ),
+        endDate: moment(values.endDate).format(
+          globalConfig.form.onlyDateFormat
+        ),
         barCode: values.barCode,
         materialId: values.materialId ? values.materialId : materialId,
         materialType: values.materialType,
@@ -223,94 +253,65 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       },
       pageNum: 1,
       pageSize: 100000,
-      userId: user.currentUser.id
-    }
-  }
-
+      userId: user.currentUser.id,
+    };
+  };
 
   //   @param 只条码 handleSearch 搜索
   const zhiSearch = (e) => {
-    form1
-      .validateFields()
-      .then(async (values) => {
-        let data = await getOnlyBarCodeList(params(values));
-        if (data.status === 200) {
-          setDataSource1(data.data.list)
-          setZhiString(data.data.tempCode)
-          message.success(data.message)
-          notification.open({
-            message: '如果需要打印,请同时修改打印机对应模板!',
-            description: data.data.tempName,
-            duration: 8,
-            icon: <SmileOutlined style={{ color: 'red' }} />,
-          });
-        }
-      })
-
-  }
+    form1.validateFields().then(async (values) => {
+      let data = await getOnlyBarCodeList(params(values));
+      if (data.status === 200) {
+        setDataSource1(data.data.list);
+        setZhiString(data.data.tempCode);
+        setPrintTypeName(data.data.tempName);
+        message.success(data.message)
+      }
+    });
+  };
 
   //盒条码查询
   const heSearch = (e) => {
-    form2
-      .validateFields()
-      .then(async (values) => {
-
-        let data = await getBoxBarCodeList(params(values));
-        if (data.status === 200) {
-
-          setDataSource2(data.data.list)
-          setHeString(data.data.tempCode)
-          message.success(data.message)
-          notification.open({
-            message: '如果需要打印,请同时修改打印机对应模板!',
-            description: data.data.tempName,
-            duration: 8,
-            icon: <SmileOutlined style={{ color: 'red' }} />,
-          });
-        }
-      })
-  }
-
+    form2.validateFields().then(async (values) => {
+      let data = await getBoxBarCodeList(params(values));
+      if (data.status === 200) {
+        setDataSource2(data.data.list);
+        setHeString(data.data.tempCode);
+        setPrintTypeName(data.data.tempName);
+        message.success(data.message)
+      }
+    });
+  };
 
   //箱条码查询
   const boxSearch = (e) => {
-    form3
-      .validateFields()
-      .then(async (values) => {
-        let data = await getBigBoxBarCodeList(params(values));
-        if (data.status === 200) {
-          if (data.data.threeC === "0") {
-            setNewImage('')
-          } else if (data.data.threeC === "1") {
-            setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`)
-          } else {
-            setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`)
-          }
-          setDataSource3(data.data.list)
-          setBoxString(data.data.tempCode)
-          message.success(data.message)
-          notification.open({
-            message: '如果需要打印,请同时修改打印机对应模板!',
-            description: data.data.tempName,
-            duration: 8,
-            icon: <SmileOutlined style={{ color: 'red' }} />,
-          });
-
+    form3.validateFields().then(async (values) => {
+      let data = await getBigBoxBarCodeList(params(values));
+      if (data.status === 200) {
+        if (data.data.threeC === "0") {
+          setNewImage("");
+        } else if (data.data.threeC === "1") {
+          setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
+        } else {
+          setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
         }
-      })
-  }
-
-
+        setDataSource3(data.data.list);
+        setBoxString(data.data.tempCode);
+        setPrintTypeName(data.data.tempName);
+        message.success(data.message)
+      }
+    });
+  };
 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
-    LodopFuncs.getLodop()
+    LodopFuncs.getLodop();
     let content = noStart;
     if (content === "") {
-      eval(zhiString)
-      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
+      eval(zhiString);
+      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
     } else {
-      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
     }
     if (zhiID.length > 0) {
       let data = await printBarCode({
@@ -318,18 +319,21 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         barCodeType: 1,
         materialId: materialId1 === "" ? materialList[0].key : materialId1,
         state: 2,
-        userId: user.currentUser.id
+        userId: user.currentUser.id,
       });
       if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var qrCodeList = data.data.qrCodeList
-        var zhiLeftList = content[0].replaceAll('9876543210', dataString[0]).replaceAll('1234567890', qrCodeList[0])
+        var dataString = data.data.barCodeList;
+        var qrCodeList = data.data.qrCodeList;
+        var zhiLeftList = content[0]
+          .replaceAll("9876543210", dataString[0])
+          .replaceAll("1234567890", qrCodeList[0]);
         if (dataString.length == 1) {
-          eval(zhiLeftList)
+          eval(zhiLeftList);
         } else {
-
-          var zhiRightList = content[1].replaceAll('kjihgfedcba', dataString[1]).replaceAll('abcdefghijk', qrCodeList[1])
-          eval(zhiLeftList + zhiRightList)
+          var zhiRightList = content[1]
+            .replaceAll("kjihgfedcba", dataString[1])
+            .replaceAll("abcdefghijk", qrCodeList[1]);
+          eval(zhiLeftList + zhiRightList);
         }
         LODOP.PRINT();
 
@@ -337,20 +341,24 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
           if (i % 2 == 0) {
             // 左边
-            zhiLeftList = zhiLeftList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
+            zhiLeftList = zhiLeftList
+              .replaceAll(dataString[i - 2], dataString[i])
+              .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
             if (i == dataString.length - 1) {
-              eval(zhiLeftList)
+              eval(zhiLeftList);
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
             }
           } else {
-            zhiRightList = zhiRightList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
-            eval(zhiLeftList + zhiRightList)
+            zhiRightList = zhiRightList
+              .replaceAll(dataString[i - 2], dataString[i])
+              .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
+            eval(zhiLeftList + zhiRightList);
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
           }
         }
-        message.info("打印中，请稍等...")
+        message.info("打印中，请稍等...");
 
         // var zhiList = content.replaceAll('9876543210', dataString[0]).
         //   replaceAll('1234567890', qrCodeList[0]).
@@ -359,7 +367,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         // LODOP.PRINT();
         // for (var i = 0; i < 2; i++) {
         //   if (i > 0) {
-        //     
+        //
         //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
         //     zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
         //       replaceAll(qrCodeList[i - 1], qrCodeList[i])
@@ -370,58 +378,65 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         //   }
         // }
       } else {
-        message.error(data.message)
+        message.error(data.message);
       }
     } else {
-      message.info('请选择要打印的数据!')
+      message.info("请选择要打印的数据!");
     }
   };
-
 
   //只条码模板
   const zhiCode = () => {
-    LodopFuncs.getLodop()
-    zhiCreateOneFormPage()
+    LodopFuncs.getLodop();
+    zhiCreateOneFormPage();
     LODOP.On_Return = (TaskID, Value) => {
-
-      setNoStart(Value)
-    }
+      setNoStart(Value);
+    };
     LODOP.PRINT_DESIGN();
   };
 
-
   const zhiCreateOneFormPage = () => {
-    eval(zhiString)
+    eval(zhiString);
   };
-
 
   //测试只模板
   const zhiCodeTest = () => {
-    LodopFuncs.getLodop()
-    var zhiList = zhiString.replace('服务热线:', "服务热线:").
-      replace('4008268008', "4008268008").
-      replace('S/N:', "S/N:").
-      replace('1234567890', "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000011").
-      replace('abcdefghijk', "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000021").
-      replace('9876543210', "3vob10A00030000011").
-      replace('kjihgfedcba', "3vob10A00030000021")
-    eval(zhiList)
+    LodopFuncs.getLodop();
+    var zhiList = zhiString
+      .replace("服务热线:", "服务热线:")
+      .replace("4008268008", "4008268008")
+      .replace("S/N:", "S/N:")
+      .replace(
+        "1234567890",
+        "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000011"
+      )
+      .replace(
+        "abcdefghijk",
+        "http://m.delixi-electric.com/c/?qrcode=3vob10A00030000021"
+      )
+      .replace("9876543210", "3vob10A00030000011")
+      .replace("kjihgfedcba", "3vob10A00030000021");
+    eval(zhiList);
+    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
     LODOP.PRINT_DESIGN();
-  }
+  };
 
   // 只---结束
 
-
-
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
-    LodopFuncs.getLodop()
-    let content = noStart
+    LodopFuncs.getLodop();
+    let content = noStart;
     if (content === "") {
-      eval(heString)
-      content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
+      eval(heString);
+      content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
     } else {
-      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
     }
     if (heID.length > 0) {
       let data = await printBarCode({
@@ -429,202 +444,230 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         barCodeType: 2,
         materialId: materialId2 === "" ? materialList[0].key : materialId2,
         state: 2,
-        userId: user.currentUser.id
+        userId: user.currentUser.id,
       });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var printDateList = data.data.printDateList
+      if (data.status == 200 && data.data.barCodeList.length > 0) {
+        var dataString = data.data.barCodeList;
+        var printDateList = data.data.printDateList;
         // var countList = data.data.countList
+        if (printTypeName.includes("双排")) {
+          var nums = [];
+          data.data.countList.map((item) => {
+            nums.push("×" + item);
+          });
+          var countList = nums;
 
-        var nums = []
-        data.data.countList.map(item => {
-          nums.push('×' + item)
-        })
-        var countList = nums
-
-        var heLeftList = content[0].replaceAll('1234567890A', dataString[0]).
-          replaceAll('2022-01-01A', printDateList[0]).
-          replaceAll('装盒A', countList[0]).
-          replace('物料型号A', data.data.material.materialType).
-          replace('物料描述A', data.data.material.boxLabelDescription).
-          replace('系列123A', data.data.material.serial).
-          replace('检02A', data.data.material.examination).
-          replace('GB/tA', data.data.material.standard).
-          replace('浙江省A', data.data.material.address).
-          replace('上海灵娃A', data.data.material.productionPlant).
-          replace('8888888888A', data.data.material.caseIEAN13).
-          replace('9999999999A', data.data.material.caseITF14).
-          replace('中文名称A', data.data.material.materialName)
-        if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
-          heLeftList = heLeftList.replace("执行标准:", "").replace('无', '').replace(null, '')
-        }
-        if (data.data.material.serial === "" || data.data.material.serial === null) {
-          heLeftList = heLeftList.replace('系列', '').replace(null, '')
-        }
-        if (dataString.length == 1) {
-          eval(heLeftList)
-        } else {
-
-          var heRightList = content[1].replaceAll('1234567890B', dataString[1]).
-            replaceAll('2022-01-01B', printDateList[1]).
-            replaceAll('装盒B', countList[1]).
-            replace('物料型号B', data.data.material.materialType).
-            replace('物料描述B', data.data.material.boxLabelDescription).
-            replace('系列123B', data.data.material.serial).
-            replace('检02B', data.data.material.examination).
-            replace('GB/tB', data.data.material.standard).
-            replace('浙江省B', data.data.material.address).
-            replace('上海灵娃B', data.data.material.productionPlant).
-            replace('8888888888B', data.data.material.caseIEAN13).
-            replace('9999999999B', data.data.material.caseITF14).
-            replace('中文名称B', data.data.material.materialName)
-          if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
-            heRightList = heRightList.replace("执行标准:", "").replace('无', '').replace(null, '')
+          var heLeftList = content[0]
+            .replaceAll("1234567890A", dataString[0])
+            .replaceAll("2022-01-01A", printDateList[0])
+            .replaceAll("装盒A", countList[0])
+            .replace("物料型号A", data.data.material.materialType)
+            .replace("物料描述A", data.data.material.boxLabelDescription)
+            .replace("系列123A", data.data.material.serial)
+            .replace("检02A", data.data.material.examination)
+            .replace("GB/tA", data.data.material.standard)
+            .replace("浙江省A", data.data.material.address)
+            .replace("上海灵娃A", data.data.material.productionPlant)
+            .replace("8888888888A", data.data.material.caseIEAN13)
+            .replace("9999999999A", data.data.material.caseITF14)
+            .replace("中文名称A", data.data.material.materialName);
+          if (
+            data.data.material.standard === "无" ||
+            data.data.material.standard === "" ||
+            data.data.material.standard === null
+          ) {
+            heLeftList = heLeftList
+              .replace("执行标准:", "")
+              .replace("无", "")
+              .replace(null, "");
           }
-          if (data.data.material.serial === "" || data.data.material.serial === null) {
-            heRightList = heRightList.replace('系列', '').replace(null, '')
+          if (
+            data.data.material.serial === "" ||
+            data.data.material.serial === null
+          ) {
+            heLeftList = heLeftList.replace("系列", "").replace(null, "");
           }
-          eval(heLeftList + heRightList)
-        }
+          if (dataString.length == 1) {
+            eval(heLeftList);
+          } else {
+            var heRightList = content[1]
+              .replaceAll("1234567890B", dataString[1])
+              .replaceAll("2022-01-01B", printDateList[1])
+              .replaceAll("装盒B", countList[1])
+              .replace("物料型号B", data.data.material.materialType)
+              .replace("物料描述B", data.data.material.boxLabelDescription)
+              .replace("系列123B", data.data.material.serial)
+              .replace("检02B", data.data.material.examination)
+              .replace("GB/tB", data.data.material.standard)
+              .replace("浙江省B", data.data.material.address)
+              .replace("上海灵娃B", data.data.material.productionPlant)
+              .replace("8888888888B", data.data.material.caseIEAN13)
+              .replace("9999999999B", data.data.material.caseITF14)
+              .replace("中文名称B", data.data.material.materialName);
+            if (
+              data.data.material.standard === "无" ||
+              data.data.material.standard === "" ||
+              data.data.material.standard === null
+            ) {
+              heRightList = heRightList
+                .replace("执行标准:", "")
+                .replace("无", "")
+                .replace(null, "");
+            }
+            if (
+              data.data.material.serial === "" ||
+              data.data.material.serial === null
+            ) {
+              heRightList = heRightList.replace("系列", "").replace(null, "");
+            }
+            eval(heLeftList + heRightList);
+          }
 
-        LODOP.PRINT();
-        for (let i = 2; i < dataString.length; i++) {
-          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-          if (i % 2 == 0) {
-            // 左边
-            heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i]).
-              replaceAll(printDateList[i - 2], printDateList[i]).
-              replaceAll(countList[i - 2], countList[i])
-
-            if (i == dataString.length - 1) {
-              eval(heLeftList)
+          LODOP.PRINT();
+          for (let i = 2; i < dataString.length; i++) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            if (i % 2 == 0) {
+              // 左边
+              heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
+                .replaceAll(printDateList[i - 2], printDateList[i])
+                .replaceAll(countList[i - 2], countList[i]);
+              if (i == dataString.length - 1) {
+                eval(heLeftList);
+                LODOP.PRINT();
+                LODOP.PRINT_INIT("");
+              }
+            } else {
+              heRightList = heRightList
+                .replaceAll(dataString[i - 2], dataString[i])
+                .replaceAll(printDateList[i - 2], printDateList[i])
+                .replaceAll(countList[i - 2], countList[i]);
+              eval(heLeftList + heRightList);
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
             }
-          } else {
-            heRightList = heRightList.replaceAll(dataString[i - 2], dataString[i]).
-              replaceAll(printDateList[i - 2], printDateList[i]).
-              replaceAll(countList[i - 2], countList[i])
-            eval(heLeftList + heRightList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
           }
+          message.info("打印中，请稍等...");
+        } else {
+          var countList = data.data.countList;
+          var heList = content[0]
+            .replaceAll("1234567890", dataString[0])
+            .replaceAll("2022-01-01", printDateList[0])
+            .replaceAll("装盒", countList[0])
+            .replace("物料型号", data.data.material.materialType)
+            .replace("物料描述", data.data.material.boxLabelDescription)
+            .replace("系列123", data.data.material.serial)
+            .replace("检02", data.data.material.examination)
+            .replace("GB/t", data.data.material.standard)
+            .replace("浙江省", data.data.material.address)
+            .replace("上海灵娃", data.data.material.productionPlant)
+            .replace("8888888888", data.data.material.caseIEAN13)
+            .replace("9999999999", data.data.material.caseITF14)
+            .replace("中文名称", data.data.material.materialName);
+
+          if (
+            data.data.material.standard === "无" ||
+            data.data.material.standard === "" ||
+            data.data.material.standard === null
+          ) {
+            heList = heList
+              .replace("执行标准:", "")
+              .replace("无", "")
+              .replace(null, "");
+          }
+          if (
+            data.data.material.serial === "" ||
+            data.data.material.serial === null
+          ) {
+            heList = heList.replace("系列", "").replace(null, "");
+          }
+          eval(heList);
+          LODOP.PRINT();
+          for (var i = 0; i < dataString.length; i++) {
+            if (i > 0) {
+              LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+              heList = heList.replaceAll(dataString[i - 1], dataString[i]);
+              console.log("heList123", heList);
+              eval(heList);
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
+          }
+          message.info("打印中，请稍等...");
         }
-        message.info("打印中，请稍等...")
       } else {
-        message.error(data.message)
+        message.info("请选择要打印的数据!");
       }
     } else {
-      message.info('请选择要打印的数据!')
+      message.error(data.message);
     }
-
-
-    // var heList = content.replaceAll('1234567890', dataString[0]).
-    //   replaceAll('2022-01-01', printDateList[0]).
-    //   replaceAll('装盒', countList[0]).
-    //   replace('物料型号', data.data.material.materialType).
-    //   replace('物料描述', data.data.material.boxLabelDescription).
-    //   replace('物料型号描述', data.data.material.boxLabelDescription).
-    //   // replaceAll('装盒', data.data.material.cartonsNumber).
-    //   replace('系列123', data.data.material.serial).
-    //   replace('检02', data.data.material.examination).
-    //   replace('GB/t', data.data.material.standard).
-    //   replace('浙江省', data.data.material.address).
-    //   replace('上海灵娃', data.data.material.productionPlant).
-    //   replace('8888888888', data.data.material.caseIEAN13).
-    //   replace('9999999999', data.data.material.caseITF14).
-    //   replace('中文名称', data.data.material.materialName)
-    // if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
-    //   heList = heList.replace("执行标准:", "").replace('无', '').replace(null, '')
-    // }
-    // if (data.data.material.serial === "" || data.data.material.serial === null) {
-    //   heList = heList.replace('系列', '').replace(null, '')
-    // }
-    //     eval(heList)
-    //     LODOP.PRINT();
-    //     for (var i = 0; i < dataString.length; i++) {
-    //       if (i > 0) {
-    //         LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-    //         heList = heList.replaceAll(dataString[i - 1], dataString[i]);
-    //         console.log('heList123', heList)
-    //         eval(heList)
-    //         LODOP.PRINT();
-    //         LODOP.PRINT_INIT("");
-    //       }
-    //     }
-    //   }
-    // } else {
-    //   message.info('请选择要打印的数据!')
-    // }
   };
-
-
 
   //盒条码模板
   const heCode = () => {
-    LodopFuncs.getLodop()
-    heCreateOneFormPage()
+    LodopFuncs.getLodop();
+    heCreateOneFormPage();
     LODOP.On_Return = (TaskID, Value) => {
-      setNoStart(Value)
-    }
+      setNoStart(Value);
+    };
     LODOP.PRINT_DESIGN();
   };
 
-
   const heCreateOneFormPage = () => {
-    eval(heString)
+    eval(heString);
   };
-
-
 
   //测试盒模板
   const heCodeTest = () => {
-    LodopFuncs.getLodop()
-    var heList = heString.replace('1234567890A', "1234567890").
-      replace('2022-01-01A', "2022-01-01").
-      replace('物料型号A', "CDCH6i16201N").
-      replace('物料描述A', "CDCH6i16A2P1NC220-240V").
-      replace('装盒A', "×10").
-      replace('检02A', '检02').
-      replace('GB/tA', "GB/t").
-      replace('浙江省A', "浙江省").
-      replace('上海灵娃A', "上海灵娃").
-      replace('系列A', "系列").
-      replace('系列123A', "领航者").
-      replace('8888888888A', "8888888888").
-      replace('9999999999A', "9999999999").
-      replace('中文名称A', "家用交流电接触器").
-      replace('箱盒数', "S").
-      replace('1234567890B', "1234567890").
-      replace('2022-01-01B', "2022-01-01").
-      replace('物料型号B', "CDCH6i16201N").
-      replace('物料描述B', "CDCH6i16A2P1NC220-240V").
-      replace('装盒B', "×10").
-      replace('检02B', '检02').
-      replace('GB/tB', "GB/t").
-      replace('浙江省B', "浙江省").
-      replace('上海灵娃B', "上海灵娃").
-      replace('系列B', "系列").
-      replace('系列123B', "领航者").
-      replace('8888888888B', "8888888888").
-      replace('9999999999B', "9999999999").
-      replace('中文名称B', "家用交流电接触器")
-    eval(heList)
+    LodopFuncs.getLodop();
+    var heList = heString
+      .replace("1234567890A", "1234567890")
+      .replace("2022-01-01A", "2022-01-01")
+      .replace("物料型号A", "CDCH6i16201N")
+      .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
+      .replace("装盒A", "×10")
+      .replace("检02A", "检02")
+      .replace("GB/tA", "GB/t")
+      .replace("浙江省A", "浙江省")
+      .replace("上海灵娃A", "上海灵娃")
+      .replace("系列A", "系列")
+      .replace("系列123A", "领航者")
+      .replace("8888888888A", "8888888888")
+      .replace("9999999999A", "9999999999")
+      .replace("中文名称A", "家用交流电接触器")
+      .replace("箱盒数", "S")
+      .replace("1234567890B", "1234567890")
+      .replace("2022-01-01B", "2022-01-01")
+      .replace("物料型号B", "CDCH6i16201N")
+      .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
+      .replace("装盒B", "×10")
+      .replace("检02B", "检02")
+      .replace("GB/tB", "GB/t")
+      .replace("浙江省B", "浙江省")
+      .replace("上海灵娃B", "上海灵娃")
+      .replace("系列B", "系列")
+      .replace("系列123B", "领航者")
+      .replace("8888888888B", "8888888888")
+      .replace("9999999999B", "9999999999")
+      .replace("中文名称B", "家用交流电接触器");
+    eval(heList);
+    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
     LODOP.PRINT_DESIGN();
-  }
+  };
 
   // 盒---结束
 
-
-
-
   //点击打印箱条码  箱---开始
   const pintBoxCode = async () => {
-    LodopFuncs.getLodop()
-    let content = noStart
+    LodopFuncs.getLodop();
+    let content = noStart;
     if (content === "") {
-      eval(boxString)
-      content = boxString
+      eval(boxString);
+      content = boxString;
     }
     if (boxID.length > 0) {
       let data = await printBarCode({
@@ -632,164 +675,177 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         barCodeType: 3,
         materialId: materialId3 === "" ? materialList[0].key : materialId3,
         state: 2,
-        userId: user.currentUser.id
+        userId: user.currentUser.id,
       });
       if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var printDateList = data.data.printDateList
-        var countList = data.data.countList
-        var dataStringNew = []
-        var printDateListNew = []
-        var countListNew = []
+        var dataString = data.data.barCodeList;
+        var printDateList = data.data.printDateList;
+        var countList = data.data.countList;
+        var dataStringNew = [];
+        var printDateListNew = [];
+        var countListNew = [];
 
-        dataStringNew = JSON.parse(JSON.stringify(dataString))
+        dataStringNew = JSON.parse(JSON.stringify(dataString));
         dataString.map((item, index) => {
           dataStringNew.splice(index * 2, 0, item);
-        })
-        printDateListNew = JSON.parse(JSON.stringify(printDateList))
+        });
+        printDateListNew = JSON.parse(JSON.stringify(printDateList));
         printDateList.map((item, index) => {
           printDateListNew.splice(index * 2, 0, item);
-        })
-        countListNew = JSON.parse(JSON.stringify(countList))
+        });
+        countListNew = JSON.parse(JSON.stringify(countList));
         countList.map((item, index) => {
           countListNew.splice(index * 2, 0, item);
-        })
+        });
 
-
-        var boxList = content.replaceAll('1234567890', dataStringNew[0]).
-          replaceAll('2022-01-01', printDateListNew[0]).
-          replaceAll('装箱', countListNew[0]).
-          replace('物料型号', data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
-          replace('检02', data.data.material.examination).
-          replace('浙江省', data.data.material.address).
-          replace('GB/t', data.data.material.standard).
-          replace('系列123', data.data.material.serial).
-          replace('上海灵娃', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('9999999999', data.data.material.caseITF14).
+        var boxList = content
+          .replaceAll("1234567890", dataStringNew[0])
+          .replaceAll("2022-01-01", printDateListNew[0])
+          .replaceAll("装箱", countListNew[0])
+          .replace("物料型号", data.data.material.materialType)
+          .replace("物料描述", data.data.material.boxLabelDescription)
+          .replace("物料型号描述", data.data.material.boxLabelDescription)
+          .replace("检02", data.data.material.examination)
+          .replace("浙江省", data.data.material.address)
+          .replace("GB/t", data.data.material.standard)
+          .replace("系列123", data.data.material.serial)
+          .replace("上海灵娃", data.data.material.productionPlant)
+          .replace("8888888888", data.data.material.caseIEAN13)
+          .replace("9999999999", data.data.material.caseITF14)
           // replace('装箱', data.data.material.packingQuantity).
-          replace('装盒', data.data.material.cartonsNumber).
-          replace('箱重', data.data.material.bigBoxWeight).
-          replace('中文名称', data.data.material.materialName).
+          .replace("装盒", data.data.material.cartonsNumber)
+          .replace("箱重", data.data.material.bigBoxWeight)
+          .replace("中文名称", data.data.material.materialName)
           // replace('箱盒数', data.data.material.boxesNumber).
-          replace('箱盒数', data.data.material.oneLogo).
-          replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-        if (data.data.material.standard === "无" || data.data.material.standard === "" || data.data.material.standard === null) {
-          boxList = boxList.replace("执行标准:", "").replace('无', '').replace(null, '')
+          .replace("箱盒数", data.data.material.oneLogo)
+          .replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+        if (
+          data.data.material.standard === "无" ||
+          data.data.material.standard === "" ||
+          data.data.material.standard === null
+        ) {
+          boxList = boxList
+            .replace("执行标准:", "")
+            .replace("无", "")
+            .replace(null, "");
         }
-        if (data.data.material.serial === "" || data.data.material.serial === null) {
-          boxList = boxList.replace('系列', '').replace(null, '')
+        if (
+          data.data.material.serial === "" ||
+          data.data.material.serial === null
+        ) {
+          boxList = boxList.replace("系列", "").replace(null, "");
         }
-        if (data.data.material.oneLogo === "" || data.data.material.oneLogo === null) {
-          boxList = boxList.replace('箱盒数', '').replace(null, '')
+        if (
+          data.data.material.oneLogo === "" ||
+          data.data.material.oneLogo === null
+        ) {
+          boxList = boxList.replace("箱盒数", "").replace(null, "");
         }
-        eval(boxList)
+        eval(boxList);
         LODOP.PRINT();
         for (var i = 0; i < dataStringNew.length; i++) {
           if (i > 0) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]);
-            console.log('heList123', boxList)
-            eval(boxList)
+            boxList = boxList.replaceAll(
+              dataStringNew[i - 1],
+              dataStringNew[i]
+            );
+            console.log("heList123", boxList);
+            eval(boxList);
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
           }
         }
       }
     } else {
-      message.info('请选择要打印的数据!')
+      message.info("请选择要打印的数据!");
     }
-
-
   };
-
 
   //箱条码模板
   const boxCode = () => {
-    LodopFuncs.getLodop()
-    boxCreateOneFormPage()
+    LodopFuncs.getLodop();
+    boxCreateOneFormPage();
     LODOP.On_Return = (TaskID, Value) => {
-      setNoStart(Value)
-    }
+      setNoStart(Value);
+    };
     LODOP.PRINT_DESIGN();
   };
 
-
   const boxCreateOneFormPage = () => {
-    eval(boxString)
+    eval(boxString);
   };
-
-
 
   //测试箱模板
   const boxCodeTest = () => {
-    LodopFuncs.getLodop()
-    var boxList = boxString.replace('1234567890', "1234567890").
-      replaceAll('2022-01-01', "2022-01-01").
-      replace('物料型号', "CDCH6i16201N").
-      replace('物料描述', "CDCH6i16A2P1NC220-240V").
-      replace('装盒', 10).
-      replace('检02', '检02').
-      replace('GB/t', "GB/t").
-      replace('浙江省', "浙江省").
-      replace('上海灵娃', "上海灵娃").
-      replace('X85220322A00030001', "X85220322A00030001").
-      replace('X85220322A00030001', "X85220322A00030001").
-      replace('中文名称', "家用交流电接触器").
-      replace('装箱', 10).
-      replace('装盒', 10).
-      replace('箱重', 10).
-      replace('箱盒数', 10).
-      replace('系列123', "领航者").
-      replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
-    eval(boxList)
+    LodopFuncs.getLodop();
+    var boxList = boxString
+      .replace("1234567890", "1234567890")
+      .replaceAll("2022-01-01", "2022-01-01")
+      .replace("物料型号", "CDCH6i16201N")
+      .replace("物料描述", "CDCH6i16A2P1NC220-240V")
+      .replace("装盒", 10)
+      .replace("检02", "检02")
+      .replace("GB/t", "GB/t")
+      .replace("浙江省", "浙江省")
+      .replace("上海灵娃", "上海灵娃")
+      .replace("X85220322A00030001", "X85220322A00030001")
+      .replace("X85220322A00030001", "X85220322A00030001")
+      .replace("中文名称", "家用交流电接触器")
+      .replace("装箱", 10)
+      .replace("装盒", 10)
+      .replace("箱重", 10)
+      .replace("箱盒数", 10)
+      .replace("系列123", "领航者")
+      .replace(
+        `<img src='${ip}/DLX_OEM/api/3c.png'>`,
+        `<img src='${ip}/DLX_OEM/api/3c.png'>`
+      );
+    eval(boxList);
+    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
     LODOP.PRINT_DESIGN();
-  }
+  };
   // 箱---结束
-
 
   // 只搜索折叠
   const zhiToggol = () => {
-    setZhiHidden1(false)
-    setZhiHidden2(true)
-  }
+    setZhiHidden1(false);
+    setZhiHidden2(true);
+  };
   const zhiToggo2 = () => {
-    setZhiHidden1(true)
-    setZhiHidden2(false)
-  }
-
+    setZhiHidden1(true);
+    setZhiHidden2(false);
+  };
 
   // 盒子搜索折叠
   const heToggol = () => {
-    setHeHidden1(false)
-    setHeHidden2(true)
-  }
+    setHeHidden1(false);
+    setHeHidden2(true);
+  };
   const heToggo2 = () => {
-    setHeHidden1(true)
-    setHeHidden2(false)
-  }
+    setHeHidden1(true);
+    setHeHidden2(false);
+  };
 
   // 箱子搜索折叠
   const boxToggol = () => {
-    setBoxHidden1(false)
-    setBoxHidden2(true)
-  }
+    setBoxHidden1(false);
+    setBoxHidden2(true);
+  };
   const boxToggo2 = () => {
-    setBoxHidden1(true)
-    setBoxHidden2(false)
-  }
-
-
-
-
+    setBoxHidden1(true);
+    setBoxHidden2(false);
+  };
 
   return (
     <PageContainer>
       <Tabs onChange={callback} type="card" style={{ background: "#fff" }}>
         <TabPane tab="只条码" key="1">
-
           <Form
             onFinish={zhiSearch}
             form={form1}
@@ -797,12 +853,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             initialValues={{
               materialId: materialId,
               startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              endDate: moment().endOf("day"),
             }}
           >
             <Row>
-
-              <Col span={5} style={{ display: 'block' }} >
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -810,11 +865,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -822,13 +880,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-
-
-              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
                 <Form.Item
                   name="barCode"
                   label="只条码"
@@ -838,7 +897,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   <Input></Input>
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="materialId"
                   label="商品编码"
@@ -849,15 +908,23 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId1}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    filterOption={(input, option) =>
+                      option.props.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
                   >
                     {materialList.map(function (item, index) {
-                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                      return (
+                        <Select.Option key={index} value={item.key}>
+                          {item.label}
+                        </Select.Option>
+                      );
                     })}
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialType"
                   label="商品编码"
@@ -865,11 +932,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -877,17 +943,59 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCodeTest} >测试只码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button>
+              <Col span={8} style={{ textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginLeft: "10px" }}
+                >
+                  查询
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={zhiCode}
+                >
+                  只码模板
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={pintZhiCode}
+                >
+                  <ArrowDownOutlined />
+                  点击打印
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={zhiCodeTest}
+                >
+                  测试只码{" "}
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={zhiToggol}
+                  hidden={zhiHidden2}
+                >
+                  {" "}
+                  <ArrowDownOutlined />
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={zhiToggo2}
+                  hidden={zhiHidden1}
+                >
+                  {" "}
+                  <ArrowUpOutlined />
+                </Button>
               </Col>
             </Row>
           </Form>
@@ -899,10 +1007,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
-              y: '100%'
+              y: "100%",
             }}
             rowSelection={{
-              ...rowSelection1
+              ...rowSelection1,
             }}
           // pagination={{ pageSize: 20 }}
           />
@@ -922,11 +1030,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             initialValues={{
               materialId: materialId,
               startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              endDate: moment().endOf("day"),
             }}
           >
             <Row>
-              <Col span={5} style={{ display: 'block' }} >
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -934,11 +1042,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -946,11 +1057,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
                   name="barCode"
                   label="盒条码"
@@ -958,10 +1072,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="materialId"
                   label="商品编码"
@@ -972,15 +1085,23 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId2}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    filterOption={(input, option) =>
+                      option.props.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
                   >
                     {materialList.map(function (item, index) {
-                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                      return (
+                        <Select.Option key={index} value={item.key}>
+                          {item.label}
+                        </Select.Option>
+                      );
                     })}
                   </Select>
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
                   name="materialType"
                   label="商品编码"
@@ -988,11 +1109,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -1000,21 +1120,61 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCodeTest} >测试盒码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol} hidden={heHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2} hidden={heHidden1}> <ArrowUpOutlined /></Button>
+              <Col span={8} style={{ textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginLeft: "10px" }}
+                >
+                  查询
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={heCode}
+                >
+                  盒码模板{" "}
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={pintHeCode}
+                >
+                  <ArrowDownOutlined />
+                  点击打印
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={heCodeTest}
+                >
+                  测试盒码{" "}
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={heToggol}
+                  hidden={heHidden2}
+                >
+                  {" "}
+                  <ArrowDownOutlined />
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={heToggo2}
+                  hidden={heHidden1}
+                >
+                  {" "}
+                  <ArrowUpOutlined />
+                </Button>
               </Col>
             </Row>
-
-
           </Form>
           <Table
             className="flex-table"
@@ -1023,10 +1183,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
-              y: '100%'
+              y: "100%",
             }}
             rowSelection={{
-              ...rowSelection2
+              ...rowSelection2,
             }}
           // pagination={{ pageSize: 20 }}
           />
@@ -1037,7 +1197,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             defaultCurrent={1}
             style={{ textAlign: 'right', padding: '15px' }}
           /> */}
-
         </TabPane>
         <TabPane tab="箱条码" key="3">
           <Form
@@ -1048,11 +1207,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             initialValues={{
               materialId: materialId,
               startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              endDate: moment().endOf("day"),
             }}
           >
             <Row>
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="startDate"
                   label="开始时间"
@@ -1060,11 +1219,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="endDate"
                   label="结束时间"
@@ -1072,13 +1234,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <DatePicker
-                    style={{ width: '100%' }} format={globalConfig.form.onlyDateFormat} allowClear={false} />
+                    style={{ width: "100%" }}
+                    format={globalConfig.form.onlyDateFormat}
+                    allowClear={false}
+                  />
                 </Form.Item>
               </Col>
 
-
-
-              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
                 <Form.Item
                   name="barCode"
                   label="箱条码"
@@ -1086,10 +1249,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={5} style={{ display: "block" }}>
                 <Form.Item
                   name="materialId"
                   label="商品编码"
@@ -1100,16 +1262,24 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     // allowClear
                     showSearch
                     onChange={changeMaterialId3}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    filterOption={(input, option) =>
+                      option.props.children
+                        .toLowerCase()
+                        .indexOf(input.toLowerCase()) >= 0
+                    }
                   >
                     {materialList.map(function (item, index) {
-                      return <Select.Option key={index} value={item.key}>{item.label}</Select.Option>
+                      return (
+                        <Select.Option key={index} value={item.key}>
+                          {item.label}
+                        </Select.Option>
+                      );
                     })}
                   </Select>
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialType"
                   label="商品编码"
@@ -1117,11 +1287,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
                 <Form.Item
                   name="batchNumber"
                   label="打印批次"
@@ -1129,22 +1298,61 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   {...formItemLayout2}
                 >
                   <Input></Input>
-
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
-
-                <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}>箱码模板</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCodeTest} >测试箱码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol} hidden={boxHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2} hidden={boxHidden1}> <ArrowUpOutlined /></Button>
+              <Col span={8} style={{ textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  style={{ marginLeft: "10px" }}
+                >
+                  查询
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={boxCode}
+                >
+                  箱码模板
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={pintBoxCode}
+                >
+                  <ArrowDownOutlined />
+                  点击打印
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  onClick={boxCodeTest}
+                >
+                  测试箱码{" "}
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={boxToggol}
+                  hidden={boxHidden2}
+                >
+                  {" "}
+                  <ArrowDownOutlined />
+                </Button>
+                <Button
+                  type="primary"
+                  style={{ marginLeft: "10px" }}
+                  shape="circle"
+                  onClick={boxToggo2}
+                  hidden={boxHidden1}
+                >
+                  {" "}
+                  <ArrowUpOutlined />
+                </Button>
               </Col>
-
             </Row>
-
           </Form>
           <Table
             className="flex-table"
@@ -1153,10 +1361,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
-              y: '100%'
+              y: "100%",
             }}
             rowSelection={{
-              ...rowSelection3
+              ...rowSelection3,
             }}
           // pagination={{ pageSize: 20 }}
           />
@@ -1167,10 +1375,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             defaultCurrent={1}
             style={{ textAlign: 'right', padding: '15px' }}
           /> */}
-
         </TabPane>
       </Tabs>
-
     </PageContainer>
   );
 };

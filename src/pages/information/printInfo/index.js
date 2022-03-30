@@ -924,7 +924,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
           <Form.Item
             style={{ marginBottom: "0px" }}
-            label="打印张数:"
+            label="订单数量:"
             name="number"
           >
             <Input style={{ width: "70%" }} id="inputVal" defaultValue={10} />
