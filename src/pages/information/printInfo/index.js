@@ -46,7 +46,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -159,7 +159,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     {
       title: () => <a style={{ color: "red" }}>物料描述</a>,
-      dataIndex: "boxLabelDescription",
+      dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
       width: 200,
@@ -168,11 +168,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       render: (text, record, index, key) => {
         return (
           <input
-            id={"boxLabelDescription" + record.id}
-            defaultValue={record.boxLabelDescription}
+            id={"typeDescription" + record.id}
+            defaultValue={record.typeDescription}
             style={{ border: "none", color: "red", textAlign: "center" }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeDescrip(document.getElementById("boxLabelDescription" + record.id).value, record.id)}
+            onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -692,10 +692,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   };
 
   // 物料描述
-  const changeDescrip = async (value, id) => {
+  const changeTypeDescription = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.boxLabelDescription = value
+        item.typeDescription = value
       }
     })
   };
@@ -833,6 +833,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         bagged: false,
         materialId: params.materialId,
         materialType: params.materialType,
+        materialNo:params.materialNo
       },
       pageNum: params.current,
       pageSize: params.pageSize,

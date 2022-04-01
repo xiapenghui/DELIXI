@@ -98,7 +98,7 @@ const Login = (props) => {
         </div>
         <Submit loading={submitting}>登录</Submit>
         <div className={styles.other}>
-          <a  href='../../../../public/CLodopPrint64.exe' download="CLodopPrint64.exe" > 插件本地下载</a>
+          <a  href="http://www.mtsoftware.cn/download/Lodop6.226_Clodop4.158.zip" download="Lodop6.226_Clodop4.158.zip" > 插件本地下载</a>
           <a className={styles.register} href="http://www.lodop.net/download.html" target="_blank">
             插件官网下载
           </a>

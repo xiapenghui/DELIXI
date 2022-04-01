@@ -9,7 +9,6 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
-import "../printRecord/components/style.css";
 import ExportJsonExcel from "js-export-excel";
 import {
   getDropDownInit,
@@ -30,6 +29,15 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
   const getColumns = () => [
+
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      valueType: "text",
+      align: "center",
+      width: 200,
+    },
+    
     {
       title: "打印时间从",
       dataIndex: "startDate",
@@ -114,13 +122,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       width: 200,
     },
 
-    {
-      title: "物料代号",
-      dataIndex: "materialNo",
-      valueType: "text",
-      align: "center",
-      width: 200,
-    },
+
 
     {
       title: "商品编码",

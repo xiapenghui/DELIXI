@@ -8,6 +8,7 @@ import ProDescriptions from "@ant-design/pro-descriptions";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import ExportJsonExcel from "js-export-excel";
+import "../../../../src/assets/commonStyle.css";
 import {
   getDropDownInit,
   postListInit,
@@ -40,7 +41,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       align: "center",
       width: 120,
       fixed: "left",
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -49,7 +50,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -199,7 +200,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 150,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -213,7 +214,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
     {
       title: "盒ITF13码",
-      dataIndex: "boxIEAN13",
+      dataIndex: "caseIEAN13",
       valueType: "text",
       align: "center",
       width: 150,
@@ -345,8 +346,10 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
+        materialNo:params.materialNo,
         materialId: params.materialId,
         materialType: params.materialType,
+        boxIEAN13:params.boxIEAN13
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -466,6 +469,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
+        className="flex-proTable"
         scroll={{ y: 500 }}
         rowKey="id"
         search={{

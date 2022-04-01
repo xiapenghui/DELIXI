@@ -36,6 +36,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   const columns = [
+
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      key: "materialNo",
+      align: "center",
+    },
+
     {
       title: "打印批次",
       dataIndex: "batchNumber",
@@ -68,12 +76,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         </Tooltip>
       ),
     },
-    {
-      title: "物料代号",
-      dataIndex: "materialNo",
-      key: "materialNo",
-      align: "center",
-    },
+   
 
     {
       title: "中文名称",
@@ -201,6 +204,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         materialId: values.materialId,
         materialType: values.materialType,
         batchNumber: values.batchNumber,
+        materialNo:values.materialNo,
         state: 1,
       },
       pageNum: 1,
@@ -371,7 +375,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9876543210', "3vob10A00030000011").
       replace('kjihgfedcba', "3vob10A00030000021")
     eval(zhiList)
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
+    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试只码");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
     LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
     LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
@@ -421,7 +425,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             replaceAll('2022-01-01A', printDateList[0]).
             replaceAll('装盒A', countList[0]).
             replace('物料型号A', data.data.material.materialType).
-            replace('物料描述A', data.data.material.boxLabelDescription).
+            replace('物料描述A', data.data.material.typeDescription).
             replace('系列123A', data.data.material.serial).
             replace('检02A', data.data.material.examination).
             replace('GB/tA', data.data.material.standard).
@@ -443,7 +447,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               replaceAll('2022-01-01B', printDateList[1]).
               replaceAll('装盒B', countList[0]).
               replace('物料型号B', data.data.material.materialType).
-              replace('物料描述B', data.data.material.boxLabelDescription).
+              replace('物料描述B', data.data.material.typeDescription).
               replace('系列123B', data.data.material.serial).
               replace('检02B', data.data.material.examination).
               replace('GB/tB', data.data.material.standard).
@@ -493,7 +497,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             .replaceAll("2022-01-01", printDateList[0])
             .replaceAll("装盒", countList[0])
             .replace("物料型号", data.data.material.materialType)
-            .replace("物料描述", data.data.material.boxLabelDescription)
+            .replace("物料描述", data.data.material.typeDescription)
             .replace("系列123", data.data.material.serial)
             .replace("检02", data.data.material.examination)
             .replace("GB/t", data.data.material.standard)
@@ -662,7 +666,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           replaceAll('装箱', countListNew[0]).
           replace('物料型号', data.data.material.materialType).
           replace('物料描述', data.data.material.boxLabelDescription).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('检02', data.data.material.examination).
           replace('浙江省', data.data.material.address).
           replace('GB/t', data.data.material.standard).
@@ -748,7 +751,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('系列123', "领航者").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
+    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试箱码");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
     LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
     LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
@@ -877,6 +880,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
+
+              <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
+                <Form.Item
+                  name="materialNo"
+                  label="物料代号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+                </Form.Item>
+              </Col>
+
+
               <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="batchNumber"
@@ -909,6 +925,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             scroll={{
               y: '100%'
             }}
+            pagination={{ showTotal: total => `总共 ${dataSource1.length} 条`, }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination
@@ -999,6 +1016,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
+              <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
+                <Form.Item
+                  name="materialNo"
+                  label="物料代号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+                </Form.Item>
+              </Col>
+
               <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
                   name="batchNumber"
@@ -1032,6 +1060,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               y: '100%'
             }}
           // pagination= {{ pageSize: 20 }}
+          pagination={{ showTotal: total => `总共 ${dataSource2.length} 条`, }}
           />
           {/* <Pagination
             total={15}
@@ -1121,6 +1150,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
                 </Form.Item>
               </Col>
+
+              <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
+                <Form.Item
+                  name="materialNo"
+                  label="物料代号"
+                  hasFeedback
+                  {...formItemLayout2}
+                >
+                  <Input></Input>
+                </Form.Item>
+              </Col>
+
+
               <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="batchNumber"
@@ -1155,6 +1197,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             scroll={{
               y: '100%'
             }}
+            pagination={{ showTotal: total => `总共 ${dataSource3.length} 条`, }}
           // pagination= {{ pageSize: 20 }}
           />
           {/* <Pagination

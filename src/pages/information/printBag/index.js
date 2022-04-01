@@ -688,7 +688,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
           <Form.Item
             style={{ marginBottom: "0px" }}
-            label="打印张数:"
+            label="订单数量:"
             name="number"
           >
             <Input id="inputVal" defaultValue={10} />
