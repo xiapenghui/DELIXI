@@ -159,6 +159,16 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
+      title: "物料描述",
+      dataIndex: "typeDescription",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInTable: true,
+    },
+
+    {
       title: () => <a style={{ color: "red" }}>物料描述</a>,
       dataIndex: "typeDescription",
       valueType: "text",
@@ -341,6 +351,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       },
     },
 
+    {
+      title: "EAN13码",
+      dataIndex: "caseIEAN13",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
+    },
+
 
     {
       title: "箱EAN13码",
@@ -350,16 +369,17 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 200,
       hideInSearch: true,
     },
-
-
+  
+    
     {
-      title: "EAN13码",
-      dataIndex: "caseIEAN13",
+      title: "盒ITF14码",
+      dataIndex: "caseITF14",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
     },
+
 
     {
       title: "箱ITF14码",
@@ -371,14 +391,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
   
-    {
-      title: "盒ITF14码",
-      dataIndex: "caseITF14",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-    },
+    
 
     {
       title: "工厂",
@@ -834,7 +847,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         bagged: false,
         materialId: params.materialId,
         materialType: params.materialType,
-        materialNo:params.materialNo
+        materialNo:params.materialNo,
+        typeDescription:params.typeDescription
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -911,6 +925,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         headerTitle="查询表格"
         actionRef={actionRef}
         scroll={{ y: 500 }}
+        className="flex-proTable"
         rowKey="id"
         search={{
           labelWidth: 120,

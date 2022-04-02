@@ -38,6 +38,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const [packingQuantity1, setPackingQuantity1] = useState('')
   const [threeC1, setThreeC1] = useState('')
 
+  
   const getColumns = () => [
     {
       title: "物料代号",
@@ -58,7 +59,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
     {
       title: "商品编码",
       dataIndex: "materialId",
@@ -67,7 +67,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       width: 150,
       hideInTable: true,
       valueEnum: materialList.length == 0 ? {} : [materialList],
-      initialValue: IsUpdate ? UpdateDate.materialId : (materialList[0] === undefined ? '' : materialList[0].key),
+      initialValue: IsUpdate ? UpdateDate.materialId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
         if (type === 'form' || type === 'table') {
           return <Select
@@ -84,16 +84,38 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.materialName
-      },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "商品编码不能为空!",
-          },
-        ],
+    },
+
+
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInTable: true,
+    },
+
+
+
+
+    {
+      title: () => <a style={{ color: "red" }}>商品编码</a>,
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"materialType" + record.id}
+            defaultValue={text}
+            style={{ border: "none", color: "red", textAlign: "center" }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
+          ></input>
+        );
       },
     },
 
@@ -120,15 +142,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
 
-    {
-      title: "商品编码",
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInTable: true,
-    },
-
+  
 
     {
       title: () => <a style={{ color: "red" }}>商品编码</a>,
@@ -152,12 +166,12 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
     {
       title: "物料描述",
-      dataIndex: "boxLabelDescription",
+      dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
       width: 150,
       ellipsis: true,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -540,7 +554,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         bagged: true,
         materialId: params.materialId,
         materialType: params.materialType,
-        materialNo:params.materialNo
+        materialNo:params.materialNo,
+        typeDescription:params.typeDescription
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -619,7 +634,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         var bagList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', picker).
           replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
-          replace('物料描述', data.data.material.boxLabelDescription).
+          replace('物料描述', data.data.material.typeDescription).
           replace('装盒', data.data.material.boxesNumber).
           replace('装盒数', data.data.material.boxesNumber).
           replace('检验02', data.data.material.examination).
@@ -672,6 +687,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       <ProTable
         headerTitle="查询表格"
         actionRef={actionRef}
+        className="flex-proTable"
         scroll={{ y: 500 }}
         rowKey="id"
         search={{

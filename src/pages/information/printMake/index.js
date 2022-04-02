@@ -51,7 +51,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   // const [createModalVisible, handleModalVisible] = useState(false);
   const formItemLayout2 = globalConfig.table.formItemLayout2;
 
-  const columns = [
+  const columns1 = [
     {
       title: "物料代号",
       dataIndex: "materialNo",
@@ -138,6 +138,181 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     },
   ];
 
+  const columns2 = [
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      key: "materialNo",
+      align: "center",
+      fixed: "left",
+    },
+    {
+      title: "打印批次",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
+      align: "center",
+    },
+
+    {
+      title: "条码类型",
+      dataIndex: "barCodeType",
+      key: "barCodeType",
+      align: "center",
+    },
+
+    {
+      title: "盒条码",
+      dataIndex: "barCode",
+      key: "barCode",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (barCode) => (
+        <Tooltip placement="topLeft" title={barCode}>
+          {barCode}
+        </Tooltip>
+      ),
+    },
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      key: "materialName",
+      align: "center",
+    },
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (materialType) => (
+        <Tooltip placement="topLeft" title={materialType}>
+          {materialType}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "物料描述",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (modelDesc) => (
+        <Tooltip placement="topLeft" title={modelDesc}>
+          {modelDesc}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "打印时间",
+      dataIndex: "printDateTime",
+      key: "printDateTime",
+      align: "center",
+    },
+    {
+      title: "打印人员",
+      dataIndex: "printer",
+      key: "printer",
+      align: "center",
+    },
+  ];
+
+
+  const columns3 = [
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      key: "materialNo",
+      align: "center",
+      fixed: "left",
+    },
+    {
+      title: "打印批次",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
+      align: "center",
+    },
+
+    {
+      title: "条码类型",
+      dataIndex: "barCodeType",
+      key: "barCodeType",
+      align: "center",
+    },
+
+    {
+      title: "箱条码",
+      dataIndex: "barCode",
+      key: "barCode",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (barCode) => (
+        <Tooltip placement="topLeft" title={barCode}>
+          {barCode}
+        </Tooltip>
+      ),
+    },
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      key: "materialName",
+      align: "center",
+    },
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (materialType) => (
+        <Tooltip placement="topLeft" title={materialType}>
+          {materialType}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "物料描述",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (modelDesc) => (
+        <Tooltip placement="topLeft" title={modelDesc}>
+          {modelDesc}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "打印时间",
+      dataIndex: "printDateTime",
+      key: "printDateTime",
+      align: "center",
+    },
+    {
+      title: "打印人员",
+      dataIndex: "printer",
+      key: "printer",
+      align: "center",
+    },
+  ];
+
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [dataSource3, setDataSource3] = useState([]);
@@ -146,10 +321,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [materialId2, setMaterialId2] = useState("");
   const [materialId3, setMaterialId3] = useState("");
 
-  const [materialId, setMaterialId] = useState(
-    materialList.length > 0 ? materialList[0].key : ""
-  );
- 
+
 
   const [zhiString, setZhiString] = useState("");
   const [heString, setHeString] = useState("");
@@ -182,7 +354,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   useEffect(() => {
     // setMaterialId(materialList[0].key)
-    zhiSearch();
+    // zhiSearch();
   }, []);
 
   useEffect(() => {
@@ -246,9 +418,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           globalConfig.form.onlyDateFormat
         ),
         barCode: values.barCode,
-        materialId: values.materialId ? values.materialId : materialId,
+        materialId: values.materialId,
         batchNumber: values.batchNumber,
         materialNo: values.materialNo,
+        typeDescription: values.typeDescription,
         state: 2,
       },
       pageNum: 1,
@@ -260,12 +433,16 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //   @param 只条码 handleSearch 搜索
   const zhiSearch = (e) => {
     form1.validateFields().then(async (values) => {
-      let data = await getOnlyBarCodeList(params(values));
-      if (data.status === 200) {
-        setDataSource1(data.data.list);
-        setZhiString(data.data.tempCode);
-        setPrintTypeName(data.data.tempName);
-        message.success(data.message)
+      if (values.materialId === undefined) {
+        message.warning('请先选择商品编码')
+      } else {
+        let data = await getOnlyBarCodeList(params(values));
+        if (data.status === 200) {
+          setDataSource1(data.data.list);
+          setZhiString(data.data.tempCode);
+          setPrintTypeName(data.data.tempName);
+          message.success(data.message)
+        }
       }
     });
   };
@@ -273,12 +450,16 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //盒条码查询
   const heSearch = (e) => {
     form2.validateFields().then(async (values) => {
-      let data = await getBoxBarCodeList(params(values));
-      if (data.status === 200) {
-        setDataSource2(data.data.list);
-        setHeString(data.data.tempCode);
-        setPrintTypeName(data.data.tempName);
-        message.success(data.message)
+      if (values.materialId === undefined) {
+        message.warning('请先选择商品编码')
+      } else {
+        let data = await getBoxBarCodeList(params(values));
+        if (data.status === 200) {
+          setDataSource2(data.data.list);
+          setHeString(data.data.tempCode);
+          setPrintTypeName(data.data.tempName);
+          message.success(data.message)
+        }
       }
     });
   };
@@ -286,19 +467,23 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //箱条码查询
   const boxSearch = (e) => {
     form3.validateFields().then(async (values) => {
-      let data = await getBigBoxBarCodeList(params(values));
-      if (data.status === 200) {
-        if (data.data.threeC === "0") {
-          setNewImage("");
-        } else if (data.data.threeC === "1") {
-          setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
-        } else {
-          setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
+      if (values.materialId === undefined) {
+        message.warning('请先选择商品编码')
+      } else {
+        let data = await getBigBoxBarCodeList(params(values));
+        if (data.status === 200) {
+          if (data.data.threeC === "0") {
+            setNewImage("");
+          } else if (data.data.threeC === "1") {
+            setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
+          } else {
+            setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
+          }
+          setDataSource3(data.data.list);
+          setBoxString(data.data.tempCode);
+          setPrintTypeName(data.data.tempName);
+          message.success(data.message)
         }
-        setDataSource3(data.data.list);
-        setBoxString(data.data.tempCode);
-        setPrintTypeName(data.data.tempName);
-        message.success(data.message)
       }
     });
   };
@@ -306,92 +491,98 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
     LodopFuncs.getLodop();
-    let content = noStart;
-    if (content === "") {
-      eval(zhiString);
-      content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
+    if (materialId1 == "") {
+      message.warning('请先选择商品编码')
     } else {
-      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
-    }
-    if (zhiID.length > 0) {
-      debugger
-      let data = await printBarCode({
-        barCodeIdList: zhiID,
-        barCodeType: 1,
-        materialId: materialId1 === "" ? materialList[0].key : materialId1,
-        state: 2,
-        userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        barCode: document.getElementById("form_in_modal_barCode").value,
-        batchNumber: document.getElementById("form_in_modal_batchNumber").value,
-        materialNo: document.getElementById("form_in_modal_materialNo").value,
-      });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList;
-        var qrCodeList = data.data.qrCodeList;
-        var zhiLeftList = content[0]
-          .replaceAll("9876543210", dataString[0])
-          .replaceAll("1234567890", qrCodeList[0]);
-        if (dataString.length == 1) {
-          eval(zhiLeftList);
-        } else {
-          var zhiRightList = content[1]
-            .replaceAll("kjihgfedcba", dataString[1])
-            .replaceAll("abcdefghijk", qrCodeList[1]);
-          eval(zhiLeftList + zhiRightList);
-        }
-        LODOP.PRINT();
 
-        for (let i = 2; i < dataString.length; i++) {
-          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-          if (i % 2 == 0) {
-            // 左边
-            zhiLeftList = zhiLeftList
-              .replaceAll(dataString[i - 2], dataString[i])
-              .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
-            if (i == dataString.length - 1) {
-              eval(zhiLeftList);
+      let content = noStart;
+      if (content === "") {
+        eval(zhiString);
+        content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
+      } else {
+        content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+      }
+      if (zhiID.length > 0) {
+        debugger
+        let data = await printBarCode({
+          barCodeIdList: zhiID,
+          barCodeType: 1,
+          materialId: materialId1,
+          state: 2,
+          userId: user.currentUser.id,
+          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          barCode: document.getElementById("form_in_modal_barCode").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber").value,
+          materialNo: document.getElementById("form_in_modal_materialNo").value,
+          typeDescription: document.getElementById("form_in_modal_typeDescription").value,
+        });
+        if (data.status == 200) {
+          var dataString = data.data.barCodeList;
+          var qrCodeList = data.data.qrCodeList;
+          var zhiLeftList = content[0]
+            .replaceAll("9876543210", dataString[0])
+            .replaceAll("1234567890", qrCodeList[0]);
+          if (dataString.length == 1) {
+            eval(zhiLeftList);
+          } else {
+            var zhiRightList = content[1]
+              .replaceAll("kjihgfedcba", dataString[1])
+              .replaceAll("abcdefghijk", qrCodeList[1]);
+            eval(zhiLeftList + zhiRightList);
+          }
+          LODOP.PRINT();
+
+          for (let i = 2; i < dataString.length; i++) {
+            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+            if (i % 2 == 0) {
+              // 左边
+              zhiLeftList = zhiLeftList
+                .replaceAll(dataString[i - 2], dataString[i])
+                .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
+              if (i == dataString.length - 1) {
+                eval(zhiLeftList);
+                LODOP.PRINT();
+                LODOP.PRINT_INIT("");
+              }
+            } else {
+              zhiRightList = zhiRightList
+                .replaceAll(dataString[i - 2], dataString[i])
+                .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
+              eval(zhiLeftList + zhiRightList);
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
             }
-          } else {
-            zhiRightList = zhiRightList
-              .replaceAll(dataString[i - 2], dataString[i])
-              .replaceAll(qrCodeList[i - 2], qrCodeList[i]);
-            eval(zhiLeftList + zhiRightList);
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
           }
-        }
-        message.info("打印中，请稍等...");
+          message.info("打印中，请稍等...");
 
-        // var zhiList = content.replaceAll('9876543210', dataString[0]).
-        //   replaceAll('1234567890', qrCodeList[0]).
-        //   replace('2022-01-01', data.data.material.date)
-        // eval(zhiList)
-        // LODOP.PRINT();
-        // for (var i = 0; i < 2; i++) {
-        //   if (i > 0) {
-        //
-        //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        //     zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
-        //       replaceAll(qrCodeList[i - 1], qrCodeList[i])
-        //     console.log('zhiList123', zhiList)
-        //     eval(zhiList)
-        //     LODOP.PRINT();
-        //     LODOP.PRINT_INIT("");
-        //   }
-        // }
+          // var zhiList = content.replaceAll('9876543210', dataString[0]).
+          //   replaceAll('1234567890', qrCodeList[0]).
+          //   replace('2022-01-01', data.data.material.date)
+          // eval(zhiList)
+          // LODOP.PRINT();
+          // for (var i = 0; i < 2; i++) {
+          //   if (i > 0) {
+          //
+          //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          //     zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
+          //       replaceAll(qrCodeList[i - 1], qrCodeList[i])
+          //     console.log('zhiList123', zhiList)
+          //     eval(zhiList)
+          //     LODOP.PRINT();
+          //     LODOP.PRINT_INIT("");
+          //   }
+          // }
+        } else {
+          message.error(data.message);
+        }
       } else {
-        message.error(data.message);
+        message.info("请选择要打印的数据!");
       }
-    } else {
-      message.info("请选择要打印的数据!");
     }
   };
 
@@ -427,12 +618,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       .replace("9876543210", "3vob10A00030000011")
       .replace("kjihgfedcba", "3vob10A00030000021");
     eval(zhiList);
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试只码");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
+    LODOP.ADD_PRINT_TEXT(23, 9, 81, 31, "测试只码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
     LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
     LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
   };
 
@@ -441,249 +632,256 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
     LodopFuncs.getLodop();
-    let content = noStart;
-    if (content === "") {
-      eval(heString);
-      content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
+    if (materialId2 == "") {
+      message.warning('请先选择商品编码')
     } else {
-      content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
-    }
-    if (heID.length > 0) {
-      let data = await printBarCode({
-        barCodeIdList: heID,
-        barCodeType: 2,
-        materialId: materialId2 === "" ? materialList[0].key : materialId2,
-        state: 2,
-        userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        barCode: document.getElementById("form_in_modal_barCode").value,
-        batchNumber: document.getElementById("form_in_modal_batchNumber").value,
-        materialNo: document.getElementById("form_in_modal_materialNo").value,
-      });
-      if (data.status == 200 && data.data.barCodeList.length > 0) {
-      
-        var dataString = data.data.barCodeList;
-        var printDateList = data.data.printDateList;
-        var materialList = data.data.materialList;
 
-        // var countList = data.data.countList
-        if (printTypeName.includes("双排")) {
-          var nums = [];
-          data.data.countList.map((item) => {
-            nums.push("×" + item);
-          });
-          var countList = nums;
+      let content = noStart;
+      if (content === "") {
+        eval(heString);
+        content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");');
+      } else {
+        content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+      }
+      if (heID.length > 0) {
+        debugger
+        let data = await printBarCode({
+          barCodeIdList: heID,
+          barCodeType: 2,
+          materialId: materialId2,
+          state: 2,
+          userId: user.currentUser.id,
+          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          barCode: document.getElementById("form_in_modal_barCode").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber").value,
+          materialNo: document.getElementById("form_in_modal_materialNo").value,
+          typeDescription: document.getElementById("form_in_modal_typeDescription").value,
+        });
+        if (data.status == 200 && data.data.barCodeList.length > 0) {
 
-          var heLeftList = content[0]
-            .replaceAll("1234567890A", dataString[0])
-            .replaceAll("2022-01-01A", printDateList[0])
-            .replaceAll("装盒A", countList[0])
-            .replaceAll("物料型号A", materialList[0].materialType)
-            .replaceAll("物料描述A", materialList[0].typeDescription)
-            .replaceAll("系列123A", materialList[0].serial)
-            .replaceAll("检02A", materialList[0].examination)
-            .replaceAll("GB/tA", materialList[0].standard)
-            .replaceAll("浙江省A", materialList[0].address)
-            .replaceAll("上海灵娃A", materialList[0].productionPlant)
-            .replaceAll("8888888888A", materialList[0].caseIEAN13)
-            .replaceAll("9999999999A", materialList[0].caseITF14)
-            .replaceAll("中文名称A", materialList[0].materialName);
+          var dataString = data.data.barCodeList;
+          var printDateList = data.data.printDateList;
+          var materialList = data.data.materialList;
 
-          // .replace("物料型号A", data.data.material.materialType)
-          // .replace("物料描述A", data.data.material.typeDescription)
-          // .replace("系列123A", data.data.material.serial)
-          // .replace("检02A", data.data.material.examination)
-          // .replace("GB/tA", data.data.material.standard)
-          // .replace("浙江省A", data.data.material.address)
-          // .replace("上海灵娃A", data.data.material.productionPlant)
-          // .replace("8888888888A", data.data.material.caseIEAN13)
-          // .replace("9999999999A", data.data.material.caseITF14)
-          // .replace("中文名称A", data.data.material.materialName);
-          if (
-            materialList[0].standard === "无" ||
-            materialList[0].standard === "" ||
-            materialList[0].standard === null
-          ) {
-            heLeftList = heLeftList
-              .replace("执行标准:", "")
-              .replace("无", "")
-              .replace(null, "");
-          }
-          if (
-            materialList[0].serial === "" ||
-            materialList[0].serial === null
-          ) {
-            heLeftList = heLeftList.replace("系列", "").replace(null, "");
-          }
-          if (dataString.length == 1) {
-            eval(heLeftList);
-          } else {
-            var heRightList = content[1]
-              .replaceAll("1234567890B", dataString[1])
-              .replaceAll("2022-01-01B", printDateList[1])
-              .replaceAll("装盒B", countList[1])
-              .replaceAll("物料型号B", materialList[1].materialType)
-              .replaceAll("物料描述B", materialList[1].typeDescription)
-              .replaceAll("系列123B", materialList[1].serial)
-              .replaceAll("检02B", materialList[1].examination)
-              .replaceAll("GB/tB", materialList[1].standard)
-              .replaceAll("浙江省B", materialList[1].address)
-              .replaceAll("上海灵娃B", materialList[1].productionPlant)
-              .replaceAll("8888888888B", materialList[1].caseIEAN13)
-              .replaceAll("9999999999B", materialList[1].caseITF14)
-              .replaceAll("中文名称B", materialList[1].materialName);
-            // .replace("物料型号B", data.data.material.materialType)
-            // .replace("物料描述B", data.data.material.typeDescription)
-            // .replace("系列123B", data.data.material.serial)
-            // .replace("检02B", data.data.material.examination)
-            // .replace("GB/tB", data.data.material.standard)
-            // .replace("浙江省B", data.data.material.address)
-            // .replace("上海灵娃B", data.data.material.productionPlant)
-            // .replace("8888888888B", data.data.material.caseIEAN13)
-            // .replace("9999999999B", data.data.material.caseITF14)
-            // .replace("中文名称B", data.data.material.materialName);
+          // var countList = data.data.countList
+          if (printTypeName.includes("双排")) {
+            var nums = [];
+            data.data.countList.map((item) => {
+              nums.push("×" + item);
+            });
+            var countList = nums;
+
+            var heLeftList = content[0]
+              .replaceAll("1234567890A", dataString[0])
+              .replaceAll("2022-01-01A", printDateList[0])
+              .replaceAll("装盒A", countList[0])
+              .replaceAll("物料型号A", materialList[0].materialType)
+              .replaceAll("物料描述A", materialList[0].typeDescription)
+              .replaceAll("系列123A", materialList[0].serial)
+              .replaceAll("检02A", materialList[0].examination)
+              .replaceAll("GB/tA", materialList[0].standard)
+              .replaceAll("浙江省A", materialList[0].address)
+              .replaceAll("上海灵娃A", materialList[0].productionPlant)
+              .replaceAll("8888888888A", materialList[0].caseIEAN13)
+              .replaceAll("9999999999A", materialList[0].caseITF14)
+              .replaceAll("中文名称A", materialList[0].materialName);
+
+            // .replace("物料型号A", data.data.material.materialType)
+            // .replace("物料描述A", data.data.material.typeDescription)
+            // .replace("系列123A", data.data.material.serial)
+            // .replace("检02A", data.data.material.examination)
+            // .replace("GB/tA", data.data.material.standard)
+            // .replace("浙江省A", data.data.material.address)
+            // .replace("上海灵娃A", data.data.material.productionPlant)
+            // .replace("8888888888A", data.data.material.caseIEAN13)
+            // .replace("9999999999A", data.data.material.caseITF14)
+            // .replace("中文名称A", data.data.material.materialName);
             if (
-              materialList[1].standard === "无" ||
-              materialList[1].standard === "" ||
-              materialList[1].standard === null
+              materialList[0].standard === "无" ||
+              materialList[0].standard === "" ||
+              materialList[0].standard === null
             ) {
-              heRightList = heRightList
+              heLeftList = heLeftList
                 .replace("执行标准:", "")
                 .replace("无", "")
                 .replace(null, "");
             }
             if (
-              materialList[1].serial === "" ||
-              materialList[1].serial === null
+              materialList[0].serial === "" ||
+              materialList[0].serial === null
             ) {
-              heRightList = heRightList.replace("系列", "").replace(null, "");
+              heLeftList = heLeftList.replace("系列", "").replace(null, "");
             }
-            eval(heLeftList + heRightList);
-          }
+            if (dataString.length == 1) {
+              eval(heLeftList);
+            } else {
+              var heRightList = content[1]
+                .replaceAll("1234567890B", dataString[1])
+                .replaceAll("2022-01-01B", printDateList[1])
+                .replaceAll("装盒B", countList[1])
+                .replaceAll("物料型号B", materialList[1].materialType)
+                .replaceAll("物料描述B", materialList[1].typeDescription)
+                .replaceAll("系列123B", materialList[1].serial)
+                .replaceAll("检02B", materialList[1].examination)
+                .replaceAll("GB/tB", materialList[1].standard)
+                .replaceAll("浙江省B", materialList[1].address)
+                .replaceAll("上海灵娃B", materialList[1].productionPlant)
+                .replaceAll("8888888888B", materialList[1].caseIEAN13)
+                .replaceAll("9999999999B", materialList[1].caseITF14)
+                .replaceAll("中文名称B", materialList[1].materialName);
+              // .replace("物料型号B", data.data.material.materialType)
+              // .replace("物料描述B", data.data.material.typeDescription)
+              // .replace("系列123B", data.data.material.serial)
+              // .replace("检02B", data.data.material.examination)
+              // .replace("GB/tB", data.data.material.standard)
+              // .replace("浙江省B", data.data.material.address)
+              // .replace("上海灵娃B", data.data.material.productionPlant)
+              // .replace("8888888888B", data.data.material.caseIEAN13)
+              // .replace("9999999999B", data.data.material.caseITF14)
+              // .replace("中文名称B", data.data.material.materialName);
+              if (
+                materialList[1].standard === "无" ||
+                materialList[1].standard === "" ||
+                materialList[1].standard === null
+              ) {
+                heRightList = heRightList
+                  .replace("执行标准:", "")
+                  .replace("无", "")
+                  .replace(null, "");
+              }
+              if (
+                materialList[1].serial === "" ||
+                materialList[1].serial === null
+              ) {
+                heRightList = heRightList.replace("系列", "").replace(null, "");
+              }
+              eval(heLeftList + heRightList);
+            }
 
-          LODOP.PRINT();
-          for (let i = 2; i < dataString.length; i++) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            if (i % 2 == 0) {
-              // 左边
-              heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
-                .replaceAll(printDateList[i - 2], printDateList[i])
-                .replaceAll(countList[i - 2], countList[i])
-                .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
-                .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
-                .replaceAll(materialList[i - 2].serial, materialList[i].serial)
-                .replaceAll(materialList[i - 2].examination, materialList[i].examination)
-                .replaceAll(materialList[i - 2].standard, materialList[i].standard)
-                .replaceAll(materialList[i - 2].address, materialList[i].address)
-                .replaceAll(materialList[i - 2].productionPlant, materialList[i].productionPlant)
-                .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
-                .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
-                .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
+            LODOP.PRINT();
+            for (let i = 2; i < dataString.length; i++) {
+              LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+              if (i % 2 == 0) {
+                // 左边
+                heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
+                  .replaceAll(printDateList[i - 2], printDateList[i])
+                  .replaceAll(countList[i - 2], countList[i])
+                  .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
+                  .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
+                  .replaceAll(materialList[i - 2].serial, materialList[i].serial)
+                  .replaceAll(materialList[i - 2].examination, materialList[i].examination)
+                  .replaceAll(materialList[i - 2].standard, materialList[i].standard)
+                  .replaceAll(materialList[i - 2].address, materialList[i].address)
+                  .replaceAll(materialList[i - 2].productionPlant, materialList[i].productionPlant)
+                  .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
+                  .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
+                  .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
 
-              if (i == dataString.length - 1) {
-                eval(heLeftList);
+                if (i == dataString.length - 1) {
+                  eval(heLeftList);
+                  LODOP.PRINT();
+                  LODOP.PRINT_INIT("");
+                }
+              } else {
+                heRightList = heRightList
+                  .replaceAll(dataString[i - 2], dataString[i])
+                  .replaceAll(printDateList[i - 2], printDateList[i])
+                  .replaceAll(countList[i - 2], countList[i])
+                  .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
+                  .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
+                  .replaceAll(materialList[i - 2].serial, materialList[i].serial)
+                  .replaceAll(materialList[i - 2].examination, materialList[i].examination)
+                  .replaceAll(materialList[i - 2].standard, materialList[i].standard)
+                  .replaceAll(materialList[i - 2].address, materialList[i].address)
+                  .replaceAll(materialList[i - 2].productionPlant, materialList[i].productionPlant)
+                  .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
+                  .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
+                  .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
+                eval(heLeftList + heRightList);
                 LODOP.PRINT();
                 LODOP.PRINT_INIT("");
               }
-            } else {
-              heRightList = heRightList
-                .replaceAll(dataString[i - 2], dataString[i])
-                .replaceAll(printDateList[i - 2], printDateList[i])
-                .replaceAll(countList[i - 2], countList[i])
-                .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
-                .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
-                .replaceAll(materialList[i - 2].serial, materialList[i].serial)
-                .replaceAll(materialList[i - 2].examination, materialList[i].examination)
-                .replaceAll(materialList[i - 2].standard, materialList[i].standard)
-                .replaceAll(materialList[i - 2].address, materialList[i].address)
-                .replaceAll(materialList[i - 2].productionPlant, materialList[i].productionPlant)
-                .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
-                .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
-                .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
-              eval(heLeftList + heRightList);
-              LODOP.PRINT();
-              LODOP.PRINT_INIT("");
             }
-          }
-          message.info("打印中，请稍等...");
-        } else {
-          var countList = data.data.countList;
-          var heList = content[0]
-            .replaceAll("1234567890", dataString[0])
-            .replaceAll("2022-01-01", printDateList[0])
-            .replaceAll("装盒", countList[0])
-            .replaceAll("物料型号", materialList[0].materialType)
-            .replaceAll("物料描述", materialList[0].typeDescription)
-            .replaceAll("系列123", materialList[0].serial)
-            .replaceAll("检02", materialList[0].examination)
-            .replaceAll("GB/t", materialList[0].standard)
-            .replaceAll("浙江省", materialList[0].address)
-            .replaceAll("上海灵娃", materialList[0].productionPlant)
-            .replaceAll("8888888888", materialList[0].caseIEAN13)
-            .replaceAll("9999999999", materialList[0].caseITF14)
-            .replaceAll("中文名称", materialList[0].materialName);
+            message.info("打印中，请稍等...");
+          } else {
+            var countList = data.data.countList;
+            var heList = content[0]
+              .replaceAll("1234567890", dataString[0])
+              .replaceAll("2022-01-01", printDateList[0])
+              .replaceAll("装盒", countList[0])
+              .replaceAll("物料型号", materialList[0].materialType)
+              .replaceAll("物料描述", materialList[0].typeDescription)
+              .replaceAll("系列123", materialList[0].serial)
+              .replaceAll("检02", materialList[0].examination)
+              .replaceAll("GB/t", materialList[0].standard)
+              .replaceAll("浙江省", materialList[0].address)
+              .replaceAll("上海灵娃", materialList[0].productionPlant)
+              .replaceAll("8888888888", materialList[0].caseIEAN13)
+              .replaceAll("9999999999", materialList[0].caseITF14)
+              .replaceAll("中文名称", materialList[0].materialName);
 
-          // .replace("物料型号", data.data.material.materialType)
-          // .replace("物料描述", data.data.material.typeDescription)
-          // .replace("系列123", data.data.material.serial)
-          // .replace("检02", data.data.material.examination)
-          // .replace("GB/t", data.data.material.standard)
-          // .replace("浙江省", data.data.material.address)
-          // .replace("上海灵娃", data.data.material.productionPlant)
-          // .replace("8888888888", data.data.material.caseIEAN13)
-          // .replace("9999999999", data.data.material.caseITF14)
-          // .replace("中文名称", data.data.material.materialName);
+            // .replace("物料型号", data.data.material.materialType)
+            // .replace("物料描述", data.data.material.typeDescription)
+            // .replace("系列123", data.data.material.serial)
+            // .replace("检02", data.data.material.examination)
+            // .replace("GB/t", data.data.material.standard)
+            // .replace("浙江省", data.data.material.address)
+            // .replace("上海灵娃", data.data.material.productionPlant)
+            // .replace("8888888888", data.data.material.caseIEAN13)
+            // .replace("9999999999", data.data.material.caseITF14)
+            // .replace("中文名称", data.data.material.materialName);
 
-          if (
-            materialList[0].standard === "无" ||
-            materialList[0].standard === "" ||
-            materialList[0].standard === null
-          ) {
-            heList = heList
-              .replace("执行标准:", "")
-              .replace("无", "")
-              .replace(null, "");
-          }
-          if (
-            materialList[0].serial === "" ||
-            materialList[0].serial === null
-          ) {
-            heList = heList.replace("系列", "").replace(null, "");
-          }
-          eval(heList);
-          LODOP.PRINT();
-          for (var i = 0; i < dataString.length; i++) {
-            if (i > 0) {
-              LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-              heList = heList.replaceAll(dataString[i - 1], dataString[i]).
-                replaceAll(printDateList[i - 1], printDateList[i]).
-                replaceAll(countList[i - 1], countList[i]).
-                replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
-                replaceAll(materialList[i - 1].typeDescription, materialList[i].typeDescription).
-                replaceAll(materialList[i - 1].serial, materialList[i].serial).
-                replaceAll(materialList[i - 1].examination, materialList[i].examination).
-                replaceAll(materialList[i - 1].standard, materialList[i].standard).
-                replaceAll(materialList[i - 1].address, materialList[i].address).
-                replaceAll(materialList[i - 1].productionPlant, materialList[i].productionPlant).
-                replaceAll(materialList[i - 1].caseIEAN13, materialList[i].caseIEAN13).
-                replaceAll(materialList[i - 1].caseITF14, materialList[i].caseITF14).
-                replaceAll(materialList[i - 1].materialName, materialList[i].materialName);
-              console.log("heList123", heList);
-              eval(heList);
-              LODOP.PRINT();
-              LODOP.PRINT_INIT("");
+            if (
+              materialList[0].standard === "无" ||
+              materialList[0].standard === "" ||
+              materialList[0].standard === null
+            ) {
+              heList = heList
+                .replace("执行标准:", "")
+                .replace("无", "")
+                .replace(null, "");
             }
+            if (
+              materialList[0].serial === "" ||
+              materialList[0].serial === null
+            ) {
+              heList = heList.replace("系列", "").replace(null, "");
+            }
+            eval(heList);
+            LODOP.PRINT();
+            for (var i = 0; i < dataString.length; i++) {
+              if (i > 0) {
+                LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+                heList = heList.replaceAll(dataString[i - 1], dataString[i]).
+                  replaceAll(printDateList[i - 1], printDateList[i]).
+                  replaceAll(countList[i - 1], countList[i]).
+                  replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
+                  replaceAll(materialList[i - 1].typeDescription, materialList[i].typeDescription).
+                  replaceAll(materialList[i - 1].serial, materialList[i].serial).
+                  replaceAll(materialList[i - 1].examination, materialList[i].examination).
+                  replaceAll(materialList[i - 1].standard, materialList[i].standard).
+                  replaceAll(materialList[i - 1].address, materialList[i].address).
+                  replaceAll(materialList[i - 1].productionPlant, materialList[i].productionPlant).
+                  replaceAll(materialList[i - 1].caseIEAN13, materialList[i].caseIEAN13).
+                  replaceAll(materialList[i - 1].caseITF14, materialList[i].caseITF14).
+                  replaceAll(materialList[i - 1].materialName, materialList[i].materialName);
+                console.log("heList123", heList);
+                eval(heList);
+                LODOP.PRINT();
+                LODOP.PRINT_INIT("");
+              }
+            }
+            message.info("打印中，请稍等...");
           }
-          message.info("打印中，请稍等...");
         }
-      } 
-    }else {
-      message.info("请选择要打印的数据!");
+      } else {
+        message.info("请选择要打印的数据!");
+      }
     }
   };
 
@@ -749,146 +947,153 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印箱条码  箱---开始
   const pintBoxCode = async () => {
     LodopFuncs.getLodop();
-    let content = noStart;
-    if (content === "") {
-      eval(boxString);
-      content = boxString;
-    }
-    if (boxID.length > 0) {
-      let data = await printBarCode({
-        barCodeIdList: boxID,
-        barCodeType: 3,
-        materialId: materialId3 === "" ? materialList[0].key : materialId3,
-        state: 2,
-        userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        barCode: document.getElementById("form_in_modal_barCode").value,
-        batchNumber: document.getElementById("form_in_modal_batchNumber").value,
-        materialNo: document.getElementById("form_in_modal_materialNo").value,
-      });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList;
-        var printDateList = data.data.printDateList;
-        var materialList = data.data.materialList;
-        var countList = data.data.countList;
-
-        var dataStringNew = [];
-        var printDateListNew = [];
-        var countListNew = [];
-        var materialListNew = [];
-
-
-
-        dataStringNew = JSON.parse(JSON.stringify(dataString));
-        dataString.map((item, index) => {
-          dataStringNew.splice(index * 2, 0, item);
+    if (materialId3 == "") {
+      message.warning('请先选择商品编码')
+    } else {
+      let content = noStart;
+      if (content === "") {
+        eval(boxString);
+        content = boxString;
+      }
+      if (boxID.length > 0) {
+        let data = await printBarCode({
+          barCodeIdList: boxID,
+          barCodeType: 3,
+          materialId: materialId3,
+          state: 2,
+          userId: user.currentUser.id,
+          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          barCode: document.getElementById("form_in_modal_barCode").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber").value,
+          materialNo: document.getElementById("form_in_modal_materialNo").value,
+          typeDescription: document.getElementById("form_in_modal_typeDescription").value,
         });
+        if (data.status == 200) {
+          
+          var dataString = data.data.barCodeList;
+          var printDateList = data.data.printDateList;
+          var materialList = data.data.materialList;
+          var countList = data.data.countList;
 
-        printDateListNew = JSON.parse(JSON.stringify(printDateList));
-        printDateList.map((item, index) => {
-          printDateListNew.splice(index * 2, 0, item);
-        });
-
-        countListNew = JSON.parse(JSON.stringify(countList));
-        countList.map((item, index) => {
-          countListNew.splice(index * 2, 0, item);
-        });
-
-        materialListNew = JSON.parse(JSON.stringify(materialList));
-        materialList.map((item, index) => {
-          materialListNew.splice(index * 2, 0, item);
-        });
-
-        var boxList = content
-          .replaceAll("1234567890", dataStringNew[0])
-          .replaceAll("2022-01-01", printDateListNew[0])
-          .replaceAll("装箱", countListNew[0])
-          .replaceAll("物料型号", materialListNew[0].materialType)
-          .replaceAll("物料描述", materialListNew[0].typeDescription)
-          .replaceAll("检02", materialListNew[0].examination)
-          .replaceAll("浙江省", materialListNew[0].address)
-          .replaceAll("GB/t", materialListNew[0].standard)
-          .replaceAll("系列123", materialListNew[0].serial)
-          .replaceAll("上海灵娃", materialListNew[0].productionPlant)
-          .replaceAll("8888888888", materialListNew[0].caseIEAN13)
-          .replaceAll("9999999999", materialListNew[0].caseITF14)
-          .replaceAll("装盒", materialListNew[0].cartonsNumber)
-          .replaceAll("箱重", materialListNew[0].bigBoxWeight)
-          .replaceAll("中文名称", materialListNew[0].materialName)
-          .replaceAll("箱盒数", materialListNew[0].oneLogo)
-          .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+          var dataStringNew = [];
+          var printDateListNew = [];
+          var countListNew = [];
+          var materialListNew = [];
 
 
 
-        // .replace("物料型号", data.data.material.materialType)
-        // .replace("物料描述", data.data.material.typeDescription)
-        // .replace("检02", data.data.material.examination)
-        // .replace("浙江省", data.data.material.address)
-        // .replace("GB/t", data.data.material.standard)
-        // .replace("系列123", data.data.material.serial)
-        // .replace("上海灵娃", data.data.material.productionPlant)
-        // .replace("8888888888", data.data.material.caseIEAN13)
-        // .replace("9999999999", data.data.material.caseITF14)
-        // // replace('装箱', data.data.material.packingQuantity).
-        // .replace("装盒", data.data.material.cartonsNumber)
-        // .replace("箱重", data.data.material.bigBoxWeight)
-        // .replace("中文名称", data.data.material.materialName)
-        // // replace('箱盒数', data.data.material.boxesNumber).
-        // .replace("箱盒数", data.data.material.oneLogo)
-        // .replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
-        if (materialList[0].standard === "无" || materialList[0].standard === "" || materialList[0].standard === null
-        ) {
-          boxList = boxList.replace("执行标准:", "").replace("无", "").replace(null, "");
-        }
-        if (
-          materialList[0].serial === "" ||
-          materialList[0].serial === null
-        ) {
-          boxList = boxList.replace("系列", "").replace(null, "");
-        }
-        if (
-          materialList[0].oneLogo === "" ||
-          materialList[0].oneLogo === null
-        ) {
-          boxList = boxList.replace("箱盒数", "").replace(null, "");
-        }
-        eval(boxList);
-        LODOP.PRINT();
-        for (var i = 0; i < dataStringNew.length; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
-              replaceAll(printDateListNew[i - 1], printDateListNew[i]).
-              replaceAll(countListNew[i - 1], countListNew[i]).
-              replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
-              replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
-              replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
-              replaceAll(materialListNew[i - 1].standard, materialListNew[i].standard).
-              replaceAll(materialListNew[i - 1].serial, materialListNew[i].serial).
-              replaceAll(materialListNew[i - 1].productionPlant, materialListNew[i].productionPlant).
-              replaceAll(materialListNew[i - 1].caseIEAN13, materialListNew[i].caseIEAN13).
-              replaceAll(materialListNew[i - 1].caseITF14, materialListNew[i].caseITF14).
-              replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
-              replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
-              replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
-              replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
-              replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+          dataStringNew = JSON.parse(JSON.stringify(dataString));
+          dataString.map((item, index) => {
+            dataStringNew.splice(index * 2, 0, item);
+          });
 
-            console.log("heList123", boxList);
-            eval(boxList);
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
+          printDateListNew = JSON.parse(JSON.stringify(printDateList));
+          printDateList.map((item, index) => {
+            printDateListNew.splice(index * 2, 0, item);
+          });
+
+          countListNew = JSON.parse(JSON.stringify(countList));
+          countList.map((item, index) => {
+            countListNew.splice(index * 2, 0, item);
+          });
+
+          materialListNew = JSON.parse(JSON.stringify(materialList));
+          materialList.map((item, index) => {
+            materialListNew.splice(index * 2, 0, item);
+          });
+
+          var boxList = content
+            .replaceAll("1234567890", dataStringNew[0])
+            .replaceAll("2022-01-01", printDateListNew[0])
+            .replaceAll("装箱", countListNew[0])
+            .replaceAll("物料型号", materialListNew[0].materialType)
+            .replaceAll("物料描述", materialListNew[0].typeDescription)
+            .replaceAll("检02", materialListNew[0].examination)
+            .replaceAll("浙江省", materialListNew[0].address)
+            .replaceAll("GB/t", materialListNew[0].standard)
+            .replaceAll("系列123", materialListNew[0].serial)
+            .replaceAll("上海灵娃", materialListNew[0].productionPlant)
+            .replaceAll("8888888888", materialListNew[0].caseIEAN13)
+            .replaceAll("9999999999", materialListNew[0].caseITF14)
+            .replaceAll("装盒", materialListNew[0].cartonsNumber)
+            .replaceAll("箱重", materialListNew[0].bigBoxWeight)
+            .replaceAll("中文名称", materialListNew[0].materialName)
+            .replaceAll("箱盒数", materialListNew[0].oneLogo)
+            .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+
+
+
+          // .replace("物料型号", data.data.material.materialType)
+          // .replace("物料描述", data.data.material.typeDescription)
+          // .replace("检02", data.data.material.examination)
+          // .replace("浙江省", data.data.material.address)
+          // .replace("GB/t", data.data.material.standard)
+          // .replace("系列123", data.data.material.serial)
+          // .replace("上海灵娃", data.data.material.productionPlant)
+          // .replace("8888888888", data.data.material.caseIEAN13)
+          // .replace("9999999999", data.data.material.caseITF14)
+          // // replace('装箱', data.data.material.packingQuantity).
+          // .replace("装盒", data.data.material.cartonsNumber)
+          // .replace("箱重", data.data.material.bigBoxWeight)
+          // .replace("中文名称", data.data.material.materialName)
+          // // replace('箱盒数', data.data.material.boxesNumber).
+          // .replace("箱盒数", data.data.material.oneLogo)
+          // .replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+          if (materialList[0].standard === "无" || materialList[0].standard === "" || materialList[0].standard === null
+          ) {
+            boxList = boxList.replace("执行标准:", "").replace("无", "").replace(null, "");
+          }
+          if (
+            materialList[0].serial === "" ||
+            materialList[0].serial === null
+          ) {
+            boxList = boxList.replace("系列", "").replace(null, "");
+          }
+          if (
+            materialList[0].oneLogo === "" ||
+            materialList[0].oneLogo === null
+          ) {
+            boxList = boxList.replace("箱盒数", "").replace(null, "");
+          }
+          eval(boxList);
+          LODOP.PRINT();
+          for (var i = 0; i < dataStringNew.length; i++) {
+            if (i > 0) {
+              LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+              boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
+                replaceAll(printDateListNew[i - 1], printDateListNew[i]).
+                replaceAll(countListNew[i - 1], countListNew[i]).
+                replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
+                replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
+                replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
+                replaceAll(materialListNew[i - 1].standard, materialListNew[i].standard).
+                replaceAll(materialListNew[i - 1].serial, materialListNew[i].serial).
+                replaceAll(materialListNew[i - 1].productionPlant, materialListNew[i].productionPlant).
+                replaceAll(materialListNew[i - 1].caseIEAN13, materialListNew[i].caseIEAN13).
+                replaceAll(materialListNew[i - 1].caseITF14, materialListNew[i].caseITF14).
+                replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
+                replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
+                replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
+                replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
+                replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+
+              console.log("heList123", boxList);
+              eval(boxList);
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
           }
         }
+      } else {
+        message.info("请选择要打印的数据!");
       }
-    } else {
-      message.info("请选择要打印的数据!");
     }
+
   };
 
   //箱条码模板
@@ -980,7 +1185,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form1}
             name="form_in_modal"
             initialValues={{
-              materialId: materialId,
               startDate: moment().subtract("years"),
               endDate: moment().endOf("day"),
             }}
@@ -1055,8 +1259,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               </Col>
               <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1145,7 +1349,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           <Table
             className="flex-table"
             dataSource={dataSource1}
-            columns={columns}
+            columns={columns1}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -1171,7 +1375,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form2}
             name="form_in_modal"
             initialValues={{
-              materialId: materialId,
               startDate: moment().subtract("years"),
               endDate: moment().endOf("day"),
             }}
@@ -1246,8 +1449,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               </Col>
               <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1325,7 +1528,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           <Table
             className="flex-table"
             dataSource={dataSource2}
-            columns={columns}
+            columns={columns2}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -1353,7 +1556,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form3}
             name="form_in_modal"
             initialValues={{
-              materialId: materialId,
               startDate: moment().subtract("years"),
               endDate: moment().endOf("day"),
             }}
@@ -1429,8 +1631,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
               <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1516,7 +1718,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           <Table
             className="flex-table"
             dataSource={dataSource3}
-            columns={columns}
+            columns={columns3}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{

@@ -35,7 +35,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
 
-  const columns = [
+  const columns1 = [
 
     {
       title: "物料代号",
@@ -64,6 +64,195 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
     {
       title: "只条码",
+      dataIndex: "barCode",
+      key: "barCode",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (barCode) => (
+        <Tooltip placement="topLeft" title={barCode}>
+          {barCode}
+        </Tooltip>
+      ),
+    },
+
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      key: "materialName",
+      align: "center",
+    },
+
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (materialType) => (
+        <Tooltip placement="topLeft" title={materialType}>
+          {materialType}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "物料描述",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (modelDesc) => (
+        <Tooltip placement="topLeft" title={modelDesc}>
+          {modelDesc}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "打印时间",
+      dataIndex: "printDateTime",
+      key: "printDateTime",
+      align: "center",
+    },
+    {
+      title: "打印人员",
+      dataIndex: "printer",
+      key: "printer",
+      align: "center",
+    },
+
+  ];
+
+  const columns2 = [
+
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      key: "materialNo",
+      align: "center",
+      fixed: "left",
+    },
+
+    {
+      title: "打印批次",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
+      align: "center",
+    },
+
+    {
+      title: "条码类型",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      render: (text, record) => {
+        return record.barCodeType
+      },
+    },
+
+    {
+      title: "盒条码",
+      dataIndex: "barCode",
+      key: "barCode",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (barCode) => (
+        <Tooltip placement="topLeft" title={barCode}>
+          {barCode}
+        </Tooltip>
+      ),
+    },
+
+
+    {
+      title: "中文名称",
+      dataIndex: "materialName",
+      key: "materialName",
+      align: "center",
+    },
+
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (materialType) => (
+        <Tooltip placement="topLeft" title={materialType}>
+          {materialType}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "物料描述",
+      dataIndex: "materialDescription",
+      key: "materialDescription",
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (modelDesc) => (
+        <Tooltip placement="topLeft" title={modelDesc}>
+          {modelDesc}
+        </Tooltip>
+      ),
+    },
+    {
+      title: "打印时间",
+      dataIndex: "printDateTime",
+      key: "printDateTime",
+      align: "center",
+    },
+    {
+      title: "打印人员",
+      dataIndex: "printer",
+      key: "printer",
+      align: "center",
+    },
+  ];
+
+  const columns3 = [
+
+    {
+      title: "物料代号",
+      dataIndex: "materialNo",
+      key: "materialNo",
+      align: "center",
+      fixed: "left",
+    },
+
+    {
+      title: "打印批次",
+      dataIndex: "batchNumber",
+      key: "batchNumber",
+      align: "center",
+    },
+
+    {
+      title: "条码类型",
+      dataIndex: "materialType",
+      key: "materialType",
+      align: "center",
+      render: (text, record) => {
+        return record.barCodeType
+      },
+    },
+
+    {
+      title: "箱条码",
       dataIndex: "barCode",
       key: "barCode",
       align: "center",
@@ -205,6 +394,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         materialId: values.materialId,
         batchNumber: values.batchNumber,
         materialNo: values.materialNo,
+        typeDescription:values.typeDescription,
         state: 1,
       },
       pageNum: 1,
@@ -313,6 +503,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
+        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
@@ -384,12 +575,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9876543210', "3vob10A00030000011").
       replace('kjihgfedcba', "3vob10A00030000021")
     eval(zhiList)
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试只码");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
-    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
+    LODOP.ADD_PRINT_TEXT(23,9,81,31,"测试只码");
+    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
+    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
+    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
     LODOP.PRINT_DESIGN();
   }
   // 只---结束
@@ -427,7 +618,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
-
+        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200 && data.data.barCodeList.length > 0) {
         var dataString = data.data.barCodeList
@@ -706,8 +897,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
+        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200) {
+        debugger
+
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var materialList = data.data.materialList
@@ -961,8 +1155,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1009,7 +1203,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table
             className="flex-table"
             dataSource={dataSource1}
-            columns={columns}
+            columns={columns1}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -1096,8 +1290,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }} hidden={heHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1143,7 +1337,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table
             className="flex-table"
             dataSource={dataSource2}
-            columns={columns}
+            columns={columns2}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
@@ -1231,8 +1425,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
-                  name="materialType"
-                  label="商品编码"
+                  name="typeDescription"
+                  label="物料描述"
                   hasFeedback
                   {...formItemLayout2}
                 >
@@ -1281,7 +1475,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           <Table
             className="flex-table"
             dataSource={dataSource3}
-            columns={columns}
+            columns={columns3}
             style={{ padding: "0 20px" }}
             rowKey="id"
             scroll={{
