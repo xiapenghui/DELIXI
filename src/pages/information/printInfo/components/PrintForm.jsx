@@ -39,7 +39,7 @@ const columns = [
     align: "center",
   },
   {
-    title: "型号描述",
+    title: "物料描述",
     dataIndex: "materialDescription",
     key: "materialDescription",
     ellipsis: true,

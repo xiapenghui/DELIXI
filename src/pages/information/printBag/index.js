@@ -46,7 +46,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       align: "center",
       width: 120,
       fixed: "left",
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -151,7 +151,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title: "物料型号描述",
+      title: "物料描述",
       dataIndex: "boxLabelDescription",
       valueType: "text",
       align: "center",
@@ -540,6 +540,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         bagged: true,
         materialId: params.materialId,
         materialType: params.materialType,
+        materialNo:params.materialNo
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -618,7 +619,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         var bagList = content.replaceAll('1234567890', dataString[0]).
           replace('2022-01-01', picker).
           replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
-          replace('物料型号描述', data.data.material.boxLabelDescription).
           replace('物料描述', data.data.material.boxLabelDescription).
           replace('装盒', data.data.material.boxesNumber).
           replace('装盒数', data.data.material.boxesNumber).

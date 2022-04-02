@@ -113,7 +113,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料型号描述",
+      title: "物料描述",
       dataIndex: "boxLabelDescription",
       valueType: "text",
       align: "center",
@@ -196,7 +196,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
     {
       title: "EAN13码",
-      dataIndex: "boxIEAN13",
+      dataIndex: "caseIEAN13",
       valueType: "text",
       align: "center",
       width: 150,
@@ -204,26 +204,26 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
     {
-      title: "箱ITF14码",
-      dataIndex: "boxITF14",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      hideInSearch: true,
-    },
-
-    {
-      title: "盒ITF13码",
-      dataIndex: "caseIEAN13",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      hideInSearch: true,
-    },
-
-    {
       title: "盒ITF14码",
       dataIndex: "caseITF14",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+    },
+
+    {
+      title: "箱ITF13码",
+      dataIndex: "boxIEAN13",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      hideInSearch: true,
+    },
+
+    {
+      title: "箱ITF14码",
+      dataIndex: "boxITF14",
       valueType: "text",
       align: "center",
       width: 150,
@@ -349,7 +349,8 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         materialNo:params.materialNo,
         materialId: params.materialId,
         materialType: params.materialType,
-        boxIEAN13:params.boxIEAN13
+        caseIEAN13:params.caseIEAN13,
+        supplierName:params.supplierName
       },
       pageNum: params.current,
       pageSize: params.pageSize,

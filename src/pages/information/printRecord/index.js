@@ -36,6 +36,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       valueType: "text",
       align: "center",
       width: 200,
+      fixed: "left",
     },
     
     {
@@ -133,7 +134,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     },
 
     {
-      title: "型号描述",
+      title: "物料描述",
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",

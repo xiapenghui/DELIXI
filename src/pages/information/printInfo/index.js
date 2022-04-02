@@ -46,6 +46,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 120,
+      fixed: "left",
       // hideInSearch: true,
     },
 
