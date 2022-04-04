@@ -40,7 +40,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
-   
+
     {
       title: "物料描述",
       dataIndex: "typeDescription",
@@ -88,11 +88,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title:() => <a style={{ color: "red" }}>中文名称</a>,
+      title: () => <a style={{ color: "red" }}>中文名称</a>,
       dataIndex: "materialName",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
       hideInSearch: true,
       ellipsis: true,
       render: (text, record, index, key) => {
@@ -109,11 +109,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title:() => <a style={{ color: "red" }}>英文名称</a>,
+      title: () => <a style={{ color: "red" }}>英文名称</a>,
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
       ellipsis: true,
       hideInSearch: true,
       render: (text, record, index, key) => {
@@ -164,11 +164,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
       fixed: "left",
       // hideInSearch: true,
     },
-   
+
 
     {
       title: () => <a style={{ color: "red" }}>物料描述</a>,
@@ -212,13 +212,13 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "serial",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
       hideInSearch: true,
       render: (text, record, index, key) => {
         return (
           <input
             id={"serial" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{ border: "none", color: "red", textAlign: "center" }}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeSerial(document.getElementById("serial" + record.id).value, record.id)}
@@ -238,8 +238,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"basicQuantity" + record.id}
-            defaultValue={text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
+            defaultValue={text === "-" ? "" : text}
+            style={{ border: "none", color: "red", textAlign: "center", width: "100px"}}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeBasicQuantity(document.getElementById("basicQuantity" + record.id).value, record.id)}
           ></input>
@@ -270,7 +270,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"cartonsNumber" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -304,7 +304,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"weight" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -339,7 +339,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"boxesNumber" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -371,8 +371,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 200,
       hideInSearch: true,
     },
-  
-    
+
+
     {
       title: "盒ITF14码",
       dataIndex: "caseITF14",
@@ -392,8 +392,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-  
-    
+
+
 
     {
       title: "工厂",
@@ -441,7 +441,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"address" + record.id}
-            defaultValue={record.address}
+            defaultValue={record.address === "-" ? "" : record.address}
             style={{
               border: "none",
               color: "red",
@@ -468,13 +468,13 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "standard",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
       hideInSearch: true,
       render: (text, record, index, key) => {
         return (
           <input
             id={"standard" + record.id}
-            defaultValue={text}
+            defaultValue={text  === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -498,7 +498,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"examination" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -530,7 +530,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"boxWeight" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -554,7 +554,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"packingQuantity" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -578,7 +578,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"date" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -602,7 +602,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"threeC" + record.id}
-            defaultValue={text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -638,34 +638,34 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
 
-  
-
- //获取中文名称
- const changeMaterialName = async (value, id) => {
-  selectedObj.map((item, key) => {
-    if (item.id == id) {
-      item.materialName = value
-    }
-  })
-};
 
 
- //获取英文名称
- const changeMaterialDescription = async (value, id) => {
-  selectedObj.map((item, key) => {
-    if (item.id == id) {
-      item.materialDescription = value
-    }
-  })
-};
+  //获取中文名称
+  const changeMaterialName = async (value, id) => {
+    selectedObj.map((item, key) => {
+      if (item.id == id) {
+        item.materialName = value
+      }
+    })
+  };
+
+
+  //获取英文名称
+  const changeMaterialDescription = async (value, id) => {
+    selectedObj.map((item, key) => {
+      if (item.id == id) {
+        item.materialDescription = value
+      }
+    })
+  };
 
 
   //获取物料型号
   const changeMater = async (value, id) => {
-    
+
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        
+
         item.materialType = value
       }
     })
@@ -742,7 +742,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       }
     })
   };
-  
+
 
 
   //生产企业
@@ -800,7 +800,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       }
     })
   }
-  
+
 
 
 
@@ -818,11 +818,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //点击确认生成条码
   const confirm = async () => {
-    
+
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (selectedObj.length > 0 && Number(inputVal) > 0) {
-      
+
       let data2 = await generateBarCode({
         materialFactoryList: selectedObj,
         printDate: picker,
@@ -830,7 +830,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         userId: user.currentUser.id
       });
       if (data2.status == '200') {
-        
+
         handleModalVisible(true);
         setMaterialTypeList(data2.data)
       } else {
@@ -849,8 +849,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         bagged: false,
         materialId: params.materialId,
         materialType: params.materialType,
-        materialNo:params.materialNo,
-        typeDescription:params.typeDescription
+        materialNo: params.materialNo,
+        typeDescription: params.typeDescription
       },
       pageNum: params.current,
       pageSize: params.pageSize,

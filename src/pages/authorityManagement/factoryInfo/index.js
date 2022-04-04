@@ -45,6 +45,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
       align: "center",
       width: 150,
       initialValue: IsUpdate ? UpdateDate.factoryNo : "",
+      fixed: "left",
       formItemProps: {
         rules: [
           {

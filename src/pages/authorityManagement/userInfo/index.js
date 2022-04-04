@@ -50,6 +50,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       initialValue: IsUpdate ? UpdateDate.userNo : "",
+      fixed: "left",
       formItemProps: {
         rules: [
           {

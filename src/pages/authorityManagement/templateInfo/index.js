@@ -47,6 +47,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       align: "center",
       width: 120,
       initialValue: IsUpdate ? UpdateDate.tempNo : "",
+      fixed: "left",
       formItemProps: {
         rules: [
           {

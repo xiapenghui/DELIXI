@@ -1,5 +1,5 @@
 import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, InputNumber, Select, DatePicker } from "antd";
+import { Button, message, TimePicker, InputNumber, Select, DatePicker ,Tag } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -52,6 +52,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 150,
+      fixed: "left",
       hideInSearch: true,
       hideInForm: true,
     },
@@ -66,7 +67,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        
+
         if (type === 'form' || type === 'table') {
           return <Select
             allowClear
@@ -107,6 +108,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       hideInForm: true,
     },
 
+
+
     {
       title: "供应商SAP代码",
       dataIndex: "supplierSapCode",
@@ -117,7 +120,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       hideInSearch: true,
       hideInForm: true,
     },
-    
+
 
 
     {
@@ -165,6 +168,35 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       },
     },
 
+
+    {
+      title: "是否绑定",
+      dataIndex: "userSex",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      // initialValue: IsUpdate ? UpdateDate.userSex : "",
+      hideInForm: true,
+      valueEnum: ["否", "是"],
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "是否绑定不能为空!",
+          },
+        ],
+      },
+      render: (text, record) => {
+        let color = text === "否" ? "red" : "green";
+        return (
+          <Tag color={color}>
+            {text}
+          </Tag>
+        );
+      },
+    },
+
+
     {
       title: "中文名称",
       dataIndex: "materialName",
@@ -172,8 +204,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       align: "center",
       width: 200,
       hideInSearch: true,
-      hideInForm:true,
-      ellipsis:true,
+      hideInForm: true,
+      ellipsis: true,
       initialValue: IsUpdate ? UpdateDate.materialName : "",
     },
 

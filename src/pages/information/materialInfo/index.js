@@ -1,5 +1,5 @@
 import { PlusOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, Select } from "antd";
+import { Button, message, Select, AutoComplete } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -32,6 +32,8 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+
+ 
 
   const getColumns = () => [
     {
@@ -82,6 +84,35 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     },
 
 
+    // {
+    //   title: "商品编码",
+    //   dataIndex: "materialId",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 150,
+    //   hideInTable: true,
+    //   // ellipsis:true,
+    //   valueEnum: materialList.length == 0 ? {} : [materialList],
+    //   initialValue: IsUpdate ? UpdateDate.materialId : "",
+    //   renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+    //     if (type === 'form' || type === 'table') {
+    //       return <AutoComplete
+    //         style={{
+    //           width: 200,
+    //         }}
+    //         options={materialList}
+    //         placeholder="try to type `b`"
+    //         filterOption={(inputValue, option) =>
+    //           option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+    //         }
+    //       />
+    //     }
+    //     return defaultRender(_);
+    //   },
+    // },
+
+    
+
     {
       title: "中文名称",
       dataIndex: "materialName",
@@ -103,14 +134,14 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-    {
-      title: "商品编码",
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      // hideInSearch: true,
-    },
+    // {
+    //   title: "商品编码",
+    //   dataIndex: "materialType",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 200,
+    //   // hideInSearch: true,
+    // },
 
     {
       title: "物料描述",
@@ -346,11 +377,11 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
-        materialNo:params.materialNo,
+        materialNo: params.materialNo,
         materialId: params.materialId,
         materialType: params.materialType,
-        caseIEAN13:params.caseIEAN13,
-        supplierName:params.supplierName
+        caseIEAN13: params.caseIEAN13,
+        supplierName: params.supplierName
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -450,7 +481,9 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     let data = await exportMaterial({
       data: {
         materialId: document.getElementById("materialId").value,
-        materialType: document.getElementById("materialType").value
+        materialType: document.getElementById("materialType").value,
+        supplierName: document.getElementById("supplierName").value,
+        caseIEAN13: document.getElementById("caseIEAN13").value,
       },
       userId: user.currentUser.id
     });
@@ -464,7 +497,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     }
   };
 
- 
+
   return (
     <PageContainer>
       <ProTable
