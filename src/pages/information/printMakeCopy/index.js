@@ -854,13 +854,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9999999999B', "9999999999").
       replace('中文名称B', "家用交流电接触器")
     eval(heList)
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试盒码");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
-    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
-    LODOP.PRINT_DESIGN();
+    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
+    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试盒码");
+    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
+    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
+    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
     LODOP.PRINT_DESIGN();
   }
 
@@ -905,7 +905,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var materialList = data.data.materialList
-        var countList = data.data.countList
+        // var countList = data.data.countList
+
+        var nums = [];
+        data.data.countList.map((item) => {
+          nums.push("×" + item);
+        });
+        var countList = nums;
 
         var dataStringNew = []
         var printDateListNew = []
@@ -941,9 +947,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           .replaceAll("GB/t", materialListNew[0].standard)
           .replaceAll("系列123", materialListNew[0].serial)
           .replaceAll("上海灵娃", materialListNew[0].productionPlant)
-          .replaceAll("8888888888", materialListNew[0].caseIEAN13)
-          .replaceAll("9999999999", materialListNew[0].caseITF14)
-          .replaceAll("装盒", materialListNew[0].cartonsNumber)
+          .replaceAll("8888888888", materialListNew[0].boxIEAN13)
+          .replaceAll("9999999999", materialListNew[0].boxITF14)
+          .replaceAll("装箱", materialListNew[0].cartonsNumber)
           .replaceAll("箱重", materialListNew[0].bigBoxWeight)
           .replaceAll("中文名称", materialListNew[0].materialName)
           .replaceAll("箱盒数", materialListNew[0].oneLogo)
@@ -972,15 +978,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               replaceAll(materialListNew[i - 1].standard, materialListNew[i].standard).
               replaceAll(materialListNew[i - 1].serial, materialListNew[i].serial).
               replaceAll(materialListNew[i - 1].productionPlant, materialListNew[i].productionPlant).
-              replaceAll(materialListNew[i - 1].caseIEAN13, materialListNew[i].caseIEAN13).
-              replaceAll(materialListNew[i - 1].caseITF14, materialListNew[i].caseITF14).
+              replaceAll(materialListNew[i - 1].boxIEAN13, materialListNew[i].boxIEAN13).
+              replaceAll(materialListNew[i - 1].boxITF14, materialListNew[i].boxITF14).
               replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
               replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
               replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
               replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
-              replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
-
-            console.log('heList123', boxList)
+              replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+            // console.log('heList123', boxList)
             eval(boxList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
@@ -1035,12 +1040,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('系列123', "领航者").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
-    LODOP.ADD_PRINT_TEXT(0, 0, 160, 35, "测试箱码");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    LODOP.SET_PRINT_STYLEA(0, "ItemType", 0.2);
-    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    LODOP.SET_PRINT_STYLEA(0, "Repeat", true);
+    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
+    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试箱码");
+    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
+    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
+    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
+    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
+    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.PRINT_DESIGN();
     LODOP.PRINT_DESIGN();
   }
   // 箱---结束

@@ -40,14 +40,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
+   
     {
-      title: "物料代号",
-      dataIndex: "materialNo",
+      title: "物料描述",
+      dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 120,
-      fixed: "left",
-      // hideInSearch: true,
+      width: 200,
+      ellipsis: true,
+      hideInTable: true,
     },
 
     {
@@ -159,14 +160,15 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
 
     {
-      title: "物料描述",
-      dataIndex: "typeDescription",
+      title: "物料代号",
+      dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 200,
-      ellipsis: true,
-      hideInTable: true,
+      width: 120,
+      fixed: "left",
+      // hideInSearch: true,
     },
+   
 
     {
       title: () => <a style={{ color: "red" }}>物料描述</a>,

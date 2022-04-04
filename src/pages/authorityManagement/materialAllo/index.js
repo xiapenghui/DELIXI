@@ -155,6 +155,14 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "物料编码不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -164,7 +172,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       align: "center",
       width: 200,
       hideInSearch: true,
+      hideInForm:true,
       ellipsis:true,
+      initialValue: IsUpdate ? UpdateDate.materialName : "",
     },
 
 

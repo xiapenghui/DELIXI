@@ -40,15 +40,17 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
   
   const getColumns = () => [
+
     {
-      title: "物料代号",
-      dataIndex: "materialNo",
+      title: "物料描述",
+      dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 120,
-      fixed: "left",
+      width: 150,
+      ellipsis: true,
       // hideInSearch: true,
     },
+  
 
     {
       title: "供应商号",
@@ -164,13 +166,15 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       },
     },
 
+
+
     {
-      title: "物料描述",
-      dataIndex: "typeDescription",
+      title: "物料代号",
+      dataIndex: "materialNo",
       valueType: "text",
       align: "center",
-      width: 150,
-      ellipsis: true,
+      width: 120,
+      fixed: "left",
       // hideInSearch: true,
     },
 
