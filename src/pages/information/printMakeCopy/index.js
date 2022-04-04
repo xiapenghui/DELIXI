@@ -394,7 +394,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         materialId: values.materialId,
         batchNumber: values.batchNumber,
         materialNo: values.materialNo,
-        typeDescription:values.typeDescription,
+        typeDescription: values.typeDescription,
         state: 1,
       },
       pageNum: 1,
@@ -503,11 +503,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
-        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
+        typeDescription: document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var qrCodeList = data.data.qrCodeList
+        //替换默认只码固定值
         var zhiLeftList = content[0].replaceAll('9876543210', dataString[0]).replaceAll('1234567890', qrCodeList[0])
         if (dataString.length == 1) {
           eval(zhiLeftList)
@@ -575,12 +576,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9876543210', "3vob10A00030000011").
       replace('kjihgfedcba', "3vob10A00030000021")
     eval(zhiList)
-    LODOP.ADD_PRINT_TEXT(23,9,81,31,"测试只码");
-    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
-    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
-    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
-    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.ADD_PRINT_TEXT(23, 9, 81, 31, "测试只码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
   }
   // 只---结束
@@ -618,7 +619,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
-        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
+        typeDescription: document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200 && data.data.barCodeList.length > 0) {
         var dataString = data.data.barCodeList
@@ -626,13 +627,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var materialList = data.data.materialList
         // var countList = data.data.countList
         if (printTypeName.includes("双排")) {
-
+          //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
+          //中报条码类型错误
           var nums = []
           data.data.countList.map(item => {
             nums.push('×' + item)
           })
           var countList = nums
-          debugger
           var heLeftList = content[0].replaceAll('1234567890A', dataString[0])
             .replaceAll('2022-01-01A', printDateList[0])
             .replaceAll('装盒A', countList[0])
@@ -646,6 +647,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             .replaceAll("8888888888A", materialList[0].caseIEAN13)
             .replaceAll("9999999999A", materialList[0].caseITF14)
             .replaceAll("中文名称A", materialList[0].materialName);
+
+          //以下判断如果值为空或无，隐藏字段
           if (materialList[0].standard === "无" ||
             materialList[0].standard === "" ||
             materialList[0].standard === null) {
@@ -688,7 +691,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           for (let i = 2; i < dataString.length; i++) {
             LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
             if (i % 2 == 0) {
-              // 左边
+              // 左边 
               heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
                 .replaceAll(printDateList[i - 2], printDateList[i])
                 .replaceAll(countList[i - 2], countList[i])
@@ -854,13 +857,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9999999999B', "9999999999").
       replace('中文名称B', "家用交流电接触器")
     eval(heList)
-    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
-    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试盒码");
-    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
-    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
-    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
-    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试盒码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
   }
 
@@ -897,16 +900,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         barCode: document.getElementById("form_in_modal_barCode").value,
         batchNumber: document.getElementById("form_in_modal_batchNumber").value,
         materialNo: document.getElementById("form_in_modal_materialNo").value,
-        typeDescription:document.getElementById("form_in_modal_typeDescription").value,
+        typeDescription: document.getElementById("form_in_modal_typeDescription").value,
       });
       if (data.status == 200) {
         debugger
-
-        var dataString = data.data.barCodeList
+        var dataString = data.data.barCodeList.length
         var printDateList = data.data.printDateList
-        var materialList = data.data.materialList
+        var materialList = data.data.materialList 
         // var countList = data.data.countList
-
+        //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
+        //中报条码类型错误
         var nums = [];
         data.data.countList.map((item) => {
           nums.push("×" + item);
@@ -918,6 +921,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var countListNew = []
         var materialListNew = [];
 
+        //默认箱码打印两张，以下为循环两次
         dataStringNew = JSON.parse(JSON.stringify(dataString))
         dataString.map((item, index) => {
           dataStringNew.splice(index * 2, 0, item);
@@ -1040,13 +1044,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('系列123', "领航者").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
-    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
-    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试箱码");
-    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
-    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
-    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
-    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试箱码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
     LODOP.PRINT_DESIGN();
   }

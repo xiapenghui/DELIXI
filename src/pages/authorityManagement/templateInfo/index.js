@@ -1,5 +1,5 @@
 import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Select } from "antd";
+import { Button, message, DatePicker, Form, Input, Select, notification } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -38,6 +38,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [UpdateDate, setUpdateDate] = useState({});
   const [stringCode, setStringCode] = useState("");
   const [stringVal, setStringVal] = useState("");
+  const [stringAddVal, setStringAdddVal] = useState("");
 
   const getColumns = () => [
     {
@@ -116,8 +117,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
     {
       title: "设计模板",
-      dataIndex: "tempCode",
+      dataIndex: "NEWtempCode",
       align: "center",
+      valueType: "textarea",
       width: 200,
       hideInSearch: true,
       hideInTable: true,
@@ -143,16 +145,22 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       width: 200,
       ellipsis: true,
       hideInSearch: true,
-      // hideInForm:true
+      // hideInForm:true,
       initialValue: IsUpdate ? UpdateDate.tempCode : "",
-      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-      //   if (type === 'form') {
-      //     if (stringVal !== '') {
-      //       return  <textarea value={stringVal} row={3} className='ant-input'></textarea>
-      //     } 
-      //   }
-      //   return defaultRender(_);
-      // }
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form') {
+          if (IsUpdate == true) {
+            if (stringVal !== '') {
+              return <textarea value={stringVal} row={3} className='ant-input' disabled={true}></textarea>
+            } else {
+              return <textarea row={3} className='ant-input' disabled={true}></textarea>
+            }
+          } else {
+            return <textarea value={stringAddVal} row={3} className='ant-input' disabled={true}></textarea>
+          }
+        }
+        return defaultRender(_);
+      },
     },
 
 
@@ -254,10 +262,23 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     try {
-      let data = await addPost({ data: fields });
+      let data = await addPost(
+        // { data: fields }
+        {
+          data: {
+            tempNo: fields.tempNo,
+            tempName: fields.tempName,
+            tempType: fields.tempType,
+            tempCode: stringAddVal,
+            tempSize: fields.tempSize,
+            remarks: fields.remarks
+          }
+        }
+      );
       if (data.status == "200") {
         hide();
         message.success(data.message);
+        setStringAdddVal('')
         return true;
       } else {
         message.error(data.message);
@@ -277,7 +298,19 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     const hide = message.loading("正在编辑");
     console.log("handleUpdate", fields);
     try {
-      let data = await updatePut({ data: { id: UpdateDate.id, ...fields } });
+      let data = await updatePut(
+        {
+          data: {
+            id: UpdateDate.id,
+            tempNo: fields.tempNo,
+            tempName: fields.tempName,
+            tempType: fields.tempType,
+            tempCode: stringVal === "" ? fields.tempCode : stringVal,
+            tempSize: fields.tempSize,
+            remarks: fields.remarks
+            // ...fields
+          }
+        });
       if (data.status == "200") {
         hide();
         message.success(data.message);
@@ -360,6 +393,12 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
   const tempAdd = async () => {
     LodopFuncs.getLodop()
+    // eval(stringCode)
+    LODOP.On_Return = (TaskID, Value) => {
+
+      setStringAdddVal(Value)
+      message.info("模板已同步输入框，如需上传，请点击提交！")
+    }
     CreateOneFormPageAdd()
     LODOP.PRINT_DESIGN();
   }
@@ -371,11 +410,15 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
 
   const tempEdit = async () => {
+
     LodopFuncs.getLodop()
     console.log('stringCode', stringCode)
+    console.log('stringVal', stringVal)
     eval(stringCode)
     LODOP.On_Return = (TaskID, Value) => {
+
       setStringVal(Value)
+      message.info("模板已同步输入框，如需上传，请点击提交！")
     }
     LODOP.PRINT_DESIGN();
   }
