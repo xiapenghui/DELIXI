@@ -40,8 +40,8 @@ const Component = ({ userInfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
-
-
+  const [userNoExp, setUserNoExp] = useState("");
+  const [userNameExp, setUserNameExp] = useState("");
 
   const getColumns = () => [
     {
@@ -49,6 +49,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "userNo",
       valueType: "text",
       align: "center",
+      width: 150,
       initialValue: IsUpdate ? UpdateDate.userNo : "",
       fixed: "left",
       formItemProps: {
@@ -65,6 +66,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "account",
       valueType: "text",
       align: "center",
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.account : "",
       formItemProps: {
@@ -82,6 +84,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "userName",
       valueType: "text",
       align: "center",
+      width: 150,
       initialValue: IsUpdate ? UpdateDate.userName : "",
       formItemProps: {
         rules: [
@@ -97,6 +100,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "userSex",
       valueType: "text",
       align: "center",
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.userSex : "",
       valueEnum: ["男", "女"],
@@ -114,6 +118,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "position",
       valueType: "text",
       align: "center",
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.position : "",
       formItemProps: {
@@ -131,6 +136,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "factoryId",
       valueType: "text",
       align: "center",
+      width: 200,
       hideInSearch: true,
       valueEnum: factoryList.length == 0 ? {} : [factoryList],
       initialValue: IsUpdate ? UpdateDate.factoryId : "",
@@ -171,6 +177,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "roleId",
       valueType: "text",
       align: "center",
+      width: 200,
       hideInSearch: true,
       valueEnum: RoleList.length == 0 ? {} : [RoleList],
       initialValue: IsUpdate ? UpdateDate.roleId : "",
@@ -207,6 +214,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "remarks",
       valueType: "text",
       align: "center",
+      width: 200,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.remarks : "",
 
@@ -217,6 +225,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       dataIndex: "option",
       valueType: "option",
       align: "center",
+      width: 150,
       render: (_, record) => (
         <>
           <Popconfirm
@@ -249,13 +258,16 @@ const Component = ({ userInfo, dispatch, user }) => {
 
 
   const query = async (params, sorter, filter) => {
+    setUserNoExp(params.userNo)
+    setUserNameExp(params.userName)
+
     const TableList = postListInit({
       pageNum: params.current,
       pageSize: params.pageSize,
       data: {
         userNo: params.userNo,
         userName: params.userName,
-        // userId: user.currentUser.id
+        userId: user.currentUser.id
       },
     });
     return TableList.then(function (value) {
@@ -423,10 +435,11 @@ const Component = ({ userInfo, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
+
     let data = await exportUser({
       data: {
-        factoryNo: document.getElementById("userNo").value,
-        factoryName: document.getElementById("userName").value
+        userNo: userNoExp,
+        userName: userNameExp
       },
       userId: user.currentUser.id
     });

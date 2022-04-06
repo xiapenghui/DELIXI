@@ -1,5 +1,5 @@
 import { PlusOutlined , ArrowUpOutlined} from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input ,Tag } from "antd";
+import { Button, message, TimePicker, DatePicker, Input ,Tag ,Select  } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -17,7 +17,7 @@ import {
 } from "@/services/information/printRecord";
 
 const printRecordComponent = ({ printRecord, dispatch ,user}) => {
-  const { TableList, typeList, riskList, isNoList } = printRecord;
+  const { TableList, typeList, riskList, isNoList ,materialList} = printRecord;
   const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -28,6 +28,17 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+
+  const [materialNoExp, setMaterialNoExp] = useState("");
+  const [startDateExp, setStartDateExp] = useState("");
+  const [endDateExp, setEndDateExp] = useState("");
+  const [onlyBarCodeExp, setOnlyBarCodeExp] = useState("");
+  const [boxBarCodeExp, setBoxBarCodeExp] = useState("");
+  const [bigBoxBarCodeExp, setBigBoxBarCodeExp] = useState("");
+  const [materialIdExp, setMaterialIdExp] = useState("");
+
+
+
   const getColumns = () => [
 
     {
@@ -124,15 +135,34 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
     },
 
 
-
     {
       title: "商品编码",
-      dataIndex: "materialType",
+      dataIndex: "materialId",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 150,
+      hideInTable: true,
+      // ellipsis:true,
+      valueEnum: materialList.length == 0 ? {} : [materialList],
+      initialValue: IsUpdate ? UpdateDate.materialId : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {materialList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
     },
-
+    
     {
       title: "物料描述",
       dataIndex: "materialDescription",
@@ -183,12 +213,21 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
   ];
 
   const query = async (params, sorter, filter) => {
+
+    setMaterialNoExp(params.materialNo)
+    setStartDateExp(params.startDate)
+    setEndDateExp(params.endDate)
+    setOnlyBarCodeExp(params.onlyBarCode)
+    setBoxBarCodeExp(params.boxBarCode)
+    setBigBoxBarCodeExp(params.bigBoxBarCode)
+    setMaterialIdExp(params.materialId)
+
     const TableList = postListInit({
       data: {
         startDate: params.startDate,
         endDate: params.endDate,
         materialNo:params.materialNo,
-        materialType:params.materialType,
+        materialId:params.materialId,
         onlyBarCode:params.onlyBarCode,
         boxBarCode:params.boxBarCode,
         bigBoxBarCode:params.bigBoxBarCode
@@ -253,13 +292,13 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
    const handleExport = async () => {
     let data = await exportPrintInfoRecord({
       data: {
-        startDate: document.getElementById("startDate").value,
-        endDate: document.getElementById("endDate").value,
-        materialNo: document.getElementById("materialNo").value,
-        materialType: document.getElementById("materialType").value,
-        onlyBarCode: document.getElementById("onlyBarCode").value,
-        boxBarCode: document.getElementById("boxBarCode").value,
-        bigBoxBarCode: document.getElementById("bigBoxBarCode").value
+        startDate: startDateExp,
+        endDate: endDateExp,
+        materialNo: materialNoExp,
+        materialId: materialIdExp,
+        onlyBarCode:onlyBarCodeExp,
+        boxBarCode: boxBarCodeExp,
+        bigBoxBarCode: bigBoxBarCodeExp
       },
       userId: user.currentUser.id
     });

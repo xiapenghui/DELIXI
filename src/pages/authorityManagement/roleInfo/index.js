@@ -94,7 +94,7 @@ const Components = ({ roleInfo, dispatch }) => {
     });
   };
 
-  const handleAdd = (modalType) => {};
+  const handleAdd = (modalType) => { };
 
   const deleteHandler = () => {
     if (DeleteIdArray.length > 0) {
@@ -123,7 +123,7 @@ const Components = ({ roleInfo, dispatch }) => {
   const OperationButton = () => {
     return (
       <Row>
-        <Col span={24} style={{ textAlign: "right",background:"#fff",padding:"15px 20px 0 0"}}>
+        <Col span={24} style={{ textAlign: "right", background: "#fff", padding: "15px 20px 0 0" }}>
           <Button
             type="primary"
             onClick={() => handleModalShow("addModalVisible")}
@@ -230,7 +230,7 @@ const Components = ({ roleInfo, dispatch }) => {
   };
   console.log(`${TableName}-component`, TableModelsData, form);
   return (
-    <PageContainer  className="formStyleTbale">
+    <PageContainer className="formStyleTbale">
       <div className="formStyle">
         <Form
           className="ant-advanced-search-form"

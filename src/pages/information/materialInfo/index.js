@@ -33,7 +33,16 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
 
- 
+  const [materialNoExp, setMaterialNoExp] = useState("");
+  const [materialIdExp, setMaterialIdExp] = useState("");
+  const [materialTypeExp, setMaterialTypeExp] = useState("");
+  const [supplierNameExp, setSupplierNameExp] = useState("");
+  const [caseIEAN13Exp, setCaseIEAN13Exp] = useState("");
+
+
+
+
+
 
   const getColumns = () => [
     {
@@ -111,7 +120,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     //   },
     // },
 
-    
+
 
     {
       title: "中文名称",
@@ -375,7 +384,12 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
-    debugger
+    setMaterialNoExp(params.materialNo)
+    setMaterialIdExp(params.materialId)
+    setMaterialTypeExp(params.materialType)
+    setSupplierNameExp(params.supplierName)
+    setCaseIEAN13Exp(params.caseIEAN13)
+
     const TableList = postListInit({
       data: {
         materialNo: params.materialNo,
@@ -481,11 +495,11 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const handleExport = async () => {
     let data = await exportMaterial({
       data: {
-        materialNo: document.getElementById("materialNo").value,
-        materialId: document.getElementById("materialId").value,
-        materialType: document.getElementById("materialType").value,
-        supplierName: document.getElementById("supplierName").value,
-        caseIEAN13: document.getElementById("caseIEAN13").value,
+        materialNo: materialNoExp,
+        materialId: materialIdExp,
+        materialType: materialTypeExp,
+        supplierName: supplierNameExp,
+        caseIEAN13: caseIEAN13Exp,
       },
       userId: user.currentUser.id
     });

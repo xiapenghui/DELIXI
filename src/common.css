@@ -16,6 +16,14 @@
  }
 
  .formStyleTbale .ant-table-content {
-    height: 53vh !important;
+    height: 50vh !important;
     overflow-y: auto !important;
  }
+
+
+ @media screen and (max-width: 1500px){
+    .formStyleTbale .ant-table-content {
+        height: 40vh !important;
+        overflow-y: auto !important;
+     }
+}

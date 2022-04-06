@@ -29,11 +29,14 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
   const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
+
   /**
    * 编辑初始化
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+  const [factoryNoExp, setFactoryNoExp] = useState("");
+  const [factoryNameExp, setFactoryNameExp] = useState("");
 
   const getColumns = () => [
 
@@ -162,6 +165,7 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
       dataIndex: "remarks",
       valueType: "textarea",
       align: "center",
+      width: 200,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.remarks : "",
     },
@@ -189,6 +193,8 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
+    setFactoryNoExp(params.factoryNo)
+    setFactoryNameExp(params.factoryName)
     const TableList = postListInit({
       data: {
         factoryNo: params.factoryNo,
@@ -298,11 +304,10 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
-    
     let data = await exportFactory({
       data: {
-        factoryNo: document.getElementById("factoryNo").value,
-        factoryName: document.getElementById("factoryName").value
+        factoryNo: factoryNoExp,
+        factoryName: factoryNameExp
       },
       userId: user.currentUser.id
     });

@@ -1,5 +1,5 @@
 import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, TimePicker, InputNumber, Select, DatePicker ,Tag } from "antd";
+import { Button, message, TimePicker, InputNumber, Select, DatePicker, Tag } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -44,7 +44,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
 
-  const [factoryIdExp , setFactoryIdExp] =useState("")
+  const [factoryIdExp, setFactoryIdExp] = useState("")
+  const [materialIdExp, setMaterialIdExp] = useState("")
 
 
   const getColumns = () => [
@@ -479,6 +480,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
   const query = async (params, sorter, filter) => {
     setFactoryIdExp(params.factoryId)
+    setMaterialIdExp(params.materialId)
     const TableList = postListInit({
       data: {
         factoryId: params.factoryId,
@@ -618,7 +620,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     let data = await exportMaterialFactory({
       data: {
         factoryId: factoryIdExp,
-        materialId: document.getElementById("materialId").value
+        materialId: materialIdExp
       },
       userId: user.currentUser.id
     });

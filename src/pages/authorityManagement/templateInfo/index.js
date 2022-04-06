@@ -39,7 +39,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [stringCode, setStringCode] = useState("");
   const [stringVal, setStringVal] = useState("");
   const [stringAddVal, setStringAdddVal] = useState("");
-
+  const [tempNoExp, setTempNoExp] = useState("");
+  const [tempNameExp, setTempNameExp] = useState("");
+ 
   const getColumns = () => [
     {
       title: "模板编号",
@@ -235,6 +237,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
+    setTempNoExp(params.tempNo)
+    setTempNameExp(params.tempName)
+ 
     const TableList = postListInit({
       data: {
         tempNo: params.tempNo,
@@ -374,8 +379,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const handleExport = async () => {
     let data = await exportTemp({
       data: {
-        factoryNo: document.getElementById("tempNo").value,
-        factoryName: document.getElementById("tempName").value
+        tempNo: tempNoExp,
+        tempName: tempNameExp
       },
       userId: user.currentUser.id
     });

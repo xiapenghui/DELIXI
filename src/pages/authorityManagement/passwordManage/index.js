@@ -37,6 +37,7 @@ const Component = ({ passwordManage, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
+  const [dateTimeExp, setDateTime] = useState("");
 
   const getColumns = () => [
 
@@ -122,6 +123,7 @@ const Component = ({ passwordManage, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
+    setDateTime(params.dateTime)
     const TableList = postListInit({
       data: {
         dateTime: params.dateTime
@@ -236,7 +238,7 @@ const Component = ({ passwordManage, dispatch, user }) => {
   const handleExport = async () => {
     let data = await exportPasswordRules({
       data: {
-        dateTime: document.getElementById("dateTime").value
+        dateTime: dateTimeExp
       },
       userId: user.currentUser.id
     });
