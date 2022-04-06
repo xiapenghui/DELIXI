@@ -385,23 +385,21 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   //查询封装公用参数
-  const params = (values) => {
-    return {
-      data: {
-        startDate: moment(values.startDate).format(globalConfig.form.onlyDateFormat),
-        endDate: moment(values.endDate).format(globalConfig.form.onlyDateFormat),
-        barCode: values.barCode,
-        materialId: values.materialId,
-        batchNumber: values.batchNumber,
-        materialNo: values.materialNo,
-        typeDescription: values.typeDescription,
-        state: 1,
-      },
-      pageNum: 1,
-      pageSize: 100000,
-      userId: user.currentUser.id
-    }
-  }
+  // const params = (values) => {
+  //   return {
+  //     data: {
+  //       barCode: values.barCode,
+  //       materialId: values.materialId,
+  //       batchNumber: values.batchNumber,
+  //       materialNo: values.materialNo,
+  //       typeDescription: values.typeDescription,
+  //       state: 1,
+  //     },
+  //     pageNum: 1,
+  //     pageSize: 100000,
+  //     userId: user.currentUser.id
+  //   }
+  // }
 
 
   //   @param 只条码 handleSearch 搜索
@@ -412,7 +410,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         if (values.materialId === undefined) {
           message.warning('请先选择商品编码')
         } else {
-          let data = await getOnlyBarCodeList(params(values));
+          let data = await getOnlyBarCodeList(
+            {
+              data: {
+                startDate: moment(values.startDate1).format(globalConfig.form.onlyDateFormat),
+                endDate: moment(values.endDate1).format(globalConfig.form.onlyDateFormat),
+                barCode: values.barCode,
+                materialId: values.materialId,
+                batchNumber: values.batchNumber,
+                materialNo: values.materialNo,
+                typeDescription: values.typeDescription,
+                state: 1,
+              },
+              pageNum: 1,
+              pageSize: 100000,
+              userId: user.currentUser.id
+            }
+          );
           if (data.status === 200) {
             setDataSource1(data.data.list);
             setZhiString(data.data.tempCode);
@@ -431,7 +445,22 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         if (values.materialId === undefined) {
           message.warning('请先选择商品编码')
         } else {
-          let data = await getBoxBarCodeList(params(values));
+          let data = await getBoxBarCodeList(
+            {
+              data: {
+                startDate: moment(values.startDate2).format(globalConfig.form.onlyDateFormat),
+                endDate: moment(values.endDate2).format(globalConfig.form.onlyDateFormat),
+                barCode: values.barCode,
+                materialId: values.materialId,
+                batchNumber: values.batchNumber,
+                materialNo: values.materialNo,
+                typeDescription: values.typeDescription,
+                state: 1,
+              },
+              pageNum: 1,
+              pageSize: 100000,
+              userId: user.currentUser.id
+          });
           if (data.status === 200) {
             setDataSource2(data.data.list);
             setHeString(data.data.tempCode);
@@ -452,7 +481,21 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         if (values.materialId === undefined) {
           message.warning('请先选择商品编码')
         } else {
-          let data = await getBigBoxBarCodeList(params(values));
+          let data = await getBigBoxBarCodeList({
+              data: {
+                startDate: moment(values.startDate3).format(globalConfig.form.onlyDateFormat),
+                endDate: moment(values.endDate3).format(globalConfig.form.onlyDateFormat),
+                barCode: values.barCode,
+                materialId: values.materialId,
+                batchNumber: values.batchNumber,
+                materialNo: values.materialNo,
+                typeDescription: values.typeDescription,
+                state: 1,
+              },
+              pageNum: 1,
+              pageSize: 100000,
+              userId: user.currentUser.id
+          });
           if (data.status === 200) {
             if (data.data.threeC === "0") {
               setNewImage('')
@@ -494,10 +537,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         materialId: materialId1,
         state: 1,
         userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+        startDate: moment(document.getElementById("form_in_modal_startDate1").value).format(
           globalConfig.form.onlyDateFormat
         ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+        endDate: moment(document.getElementById("form_in_modal_endDate1").value).format(
           globalConfig.form.onlyDateFormat
         ),
         barCode: document.getElementById("form_in_modal_barCode").value,
@@ -605,15 +648,17 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       } else {
         content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
       }
+      debugger
+
       let data = await printBarCode({
         barCodeType: 2,
         materialId: materialId2,
         state: 1,
         userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+        startDate: moment(document.getElementById("form_in_modal_startDate2").value).format(
           globalConfig.form.onlyDateFormat
         ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+        endDate: moment(document.getElementById("form_in_modal_endDate2").value).format(
           globalConfig.form.onlyDateFormat
         ),
         barCode: document.getElementById("form_in_modal_barCode").value,
@@ -891,10 +936,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         materialId: materialId3,
         state: 1,
         userId: user.currentUser.id,
-        startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+        startDate: moment(document.getElementById("form_in_modal_startDate3").value).format(
           globalConfig.form.onlyDateFormat
         ),
-        endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+        endDate: moment(document.getElementById("form_in_modal_endDate3").value).format(
           globalConfig.form.onlyDateFormat
         ),
         barCode: document.getElementById("form_in_modal_barCode").value,
@@ -906,7 +951,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         debugger
         var dataString = data.data.barCodeList.length
         var printDateList = data.data.printDateList
-        var materialList = data.data.materialList 
+        var materialList = data.data.materialList
         // var countList = data.data.countList
         //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
         //中报条码类型错误
@@ -1101,15 +1146,15 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form1}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              startDate1: moment().subtract("years"),
+              endDate1: moment().endOf('day')
             }}
           >
             <Row>
 
               <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
-                  name="startDate"
+                  name="startDate1"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1121,7 +1166,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
-                  name="endDate"
+                  name="endDate1"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1237,14 +1282,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form2}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              startDate2: moment().subtract("years"),
+              endDate2: moment().endOf('day')
             }}
           >
             <Row>
               <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
-                  name="startDate"
+                  name="startDate2"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1256,7 +1301,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
-                  name="endDate"
+                  name="endDate2"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1372,14 +1417,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             form={form3}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf('day')
+              startDate3: moment().subtract("years"),
+              endDate3: moment().endOf('day')
             }}
           >
             <Row>
               <Col span={5} style={{ display: 'block' }} >
                 <Form.Item
-                  name="startDate"
+                  name="startDate3"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1391,7 +1436,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
               <Col span={5} style={{ display: 'block' }}>
                 <Form.Item
-                  name="endDate"
+                  name="endDate3"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}

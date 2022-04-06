@@ -407,28 +407,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     },
   };
 
-  //查询封装公用参数
-  const params = (values) => {
-    return {
-      data: {
-        startDate: moment(values.startDate).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        endDate: moment(values.endDate).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        barCode: values.barCode,
-        materialId: values.materialId,
-        batchNumber: values.batchNumber,
-        materialNo: values.materialNo,
-        typeDescription: values.typeDescription,
-        state: 2,
-      },
-      pageNum: 1,
-      pageSize: 100000,
-      userId: user.currentUser.id,
-    };
-  };
 
   //   @param 只条码 handleSearch 搜索
   const zhiSearch = (e) => {
@@ -436,7 +414,27 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (values.materialId === undefined) {
         message.warning('请先选择商品编码')
       } else {
-        let data = await getOnlyBarCodeList(params(values));
+        let data = await getOnlyBarCodeList(
+          {
+            data: {
+              startDate: moment(values.startDate1).format(
+                globalConfig.form.onlyDateFormat
+              ),
+              endDate: moment(values.endDate1).format(
+                globalConfig.form.onlyDateFormat
+              ),
+              barCode: values.barCode,
+              materialId: values.materialId,
+              batchNumber: values.batchNumber,
+              materialNo: values.materialNo,
+              typeDescription: values.typeDescription,
+              state: 2,
+            },
+            pageNum: 1,
+            pageSize: 100000,
+            userId: user.currentUser.id,
+          }
+        );
         if (data.status === 200) {
           setDataSource1(data.data.list);
           setZhiString(data.data.tempCode);
@@ -453,7 +451,25 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (values.materialId === undefined) {
         message.warning('请先选择商品编码')
       } else {
-        let data = await getBoxBarCodeList(params(values));
+        let data = await getBoxBarCodeList({
+          data: {
+            startDate: moment(values.startDate2).format(
+              globalConfig.form.onlyDateFormat
+            ),
+            endDate: moment(values.endDate2).format(
+              globalConfig.form.onlyDateFormat
+            ),
+            barCode: values.barCode,
+            materialId: values.materialId,
+            batchNumber: values.batchNumber,
+            materialNo: values.materialNo,
+            typeDescription: values.typeDescription,
+            state: 2,
+          },
+          pageNum: 1,
+          pageSize: 100000,
+          userId: user.currentUser.id,
+        });
         if (data.status === 200) {
           setDataSource2(data.data.list);
           setHeString(data.data.tempCode);
@@ -470,7 +486,27 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (values.materialId === undefined) {
         message.warning('请先选择商品编码')
       } else {
-        let data = await getBigBoxBarCodeList(params(values));
+        let data = await getBigBoxBarCodeList(
+         {
+          data: {
+            startDate: moment(values.startDate3).format(
+              globalConfig.form.onlyDateFormat
+            ),
+            endDate: moment(values.endDate3).format(
+              globalConfig.form.onlyDateFormat
+            ),
+            barCode: values.barCode,
+            materialId: values.materialId,
+            batchNumber: values.batchNumber,
+            materialNo: values.materialNo,
+            typeDescription: values.typeDescription,
+            state: 2,
+          },
+          pageNum: 1,
+          pageSize: 100000,
+          userId: user.currentUser.id,
+         }
+        );
         if (data.status === 200) {
           if (data.data.threeC === "0") {
             setNewImage("");
@@ -510,10 +546,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           materialId: materialId1,
           state: 2,
           userId: user.currentUser.id,
-          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+          startDate: moment(document.getElementById("form_in_modal_startDate1").value).format(
             globalConfig.form.onlyDateFormat
           ),
-          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+          endDate: moment(document.getElementById("form_in_modal_endDate1").value).format(
             globalConfig.form.onlyDateFormat
           ),
           barCode: document.getElementById("form_in_modal_barCode").value,
@@ -651,10 +687,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           materialId: materialId2,
           state: 2,
           userId: user.currentUser.id,
-          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+          startDate: moment(document.getElementById("form_in_modal_startDate2").value).format(
             globalConfig.form.onlyDateFormat
           ),
-          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+          endDate: moment(document.getElementById("form_in_modal_endDate2").value).format(
             globalConfig.form.onlyDateFormat
           ),
           barCode: document.getElementById("form_in_modal_barCode").value,
@@ -933,13 +969,13 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       .replace("9999999999B", "9999999999")
       .replace("中文名称B", "家用交流电接触器");
     eval(heList);
-    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
-    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试盒码");
-    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
-    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
-    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
-    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试盒码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
   };
 
@@ -963,10 +999,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           materialId: materialId3,
           state: 2,
           userId: user.currentUser.id,
-          startDate: moment(document.getElementById("form_in_modal_startDate").value).format(
+          startDate: moment(document.getElementById("form_in_modal_startDate3").value).format(
             globalConfig.form.onlyDateFormat
           ),
-          endDate: moment(document.getElementById("form_in_modal_endDate").value).format(
+          endDate: moment(document.getElementById("form_in_modal_endDate3").value).format(
             globalConfig.form.onlyDateFormat
           ),
           barCode: document.getElementById("form_in_modal_barCode").value,
@@ -1140,13 +1176,13 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         `<img src='${ip}/DLX_OEM/api/3c.png'>`
       );
     eval(boxList);
-    LODOP.ADD_PRINT_LINE("36.99mm","43.89mm","36.99mm","92.1mm",0,1);
-    LODOP.ADD_PRINT_TEXT(57,53,115,35,"测试箱码");
-    LODOP.SET_PRINT_STYLEA(0,"FontName","华文彩云");
-    LODOP.SET_PRINT_STYLEA(0,"FontSize",12);
-    LODOP.SET_PRINT_STYLEA(0,"FontColor","#EEC591");
-    LODOP.SET_PRINT_STYLEA(0,"Angle",20);
-    LODOP.SET_PRINT_STYLEA(0,"Repeat",1);
+    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试箱码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
     LODOP.PRINT_DESIGN();
   };
   // 箱---结束
@@ -1190,14 +1226,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form1}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf("day"),
+              startDate1: moment().subtract("years"),
+              endDate1: moment().endOf("day"),
             }}
           >
             <Row>
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="startDate"
+                  name="startDate1"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1212,7 +1248,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="endDate"
+                  name="endDate1"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1380,14 +1416,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form2}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf("day"),
+              startDate2: moment().subtract("years"),
+              endDate2: moment().endOf("day"),
             }}
           >
             <Row>
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="startDate"
+                  name="startDate2"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1402,7 +1438,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="endDate"
+                  name="endDate2"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1561,14 +1597,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             form={form3}
             name="form_in_modal"
             initialValues={{
-              startDate: moment().subtract("years"),
-              endDate: moment().endOf("day"),
+              startDate3: moment().subtract("years"),
+              endDate3: moment().endOf("day"),
             }}
           >
             <Row>
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="startDate"
+                  name="startDate3"
                   label="开始时间"
                   hasFeedback
                   {...formItemLayout2}
@@ -1583,7 +1619,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
               <Col span={5} style={{ display: "block" }}>
                 <Form.Item
-                  name="endDate"
+                  name="endDate3"
                   label="结束时间"
                   hasFeedback
                   {...formItemLayout2}

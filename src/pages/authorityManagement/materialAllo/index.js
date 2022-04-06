@@ -44,6 +44,9 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
 
+  const [factoryIdExp , setFactoryIdExp] =useState("")
+
+
   const getColumns = () => [
 
     {
@@ -134,7 +137,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     },
 
     {
-      title: "物料编码",
+      title: "商品编码",
       dataIndex: "materialId",
       valueType: "text",
       align: "center",
@@ -162,7 +165,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         rules: [
           {
             required: true,
-            message: "物料编码不能为空!",
+            message: "商品编码不能为空!",
           },
         ],
       },
@@ -211,7 +214,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
     {
-      title: "物料编码",
+      title: "商品编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
@@ -475,6 +478,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
   const query = async (params, sorter, filter) => {
+    setFactoryIdExp(params.factoryId)
     const TableList = postListInit({
       data: {
         factoryId: params.factoryId,
@@ -610,10 +614,11 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
+    debugger
     let data = await exportMaterialFactory({
       data: {
-        factoryNo: document.getElementById("factoryId").value,
-        factoryName: document.getElementById("materialId").value
+        factoryId: factoryIdExp,
+        materialId: document.getElementById("materialId").value
       },
       userId: user.currentUser.id
     });

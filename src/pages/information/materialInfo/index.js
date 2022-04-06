@@ -134,14 +134,14 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-    // {
-    //   title: "商品编码",
-    //   dataIndex: "materialType",
-    //   valueType: "text",
-    //   align: "center",
-    //   width: 200,
-    //   // hideInSearch: true,
-    // },
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      // hideInSearch: true,
+    },
 
     {
       title: "物料描述",
@@ -375,6 +375,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
+    debugger
     const TableList = postListInit({
       data: {
         materialNo: params.materialNo,
@@ -480,6 +481,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const handleExport = async () => {
     let data = await exportMaterial({
       data: {
+        materialNo: document.getElementById("materialNo").value,
         materialId: document.getElementById("materialId").value,
         materialType: document.getElementById("materialType").value,
         supplierName: document.getElementById("supplierName").value,
