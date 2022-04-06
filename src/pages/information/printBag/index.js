@@ -1,4 +1,4 @@
-import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
+import { PlusOutlined, SnippetsOutlined ,ArrowDownOutlined} from "@ant-design/icons";
 import { Button, message, DatePicker, Form, Input, Select, Radio } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
@@ -23,21 +23,20 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
-  const [bagString, setBagString] = useState('')
+
   const [noStart, setNoStart] = useState('')
   const [bagID, setBagID] = useState([])
   /**
    * 编辑初始化
    */
   const [IsUpdate, setIsUpdate] = useState(false);
-  const [UpdateDate, setUpdateDate] = useState({});
-
+ 
   const [materialType1, setMaterialType1] = useState('')
   const [cartonsNumber1, setCartonsNumber1] = useState('')
   const [boxWeight1, setBoxWeight1] = useState('')
   const [packingQuantity1, setPackingQuantity1] = useState('')
   const [threeC1, setThreeC1] = useState('')
-
+  const [bagString, setBagString] = useState('')
   
   const getColumns = () => [
 
@@ -88,45 +87,47 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title: () => <a style={{ color: "red" }}>中文名称</a>,
+      title: "中文名称",
+      // title: () => <a style={{ color: "red" }}>中文名称</a>,
       dataIndex: "materialName",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
       ellipsis: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialName" + record.id}
-            defaultValue={record.materialName}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialName(document.getElementById("materialName" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"materialName" + record.id}
+      //       defaultValue={record.materialName}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeMaterialName(document.getElementById("materialName" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
-      title: () => <a style={{ color: "red" }}>英文名称</a>,
+      title:"英文名称",
+      // title: () => <a style={{ color: "red" }}>英文名称</a>,
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
       width: 200,
       ellipsis: true,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialDescription" + record.id}
-            defaultValue={record.materialDescription}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialDescription(document.getElementById("materialDescription" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"materialDescription" + record.id}
+      //       defaultValue={record.materialDescription}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeMaterialDescription(document.getElementById("materialDescription" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -140,23 +141,24 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>商品编码</a>,
+      title:"商品编码",
+      // title: () => <a style={{ color: "red" }}>商品编码</a>,
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialType" + record.id}
-            defaultValue={text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"materialType" + record.id}
+      //       defaultValue={text}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -171,24 +173,25 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>物料描述</a>,
+      title:"物料描述",
+      // title: () => <a style={{ color: "red" }}>物料描述</a>,
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
       width: 200,
       ellipsis: true,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"typeDescription" + record.id}
-            defaultValue={record.typeDescription}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"typeDescription" + record.id}
+      //       defaultValue={record.typeDescription}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -208,43 +211,45 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title: () => <a style={{ color: "red" }}>系列</a>,
+      title: "系列",
+      // title: () => <a style={{ color: "red" }}>系列</a>,
       dataIndex: "serial",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"serial" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeSerial(document.getElementById("serial" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"serial" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeSerial(document.getElementById("serial" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
-      title: () => <a style={{ color: "red" }}>装袋数量</a>,
+      title: "装袋数量",
+      // title: () => <a style={{ color: "red" }}>装袋数量</a>,
       dataIndex: "basicQuantity",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"basicQuantity" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{ border: "none", color: "red", textAlign: "center", width: "100px"}}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBasicQuantity(document.getElementById("basicQuantity" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"basicQuantity" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{ border: "none", color: "red", textAlign: "center", width: "100px"}}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeBasicQuantity(document.getElementById("basicQuantity" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -260,28 +265,29 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>装盒数量</a>,
+      title:"装盒数量",
+      // title: () => <a style={{ color: "red" }}>装盒数量</a>,
       dataIndex: "cartonsNumber",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"cartonsNumber" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"cartonsNumber" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -294,28 +300,29 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title: () => <a style={{ color: "red" }}>盒重量</a>,
+      title: "盒重量",
+      // title: () => <a style={{ color: "red" }}>盒重量</a>,
       dataIndex: "weight",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"weight" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeWeight(document.getElementById("weight" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"weight" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeWeight(document.getElementById("weight" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -335,22 +342,22 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"boxesNumber" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxesNumber(document.getElementById("boxesNumber" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"boxesNumber" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeBoxesNumber(document.getElementById("boxesNumber" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {
@@ -405,54 +412,56 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
     {
-      title: () => <a style={{ color: "red" }}>生产厂/生产企业</a>,
+      title: "生产企业",
+      // title: () => <a style={{ color: "red" }}>生产企业</a>,
       dataIndex: "productionPlant",
       valueType: "text",
       align: "center",
       width: 250,
       ellipsis: true,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"productionPlant" + record.id}
-            defaultValue={record.productionPlant}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "200px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeProductionPlant(document.getElementById("productionPlant" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"productionPlant" + record.id}
+      //       defaultValue={record.productionPlant}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "200px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeProductionPlant(document.getElementById("productionPlant" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
-      title: () => <a style={{ color: "red" }}>地址</a>,
+      title:"地址",
+      // title: () => <a style={{ color: "red" }}>地址</a>,
       dataIndex: "address",
       valueType: "text",
       align: "center",
       ellipsis: true,
       width: 250,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"address" + record.id}
-            defaultValue={record.address === "-" ? "" : record.address}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "200px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeAddress(document.getElementById("address" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"address" + record.id}
+      //       defaultValue={record.address === "-" ? "" : record.address}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "200px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeAddress(document.getElementById("address" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
       title: "备注",
@@ -464,52 +473,54 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
     {
-      title: () => <a style={{ color: "red" }}>执行标准</a>,
+      title: "执行标准",
+      // title: () => <a style={{ color: "red" }}>执行标准</a>,
       dataIndex: "standard",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"standard" + record.id}
-            defaultValue={text  === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeStandard(document.getElementById("standard" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"standard" + record.id}
+      //       defaultValue={text  === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeStandard(document.getElementById("standard" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
-      title: () => <a style={{ color: "red" }}>检验员</a>,
+      title: "检验员",
+      // title: () => <a style={{ color: "red" }}>检验员</a>,
       dataIndex: "examination",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"examination" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeExamination(document.getElementById("examination" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"examination" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeExamination(document.getElementById("examination" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
       title: "变更标记",
@@ -520,100 +531,104 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
     {
-      title: () => <a style={{ color: "red" }}>箱重量</a>,
+      title: "箱重量",
+      // title: () => <a style={{ color: "red" }}>箱重量</a>,
       dataIndex: "boxWeight",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"boxWeight" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"boxWeight" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
-      title: () => <a style={{ color: "red" }}>装箱数量</a>,
+      title: "装箱数量",
+      // title: () => <a style={{ color: "red" }}>装箱数量</a>,
       dataIndex: "packingQuantity",
       valueType: "text",
       align: "center",
       width: 150,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"packingQuantity" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"packingQuantity" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
-      title: () => <a style={{ color: "red" }}>生产日期</a>,
+      title: "生产日期",
+      // title: () => <a style={{ color: "red" }}>生产日期</a>,
       dataIndex: "date",
       valueType: "text",
       align: "center",
       width: 180,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"date" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeDate(document.getElementById("date" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"date" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeDate(document.getElementById("date" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
     {
-      title: () => <a style={{ color: "red" }}>3C</a>,
+      title:"3C",
+      // title: () => <a style={{ color: "red" }}>3C</a>,
       dataIndex: "threeC",
       valueType: "text",
       align: "center",
       width: 120,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"threeC" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"threeC" + record.id}
+      //       defaultValue={text === "-" ? "" : text}
+      //       style={{
+      //         border: "none",
+      //         color: "red",
+      //         textAlign: "center",
+      //         width: "100px",
+      //       }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     // {
@@ -966,6 +981,54 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
 
+
+   //测试袋模板
+   const bagCodeTest = () => {
+    LodopFuncs.getLodop();
+    var bagList = bagString
+      .replace("1234567890A", "1234567890")
+      .replace("2022-01-01A", "2022-01-01")
+      .replace("物料型号A", "CDCH6i16201N")
+      .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
+      .replace("装盒A", "×10")
+      .replace("检02A", "检02")
+      .replace("GB/tA", "GB/t")
+      .replace("浙江省A", "浙江省")
+      .replace("上海灵娃A", "上海灵娃")
+      .replace("系列A", "系列")
+      .replace("系列123A", "领航者")
+      .replace("8888888888A", "8888888888")
+      .replace("9999999999A", "9999999999")
+      .replace("中文名称A", "家用交流电接触器")
+      .replace("箱盒数", "S")
+      .replace("1234567890B", "1234567890")
+      .replace("2022-01-01B", "2022-01-01")
+      .replace("物料型号B", "CDCH6i16201N")
+      .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
+      .replace("装盒B", "×10")
+      .replace("检02B", "检02")
+      .replace("GB/tB", "GB/t")
+      .replace("浙江省B", "浙江省")
+      .replace("上海灵娃B", "上海灵娃")
+      .replace("系列B", "系列")
+      .replace("系列123B", "领航者")
+      .replace("8888888888B", "8888888888")
+      .replace("9999999999B", "9999999999")
+      .replace("中文名称B", "家用交流电接触器");
+    eval(bagList);
+    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
+    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
+    LODOP.PRINT_DESIGN();
+  };
+
+
+
+
   return (
     <PageContainer>
       <ProTable
@@ -995,7 +1058,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           </Form.Item>,
 
           <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCode}>袋码模板</Button>,
-          <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBagCode}><SnippetsOutlined />点击打印</Button>
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBagCode}><ArrowDownOutlined />点击打印</Button>,
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCodeTest}>测试袋码</Button>
 
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
@@ -1036,36 +1100,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       )} */}
 
 
-
-      {UpdateDate && Object.keys(UpdateDate).length ? (
-        <UpdateForm
-          onCancel={() => {
-            setUpdateDate({}); //编辑modal一旦关闭就必须setUpdateDate
-            setIsUpdate(false);
-            handleUpdateModalVisible(false);
-          }}
-          modalVisible={updateModalVisible}
-          title="编辑"
-        >
-          <ProTable
-            onSubmit={async (value) => {
-              const success = await handleUpdate(value);
-
-              if (success) {
-                handleUpdateModalVisible(false);
-                setUpdateDate({});
-                setIsUpdate(false);
-                if (actionRef.current) {
-                  actionRef.current.reload();
-                }
-              }
-            }}
-            rowKey="id"
-            type="form"
-            columns={getColumns()}
-          />
-        </UpdateForm>
-      ) : null}
+ 
     </PageContainer>
   );
 };

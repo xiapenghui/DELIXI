@@ -20,9 +20,9 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
-} from "@/services/authorityManagement/materialAllo";
+} from "@/services/authorityManagement/materialMain";
 
-const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
+const materialMainComponent = ({ materialMain, dispatch, user }) => {
   const { currentUser } = user;
 
   const {
@@ -32,7 +32,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     boxTempList,
     bigBoxTempList,
     bagTempList
-  } = materialAllo;
+  } = materialMain;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [importModalVisible, handleImportModalVisible] = useState(false);
@@ -171,6 +171,35 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         ],
       },
     },
+
+
+    {
+      title: "是否绑定",
+      dataIndex: "userSex",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      // initialValue: IsUpdate ? UpdateDate.userSex : "",
+      hideInForm: true,
+      valueEnum: ["否", "是"],
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "是否绑定不能为空!",
+          },
+        ],
+      },
+      render: (text, record) => {
+        let color = text === "否" ? "red" : "green";
+        return (
+          <Tag color={color}>
+            {text}
+          </Tag>
+        );
+      },
+    },
+
 
     {
       title: "中文名称",
@@ -730,8 +759,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
   );
 };
 
-export default connect(({ materialAllo, user }) => ({ materialAllo, user }))(
-  materialAlloComponent
+export default connect(({ materialMain, user }) => ({ materialMain, user }))(
+  materialMainComponent
 );
 
 

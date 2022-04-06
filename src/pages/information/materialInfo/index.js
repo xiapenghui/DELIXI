@@ -38,10 +38,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
   const [materialTypeExp, setMaterialTypeExp] = useState("");
   const [supplierNameExp, setSupplierNameExp] = useState("");
   const [caseIEAN13Exp, setCaseIEAN13Exp] = useState("");
-
-
-
-
+  const [ArrID, setArrID] = useState([]);
 
 
   const getColumns = () => [
@@ -489,12 +486,19 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
     }
   };
 
-
+  //多选
+  const rowSelectionAll = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setArrID(selectedRowKeys)
+    },
+  };
 
   //导出
-  const handleExport = async () => {
+  const handleExport = async (selectedRowsState) => {
+    debugger
     let data = await exportMaterial({
       data: {
+        ArrID:ArrID,
         materialNo: materialNoExp,
         materialId: materialIdExp,
         materialType: materialTypeExp,
@@ -539,6 +543,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         columns={getColumns()}
         rowSelection={{
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
+          ...rowSelectionAll,
         }}
       />
       {selectedRowsState?.length > 0 && (
