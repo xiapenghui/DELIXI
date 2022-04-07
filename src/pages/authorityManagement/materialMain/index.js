@@ -62,7 +62,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
     },
 
     {
-      title: "工厂名称",
+      title: "供应商SAP代码",
       dataIndex: "factoryId",
       valueType: "text",
       align: "center",
@@ -87,14 +87,11 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.factoryName
-      },
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "工厂名称不能为空!",
+            message: "供应商SAP代码不能为空!",
           },
         ],
       },
@@ -133,7 +130,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
+      // hideInSearch: true,
       hideInForm: true,
     },
 
@@ -173,34 +170,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
     },
 
 
-    {
-      title: "是否绑定",
-      dataIndex: "userSex",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      // initialValue: IsUpdate ? UpdateDate.userSex : "",
-      hideInForm: true,
-      valueEnum: ["否", "是"],
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "是否绑定不能为空!",
-          },
-        ],
-      },
-      render: (text, record) => {
-        let color = text === "否" ? "red" : "green";
-        return (
-          <Tag color={color}>
-            {text}
-          </Tag>
-        );
-      },
-    },
-
-
+ 
     {
       title: "中文名称",
       dataIndex: "materialName",
@@ -220,7 +190,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
+      // hideInSearch: true,
       hideInForm: true,
       initialValue: IsUpdate ? UpdateDate.materialType : "",
     },
@@ -483,8 +453,11 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
     setMaterialIdExp(params.materialId)
     const TableList = postListInit({
       data: {
+        isBind:0,
         factoryId: params.factoryId,
         materialId: params.materialId,
+        materialNo:params.materialNo,
+        materialType:params.materialType,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -601,8 +574,15 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
 
 
   //下载模板
-  const downloadTemp = async (fields) => {
-    let data = await getTempl(fields);
+  const downloadTemp = async () => {
+      let data = await getTempl(
+        {
+          data: {
+            isBind: 0
+          },
+          userId: user.currentUser.id
+        }
+      );
     if (data.status === 200) {
       message.success(data.message);
       window.location.href = data.data

@@ -140,14 +140,14 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-    {
-      title: "商品编码",
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      // hideInSearch: true,
-    },
+    // {
+    //   title: "商品编码",
+    //   dataIndex: "materialType",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 200,
+    //   // hideInSearch: true,
+    // },
 
     {
       title: "物料描述",
@@ -495,10 +495,9 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
 
   //导出
   const handleExport = async (selectedRowsState) => {
-    debugger
     let data = await exportMaterial({
       data: {
-        ArrID:ArrID,
+        materialIdList:ArrID,
         materialNo: materialNoExp,
         materialId: materialIdExp,
         materialType: materialTypeExp,

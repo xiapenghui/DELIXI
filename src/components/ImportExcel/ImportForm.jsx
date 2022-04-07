@@ -14,7 +14,9 @@ const ImportForm = (props) => {
       setNewType("User")
     } else if (location.pathname === "/authorityManagement/materialAllo") {
       setNewType("MaterialFactory")
-    } else if (location.pathname === "/authorityManagement/templateinfo") {
+    }else if (location.pathname === "/authorityManagement/materialMain") {
+      setNewType("MaterialFactory")
+    }else if (location.pathname === "/authorityManagement/templateinfo") {
       setNewType("Temp")
     } else if (location.pathname === "/authorityManagement/passwordManage") {
       setNewType("PasswordRules")

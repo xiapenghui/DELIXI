@@ -261,104 +261,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
-
-
-    {
-      title:"装盒数量",
-      // title: () => <a style={{ color: "red" }}>装盒数量</a>,
-      dataIndex: "cartonsNumber",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"cartonsNumber" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
-
-    {
-      title: "盒单位",
-      dataIndex: "boxUnit",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-    },
-
-    {
-      title: "盒重量",
-      // title: () => <a style={{ color: "red" }}>盒重量</a>,
-      dataIndex: "weight",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"weight" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeWeight(document.getElementById("weight" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
-
-    {
-      title: "重量单位",
-      dataIndex: "weightUnit",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-    },
-
-
-    {
-      title: "箱盒数量",
-      dataIndex: "boxesNumber",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"boxesNumber" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeBoxesNumber(document.getElementById("boxesNumber" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
+ 
 
     {
       title: "EAN13码",
@@ -369,35 +272,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
-    {
-      title: "箱EAN13码",
-      dataIndex: "boxIEAN13",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-    },
-
-
-    {
-      title: "盒ITF14码",
-      dataIndex: "caseITF14",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-    },
-
-
-    {
-      title: "箱ITF14码",
-      dataIndex: "boxITF14",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-    },
+ 
 
 
 
@@ -530,56 +405,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       width: 120,
       hideInSearch: true,
     },
-    {
-      title: "箱重量",
-      // title: () => <a style={{ color: "red" }}>箱重量</a>,
-      dataIndex: "boxWeight",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"boxWeight" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
-    {
-      title: "装箱数量",
-      // title: () => <a style={{ color: "red" }}>装箱数量</a>,
-      dataIndex: "packingQuantity",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"packingQuantity" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
+  
+  
     {
       title: "生产日期",
       // title: () => <a style={{ color: "red" }}>生产日期</a>,
@@ -605,32 +432,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       //   );
       // },
     },
-    {
-      title:"3C",
-      // title: () => <a style={{ color: "red" }}>3C</a>,
-      dataIndex: "threeC",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"threeC" + record.id}
-      //       defaultValue={text === "-" ? "" : text}
-      //       style={{
-      //         border: "none",
-      //         color: "red",
-      //         textAlign: "center",
-      //         width: "100px",
-      //       }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
-    },
-
+ 
     // {
     //   title: '操作',
     //   dataIndex: 'option',
@@ -686,41 +488,10 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     })
   };
 
-  //获取装盒数量
-  const changeCartonsNumber = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.cartonsNumber = value
-      }
-    })
-  };
-
-  //获取箱重量
-  const changeBoxWeight = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.boxWeight = value
-      }
-    })
-  };
-
-  //获取装箱数量
-  const changePacking = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.packingQuantity = value
-      }
-    })
-  };
-
-  //获取3C
-  const changethreeC = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.threeC = value
-      }
-    })
-  };
+ 
+ 
+ 
+  
 
   // 物料描述
   const changeTypeDescription = async (value, id) => {
@@ -748,16 +519,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       }
     })
   };
-
-  // 盒重量
-  const changeWeight = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.weight = value
-      }
-    })
-  };
-
+ 
 
 
   //生产企业
@@ -807,14 +569,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   };
 
 
-  //箱盒数量
-  const changeBoxesNumber = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.boxesNumber = value
-      }
-    })
-  }
+ 
   //多选袋条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
@@ -929,32 +684,32 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       });
       if (data.status == 200) {
         
-        var dataString = data.data.barCodeList
-        var bagList = content.replaceAll('1234567890', dataString[0]).
-          replace('2022-01-01', picker).
-          replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
-          replace('物料描述', data.data.material.typeDescription).
-          replace('装盒', data.data.material.boxesNumber).
-          replace('装盒数', data.data.material.boxesNumber).
-          replace('检验02', data.data.material.examination).
-          replace('GB/T', data.data.material.standard).
-          replace('浙江省', data.data.material.address).
-          replace('德力西', data.data.material.productionPlant).
-          replace('8888888888', data.data.material.caseIEAN13).
-          replace('中文名称', data.data.material.materialName)
-        eval(bagList)
-        LODOP.PRINT();
-        for (var i = 0; i < 2; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
-            console.log('bagList123', bagList)
-            eval(bagList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
-          }
-        }
-        query()
+        // var dataString = data.data.barCodeList
+        // var bagList = content.replaceAll('1234567890', dataString[0]).
+        //   replace('2022-01-01', picker).
+        //   replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
+        //   replace('物料描述', data.data.material.typeDescription).
+        //   replace('装盒', data.data.material.boxesNumber).
+        //   replace('装盒数', data.data.material.boxesNumber).
+        //   replace('检验02', data.data.material.examination).
+        //   replace('GB/T', data.data.material.standard).
+        //   replace('浙江省', data.data.material.address).
+        //   replace('德力西', data.data.material.productionPlant).
+        //   replace('8888888888', data.data.material.caseIEAN13).
+        //   replace('中文名称', data.data.material.materialName)
+        // eval(bagList)
+        // LODOP.PRINT();
+        // for (var i = 0; i < 2; i++) {
+        //   if (i > 0) {
+        //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+        //     bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
+        //     console.log('bagList123', bagList)
+        //     eval(bagList)
+        //     LODOP.PRINT();
+        //     LODOP.PRINT_INIT("");
+        //   }
+        // }
+        // query()
       }
     } else {
       message.warning('请勾选一条数据!')
@@ -984,46 +739,46 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
    //测试袋模板
    const bagCodeTest = () => {
-    LodopFuncs.getLodop();
-    var bagList = bagString
-      .replace("1234567890A", "1234567890")
-      .replace("2022-01-01A", "2022-01-01")
-      .replace("物料型号A", "CDCH6i16201N")
-      .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
-      .replace("装盒A", "×10")
-      .replace("检02A", "检02")
-      .replace("GB/tA", "GB/t")
-      .replace("浙江省A", "浙江省")
-      .replace("上海灵娃A", "上海灵娃")
-      .replace("系列A", "系列")
-      .replace("系列123A", "领航者")
-      .replace("8888888888A", "8888888888")
-      .replace("9999999999A", "9999999999")
-      .replace("中文名称A", "家用交流电接触器")
-      .replace("箱盒数", "S")
-      .replace("1234567890B", "1234567890")
-      .replace("2022-01-01B", "2022-01-01")
-      .replace("物料型号B", "CDCH6i16201N")
-      .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
-      .replace("装盒B", "×10")
-      .replace("检02B", "检02")
-      .replace("GB/tB", "GB/t")
-      .replace("浙江省B", "浙江省")
-      .replace("上海灵娃B", "上海灵娃")
-      .replace("系列B", "系列")
-      .replace("系列123B", "领航者")
-      .replace("8888888888B", "8888888888")
-      .replace("9999999999B", "9999999999")
-      .replace("中文名称B", "家用交流电接触器");
-    eval(bagList);
-    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
-    LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
-    LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
-    LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
-    LODOP.PRINT_DESIGN();
+    // LodopFuncs.getLodop();
+    // var bagList = bagString
+    //   .replace("1234567890A", "1234567890")
+    //   .replace("2022-01-01A", "2022-01-01")
+    //   .replace("物料型号A", "CDCH6i16201N")
+    //   .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
+    //   .replace("装盒A", "×10")
+    //   .replace("检02A", "检02")
+    //   .replace("GB/tA", "GB/t")
+    //   .replace("浙江省A", "浙江省")
+    //   .replace("上海灵娃A", "上海灵娃")
+    //   .replace("系列A", "系列")
+    //   .replace("系列123A", "领航者")
+    //   .replace("8888888888A", "8888888888")
+    //   .replace("9999999999A", "9999999999")
+    //   .replace("中文名称A", "家用交流电接触器")
+    //   .replace("箱盒数", "S")
+    //   .replace("1234567890B", "1234567890")
+    //   .replace("2022-01-01B", "2022-01-01")
+    //   .replace("物料型号B", "CDCH6i16201N")
+    //   .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
+    //   .replace("装盒B", "×10")
+    //   .replace("检02B", "检02")
+    //   .replace("GB/tB", "GB/t")
+    //   .replace("浙江省B", "浙江省")
+    //   .replace("上海灵娃B", "上海灵娃")
+    //   .replace("系列B", "系列")
+    //   .replace("系列123B", "领航者")
+    //   .replace("8888888888B", "8888888888")
+    //   .replace("9999999999B", "9999999999")
+    //   .replace("中文名称B", "家用交流电接触器");
+    // eval(bagList);
+    // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    // LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
+    // LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+    // LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+    // LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+    // LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
+    // LODOP.PRINT_DESIGN();
   };
 
 

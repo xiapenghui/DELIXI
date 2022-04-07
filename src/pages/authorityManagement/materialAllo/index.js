@@ -62,7 +62,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     },
 
     {
-      title: "工厂名称",
+      title: "供应商SAP代码",
       dataIndex: "factoryId",
       valueType: "text",
       align: "center",
@@ -87,14 +87,11 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      render: (text, record) => {
-        return record.factoryName
-      },
       formItemProps: {
         rules: [
           {
             required: true,
-            message: "工厂名称不能为空!",
+            message: "供应商SAP代码不能为空!",
           },
         ],
       },
@@ -133,7 +130,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
+      // hideInSearch: true,
       hideInForm: true,
     },
 
@@ -454,8 +451,11 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     setMaterialIdExp(params.materialId)
     const TableList = postListInit({
       data: {
+        isBind:1,
         factoryId: params.factoryId,
         materialId: params.materialId,
+        materialNo:params.materialNo,
+        materialType:params.materialType,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -572,8 +572,15 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
   //下载模板
-  const downloadTemp = async (fields) => {
-    let data = await getTempl(fields);
+  const downloadTemp = async () => {
+    let data = await getTempl(
+      {
+        data: {
+          isBind: 1
+        },
+        userId: user.currentUser.id
+      }
+    );
     if (data.status === 200) {
       message.success(data.message);
       window.location.href = data.data
