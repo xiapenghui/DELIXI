@@ -144,6 +144,14 @@ export default defineConfig({
                   icon: 'smile',
                   component: '../pages/authorityManagement/materialAllo',
                 },
+
+                {
+                  path: '/authorityManagement/materialMain',
+                  name: '物料分配维护',
+                  icon: 'smile',
+                  component: '../pages/authorityManagement/materialMain',
+                },
+
                 {
                   path: '/authorityManagement/passwordManage',
                   name: '密码规则管理',

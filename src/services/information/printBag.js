@@ -11,7 +11,7 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
   })
 }
 
-//打印获取条码
+//获取表格数据
 export async function postListInit(params) {
   return request(`${ip}/DLX_OEM/api/printBagBarCode/postListInit`, {
     method: 'POST',
@@ -19,6 +19,17 @@ export async function postListInit(params) {
   });
 }
 
+
+
+
+
+
+export async function getBagTemp(params) {
+  return request(`${ip}/DLX_OEM/api/printBagBarCode/getBagTemp/${params}`, {
+    method: 'POST',
+    // data: { ...params },
+  });
+}
 
  //打印条码
  export async function printBarCode(params) {

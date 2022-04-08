@@ -1,5 +1,5 @@
-import { PlusOutlined, SnippetsOutlined ,ArrowDownOutlined} from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Select, Radio } from "antd";
+import { PlusOutlined, SnippetsOutlined, ArrowDownOutlined ,SmileOutlined  } from "@ant-design/icons";
+import { Button, message, DatePicker, Form, Input, Select, Radio , notification} from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -8,19 +8,19 @@ import moment from "moment";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import UpdateForm from "./components/UpdateForm";
 import "../../../../src/assets/commonStyle.css";
-import  * as  LodopFuncs from "../../../utils/LodopFuncs.js";
+import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 import {
   getDropDownInit,
   postListInit,
   deleted,
   generateBarCode,
-  printBarCode
+  printBarCode,
+  getBagTemp
 } from "@/services/information/printBag";
 
 const printBagComponent = ({ printBag, dispatch, user }) => {
   const { materialList } = printBag;
   const { currentUser } = user;
-  const [updateModalVisible, handleUpdateModalVisible] = useState(false);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const actionRef = useRef();
 
@@ -30,14 +30,11 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
    * 编辑初始化
    */
   const [IsUpdate, setIsUpdate] = useState(false);
- 
-  const [materialType1, setMaterialType1] = useState('')
-  const [cartonsNumber1, setCartonsNumber1] = useState('')
-  const [boxWeight1, setBoxWeight1] = useState('')
-  const [packingQuantity1, setPackingQuantity1] = useState('')
-  const [threeC1, setThreeC1] = useState('')
   const [bagString, setBagString] = useState('')
-  
+  const [bagSelectCol, setBagSelectCol] = useState('')
+  const [printTypeName, setPrintTypeName] = useState('')
+ 
+
   const getColumns = () => [
 
     {
@@ -109,7 +106,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title:"英文名称",
+      title: "英文名称",
       // title: () => <a style={{ color: "red" }}>英文名称</a>,
       dataIndex: "materialDescription",
       valueType: "text",
@@ -141,7 +138,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title:"商品编码",
+      title: "商品编码",
       // title: () => <a style={{ color: "red" }}>商品编码</a>,
       dataIndex: "materialType",
       valueType: "text",
@@ -173,7 +170,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title:"物料描述",
+      title: "物料描述",
       // title: () => <a style={{ color: "red" }}>物料描述</a>,
       dataIndex: "typeDescription",
       valueType: "text",
@@ -195,7 +192,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     },
 
     {
-      title: "是否只码",
+      title: "是否袋码",
       dataIndex: "only",
       valueType: "text",
       align: "center",
@@ -261,7 +258,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
 
- 
+
 
     {
       title: "EAN13码",
@@ -272,7 +269,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       hideInSearch: true,
     },
 
- 
+
 
 
 
@@ -313,7 +310,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       // },
     },
     {
-      title:"地址",
+      title: "地址",
       // title: () => <a style={{ color: "red" }}>地址</a>,
       dataIndex: "address",
       valueType: "text",
@@ -405,8 +402,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       width: 120,
       hideInSearch: true,
     },
-  
-  
+
+
     {
       title: "生产日期",
       // title: () => <a style={{ color: "red" }}>生产日期</a>,
@@ -432,7 +429,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       //   );
       // },
     },
- 
+
     // {
     //   title: '操作',
     //   dataIndex: 'option',
@@ -453,6 +450,17 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     // },
   ];
 
+
+  useEffect(() => {
+    if (printTypeName !== "") {
+      notification.open({
+        message: "如果需要打印,请同时修改打印机对应模板!",
+        description: printTypeName,
+        duration: 8,
+        icon: <SmileOutlined style={{ color: "red" }} />,
+      });
+    }
+  }, [printTypeName]);
 
 
 
@@ -488,10 +496,10 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     })
   };
 
- 
- 
- 
-  
+
+
+
+
 
   // 物料描述
   const changeTypeDescription = async (value, id) => {
@@ -519,7 +527,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       }
     })
   };
- 
+
 
 
   //生产企业
@@ -569,37 +577,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   };
 
 
- 
-  //多选袋条码
-  const rowSelection1 = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      setBagID(selectedRowKeys)
-    }
-  };
-
-
-
-
-  //点击确认生成条码
-  // const confirm = async () => {
-  //   let inputVal = document.getElementById("inputVal").value;
-  //   let picker  = document.getElementById("PickerVal").value;
-  //   if (selectedRowsState?.length > 0  && Number(inputVal) > 0) {
-  //     handleModalVisible(true);
-  //     let data2 = await generateBarCode({
-  //       materialFactoryList: selectedRowsState,
-  //       printDate: picker,
-  //       printQuantity: inputVal,
-  //       userId: user.currentUser.id
-  //     });
-  //     if (data2.status == '200') {
-  //       setMaterialTypeList(data2.data)
-  //     }
-  //   } else {
-  //     message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
-  //   }
-  // }
-
 
   const query = async (params, sorter, filter) => {
 
@@ -608,15 +585,14 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         bagged: true,
         materialId: params.materialId,
         materialType: params.materialType,
-        materialNo:params.materialNo,
-        typeDescription:params.typeDescription
+        materialNo: params.materialNo,
+        typeDescription: params.typeDescription
       },
       pageNum: params.current,
       pageSize: params.pageSize,
       userId: user.currentUser.id
     });
     return TableList.then(function (value) {
-      setBagString(value.data.list.length === 0 ? '' : value.data.list[0].bagTempCode)
       return {
         data: value.data.list,
         current: value.pageNum,
@@ -640,7 +616,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   // const handleRemove = async (selectedRows) => {
   //   const hide = message.loading("正在删除");
   //   if (!selectedRows) return true;
-
   //   try {
   //     let data = await deleted({
   //       id: selectedRows.map((row) => row.id),
@@ -661,124 +636,138 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   //   }
   // };
 
+  //多选袋条码
+  const rowSelection1 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      debugger
+      setBagID(selectedRowKeys)
+      bagCreateOneFormPage(selectedRowKeys[0])
+      setBagSelectCol(selectedRows)
 
-  //点击打印袋条码  只---开始
+    }
+  };
+
+
+  //点击打印袋条码  袋---开始
   const pintBagCode = async () => {
     LodopFuncs.getLodop()
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (bagID.length > 0 && Number(inputVal) > 0) {
+
       let content = noStart
       if (content === "") {
         eval(bagString)
         content = bagString
       }
-
-      let data = await printBarCode({
-        barCodeIdList: bagID,
-        printDate: picker,
-        printQuantity: inputVal,
-        barCodeType: 1,
-        state: 1,
-        userId: user.currentUser.id
-      });
-      if (data.status == 200) {
-        
-        // var dataString = data.data.barCodeList
-        // var bagList = content.replaceAll('1234567890', dataString[0]).
-        //   replace('2022-01-01', picker).
-        //   replace('物料型号', data.data.material.materialType !== materialType1 ? materialType1 : data.data.material.materialType).
-        //   replace('物料描述', data.data.material.typeDescription).
-        //   replace('装盒', data.data.material.boxesNumber).
-        //   replace('装盒数', data.data.material.boxesNumber).
-        //   replace('检验02', data.data.material.examination).
-        //   replace('GB/T', data.data.material.standard).
-        //   replace('浙江省', data.data.material.address).
-        //   replace('德力西', data.data.material.productionPlant).
-        //   replace('8888888888', data.data.material.caseIEAN13).
-        //   replace('中文名称', data.data.material.materialName)
-        // eval(bagList)
-        // LODOP.PRINT();
-        // for (var i = 0; i < 2; i++) {
-        //   if (i > 0) {
-        //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-        //     bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
-        //     console.log('bagList123', bagList)
-        //     eval(bagList)
-        //     LODOP.PRINT();
-        //     LODOP.PRINT_INIT("");
-        //   }
-        // }
-        // query()
+      var dataString = bagSelectCol[0]
+      var bagList = content.replace('8888888888', dataString.caseIEAN13).
+        replace('2022-01-01', picker).
+        replace('物料型号', dataString.materialType).
+        replace('物料描述', dataString.typeDescription).
+        replace('装袋', dataString.basicQuantity).
+        replace('检02', dataString.examination).
+        replace('GB/t', dataString.standard).
+        replace('浙江省', dataString.address).
+        replace('上海灵娃', dataString.productionPlant).
+        replace('9999999999', dataString.caseITF14).
+        replace('中文名称', dataString.materialName).
+        replace("系列123", dataString.serial)
+      if (
+        dataString.standard === "无" ||
+        dataString.standard === "" ||
+        dataString.standard === null
+      ) {
+        bagList = bagList
+          .replace("执行标准:", "")
+          .replace("无", "")
+          .replace(null, "");
       }
+      if (
+        dataString.serial === "" ||
+        dataString.serial === null
+      ) {
+        bagList = bagList.replace("系列", "").replace(null, "");
+      }
+      eval(bagList)
+      LODOP.PRINT();
+      message.info("打印中，请稍等...")
+      for (var i = 0; i < inputVal; i++) {
+        if (i > 0) {
+          LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+          bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
+          eval(bagList)
+          LODOP.PRINT();
+          LODOP.PRINT_INIT("");
+        }
+      }
+
     } else {
       message.warning('请勾选一条数据!')
     }
   };
 
 
-  //只条码模板
+  //袋条码模板
   const bagCode = () => {
-    LodopFuncs.getLodop()
-    zhiCreateOneFormPage()
-    LODOP.On_Return = (TaskID, Value) => {
-      setNoStart(Value)
+    if (bagID.length == 0) {
+      message.warning("请先勾选一条数据")
+    } else {
+      LodopFuncs.getLodop()
+      LODOP.On_Return = (TaskID, Value) => {
+        setNoStart(Value)
+      }
+      LODOP.PRINT_DESIGN();
     }
-    LODOP.PRINT_DESIGN();
   };
 
+  const bagCreateOneFormPage = async (selectedRowKeys) => {
+    let data = await getBagTemp(selectedRowKeys)
+    if (data.status == 200) {
+      setNoStart(data.data.tempCode)
+      setPrintTypeName(data.data.tempName)
+      eval(data.data.tempCode)
+    } else {
+      message.warning(data.message)
+    }
+  }
 
-  const zhiCreateOneFormPage = () => {
-    eval(bagString)
-  };
-
-  // 只---结束
+  // 袋---结束
 
 
 
 
-   //测试袋模板
-   const bagCodeTest = () => {
-    // LodopFuncs.getLodop();
-    // var bagList = bagString
-    //   .replace("1234567890A", "1234567890")
-    //   .replace("2022-01-01A", "2022-01-01")
-    //   .replace("物料型号A", "CDCH6i16201N")
-    //   .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
-    //   .replace("装盒A", "×10")
-    //   .replace("检02A", "检02")
-    //   .replace("GB/tA", "GB/t")
-    //   .replace("浙江省A", "浙江省")
-    //   .replace("上海灵娃A", "上海灵娃")
-    //   .replace("系列A", "系列")
-    //   .replace("系列123A", "领航者")
-    //   .replace("8888888888A", "8888888888")
-    //   .replace("9999999999A", "9999999999")
-    //   .replace("中文名称A", "家用交流电接触器")
-    //   .replace("箱盒数", "S")
-    //   .replace("1234567890B", "1234567890")
-    //   .replace("2022-01-01B", "2022-01-01")
-    //   .replace("物料型号B", "CDCH6i16201N")
-    //   .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
-    //   .replace("装盒B", "×10")
-    //   .replace("检02B", "检02")
-    //   .replace("GB/tB", "GB/t")
-    //   .replace("浙江省B", "浙江省")
-    //   .replace("上海灵娃B", "上海灵娃")
-    //   .replace("系列B", "系列")
-    //   .replace("系列123B", "领航者")
-    //   .replace("8888888888B", "8888888888")
-    //   .replace("9999999999B", "9999999999")
-    //   .replace("中文名称B", "家用交流电接触器");
-    // eval(bagList);
-    // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
-    // LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
-    // LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
-    // LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
-    // LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
-    // LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
-    // LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
-    // LODOP.PRINT_DESIGN();
+  //测试袋模板
+  const bagCodeTest = () => {
+    if (bagID.length == 0) {
+      message.warning("请先勾选一条数据")
+    } else {
+      LodopFuncs.getLodop();
+      var bagList = noStart
+        .replace("2022-01-01", "2022-01-01")
+        .replace("物料型号", "CDCH6i16201N")
+        .replace("物料描述", "CDCH6i16A2P1NC220-240V")
+        .replace("装袋", "×10")
+        .replace("检02", "检02")
+        .replace("GB/t", "GB/t")
+        .replace("浙江省", "浙江省")
+        .replace("上海灵娃", "上海灵娃")
+        .replace("系列", "系列")
+        .replace("系列123", "领航者")
+        .replace("8888888888", "8888888888")
+        .replace("9999999999", "9999999999")
+        .replace("中文名称", "家用交流电接触器")
+      eval(bagList);
+      LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+      LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
+      LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
+      LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
+      LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
+      LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
+      LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
+      LODOP.PRINT_DESIGN();
+    }
+
   };
 
 
@@ -855,7 +844,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       )} */}
 
 
- 
+
     </PageContainer>
   );
 };
