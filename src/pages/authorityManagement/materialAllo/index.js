@@ -572,7 +572,7 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
 
   //下载模板
-  const downloadTemp = async () => {
+  const downloadTemp = async (params) => {
     let data = await getTempl(
       {
         data: {
@@ -598,7 +598,8 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
     let data = await exportMaterialFactory({
       data: {
         factoryId: factoryIdExp,
-        materialId: materialIdExp
+        materialId: materialIdExp,
+        isBind:1
       },
       userId: user.currentUser.id
     });

@@ -528,7 +528,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       let content = noStart;
       if (content === "") {
         eval(zhiString)
-        content = zhiString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
+        content = zhiString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
       } else {
         content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
       }
@@ -551,12 +551,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       if (data.status == 200) {
         var dataString = data.data.barCodeList
         var qrCodeList = data.data.qrCodeList
+        var materialList = data.data.materialList.map((item) => item.materialType)
         //替换默认只码固定值
-        var zhiLeftList = content[0].replaceAll('9876543210', dataString[0]).replaceAll('1234567890', qrCodeList[0])
+        var zhiLeftList = content[0]
+          .replaceAll('9876543210', dataString[0])
+          .replaceAll('1234567890', qrCodeList[0])
+          .replaceAll("1111111111", materialList[0]);
         if (dataString.length == 1) {
           eval(zhiLeftList)
         } else {
-          var zhiRightList = content[1].replaceAll('kjihgfedcba', dataString[1]).replaceAll('abcdefghijk', qrCodeList[1])
+          var zhiRightList = content[1]
+            .replaceAll('kjihgfedcba', dataString[1])
+            .replaceAll('abcdefghijk', qrCodeList[1])
+            .replaceAll("2222222222", materialList[1])
           eval(zhiLeftList + zhiRightList)
         }
         LODOP.PRINT();
@@ -565,14 +572,20 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
           if (i % 2 == 0) {
             // 左边
-            zhiLeftList = zhiLeftList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
+            zhiLeftList = zhiLeftList
+              .replaceAll(dataString[i - 2], dataString[i])
+              .replaceAll(qrCodeList[i - 2], qrCodeList[i])
+              .replaceAll(materialList[i - 2], materialList[i]);
             if (i == dataString.length - 1) {
               eval(zhiLeftList)
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
             }
           } else {
-            zhiRightList = zhiRightList.replaceAll(dataString[i - 2], dataString[i]).replaceAll(qrCodeList[i - 2], qrCodeList[i])
+            zhiRightList = zhiRightList
+              .replaceAll(dataString[i - 2], dataString[i])
+              .replaceAll(qrCodeList[i - 2], qrCodeList[i])
+              .replaceAll(materialList[i - 2], materialList[i]);
             eval(zhiLeftList + zhiRightList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
@@ -646,7 +659,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         let content = noStart
         if (content === "") {
           eval(heString)
-          content = heString.split('LODOP.ADD_PRINT_TEXT(0, 0, 0, 0, "");')
+          content = heString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
         } else {
           content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
         }

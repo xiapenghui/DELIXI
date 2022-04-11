@@ -574,7 +574,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
 
 
   //下载模板
-  const downloadTemp = async () => {
+  const downloadTemp = async (params) => {
       let data = await getTempl(
         {
           data: {
@@ -600,7 +600,8 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
     let data = await exportMaterialFactory({
       data: {
         factoryId: factoryIdExp,
-        materialId: materialIdExp
+        materialId: materialIdExp,
+        isBind:0
       },
       userId: user.currentUser.id
     });
