@@ -7,6 +7,7 @@ import ProTable from "@ant-design/pro-table";
 import moment from "moment";
 import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
+import CopyForm from "./components/CopyForm";
 import ImportForm from "../../../components/ImportExcel/ImportForm";
 import * as  LodopFuncs from "../../../utils/LodopFuncs.js";
 // import "../../../../src/assets/commonStyle.css";
@@ -28,6 +29,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
 
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
+  const [copyModalVisible, handleCopyModalVisible] = useState(false);
+
+
   const [importModalVisible, handleImportModalVisible] = useState(false);
   const actionRef = useRef();
   const [selectedRowsState, setSelectedRows] = useState([]);
@@ -41,7 +45,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [stringAddVal, setStringAdddVal] = useState("");
   const [tempNoExp, setTempNoExp] = useState("");
   const [tempNameExp, setTempNameExp] = useState("");
- 
+
   const getColumns = () => [
     {
       title: "模板编号",
@@ -185,24 +189,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       },
     },
 
-    // {
-    //   title: "单位",
-    //   dataIndex: "tempUnit",
-    //   valueType: "text",
-    //   align: "center",
-    //   width: 120,
-    //   hideInSearch: true,
-    //   initialValue: IsUpdate ? UpdateDate.tempUnit : "",
-    //   formItemProps: {
-    //     rules: [
-    //       {
-    //         required: true,
-    //         message: "单位不能为空!",
-    //       },
-    //     ],
-    //   },
-    // },
-
     {
       title: "备注",
       dataIndex: "remarks",
@@ -231,6 +217,16 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           >
             编辑
           </a>
+          <a
+            onClick={() => {
+              setIsUpdate(true);
+              setUpdateDate({ ...record });
+              handleCopyModalVisible(true);
+            }}
+            style={{ marginLeft: "20px" }}
+          >
+            复制
+          </a>
         </>
       ),
     },
@@ -239,7 +235,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     setTempNoExp(params.tempNo)
     setTempNameExp(params.tempName)
- 
+
     const TableList = postListInit({
       data: {
         tempNo: params.tempNo,
@@ -267,6 +263,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     try {
+      debugger
       let data = await addPost(
         // { data: fields }
         {
@@ -274,7 +271,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             tempNo: fields.tempNo,
             tempName: fields.tempName,
             tempType: fields.tempType,
-            tempCode: stringAddVal,
+            tempCode: stringAddVal === "" ? document.getElementById("tempCode").value : stringAddVal,
             tempSize: fields.tempSize,
             remarks: fields.remarks
           }
@@ -543,6 +540,45 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           />
         </UpdateForm>
       ) : null}
+
+
+      {/* 复制 */}
+
+      {UpdateDate && Object.keys(UpdateDate).length ? (
+        <CopyForm
+          onCancel={() => {
+            setUpdateDate({}); //编辑modal一旦关闭就必须setUpdateDate
+            setIsUpdate(false);
+            handleCopyModalVisible(false);
+          }}
+          modalVisible={copyModalVisible}
+          title="复制"
+        >
+          <ProTable
+            onSubmit={async (value) => {
+              const success = await handleAdd(value);
+
+              if (success) {
+                handleCopyModalVisible(false);
+                setUpdateDate({});
+                setIsUpdate(false);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            rowKey="id"
+            type="form"
+            columns={getColumns()}
+          />
+        </CopyForm>
+      ) : null}
+
+
+
+
+
+
 
       {/* 导入  */}
       <ImportForm

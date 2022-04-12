@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal } from 'antd';
 
-const UpdateForm = (props) => {
+const CopyForm = (props) => {
   const { modalVisible, onCancel } = props
   return (
-    <Modal
-    maskClosable={false}
+     <Modal
+      maskClosable={false}
       destroyOnClose
-      title="编辑"
+      title="复制"
       visible={modalVisible}
       onCancel={() => onCancel()}
       footer={null}
@@ -17,4 +17,4 @@ const UpdateForm = (props) => {
   );
 };
 
-export default UpdateForm;
+export default CopyForm;

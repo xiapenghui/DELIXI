@@ -67,6 +67,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       dataIndex: "barCode",
       key: "barCode",
       align: "center",
+      width:200,
       ellipsis: {
         showTitle: false,
       },
