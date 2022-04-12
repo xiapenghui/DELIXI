@@ -263,7 +263,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const handleAdd = async (fields) => {
     const hide = message.loading("正在添加");
     try {
-      debugger
       let data = await addPost(
         // { data: fields }
         {

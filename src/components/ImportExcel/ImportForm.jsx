@@ -37,7 +37,7 @@ const ImportForm = (props) => {
     headers: {},
 
     beforeUpload: file => {
-      const isExcel = file.type === 'application/vnd.ms-excel';
+      const isExcel = file.type === "application/vnd.ms-excel" || "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
       if (!isExcel) {
         message.error(`${file.name} 不是excel文档`);
       }
