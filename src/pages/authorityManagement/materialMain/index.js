@@ -46,6 +46,8 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
 
   const [factoryIdExp, setFactoryIdExp] = useState("")
   const [materialIdExp, setMaterialIdExp] = useState("")
+  const [materialNoExp, setmaterialNoExp] = useState("")
+  
 
 
   const getColumns = () => [
@@ -224,14 +226,6 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "袋码模板不能为空!",
-          },
-        ],
-      },
     },
 
     {
@@ -275,17 +269,6 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      // render: (text, record) => {
-      //   return record.onlyTempName
-      // },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "只码模板不能为空!",
-          },
-        ],
-      },
     },
 
     {
@@ -326,17 +309,6 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
           </Select>
         }
         return defaultRender(_);
-      },
-      // render: (text, record) => {
-      //   return record.boxTempName
-      // },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "盒码模板不能为空!",
-          },
-        ],
       },
     },
 
@@ -451,6 +423,7 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     setFactoryIdExp(params.factoryId)
     setMaterialIdExp(params.materialId)
+    setmaterialNoExp(params.materialNo)
     const TableList = postListInit({
       data: {
         isBind:0,
@@ -596,11 +569,11 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
-    debugger
     let data = await exportMaterialFactory({
       data: {
         factoryId: factoryIdExp,
         materialId: materialIdExp,
+        materialNo:materialNoExp,
         isBind:0
       },
       userId: user.currentUser.id
@@ -629,9 +602,9 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => downloadTemp()}>
-            <FileWordOutlined /> 下载模板
-          </Button>,
+          // <Button type="primary" onClick={() => downloadTemp()}>
+          //   <FileWordOutlined /> 下载模板
+          // </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ArrowDownOutlined /> 导入
           </Button>,

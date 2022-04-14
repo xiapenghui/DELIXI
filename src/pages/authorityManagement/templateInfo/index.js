@@ -43,26 +43,18 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [stringCode, setStringCode] = useState("");
   const [stringVal, setStringVal] = useState("");
   const [stringAddVal, setStringAdddVal] = useState("");
-  const [tempNoExp, setTempNoExp] = useState("");
+  const [idExp, setIdExp] = useState("");
   const [tempNameExp, setTempNameExp] = useState("");
 
   const getColumns = () => [
     {
       title: "模板编号",
-      dataIndex: "tempNo",
+      dataIndex: "id",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.tempNo : "",
       fixed: "left",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "模板编号不能为空!",
-          },
-        ],
-      },
+      hideInForm:true
     },
 
     {
@@ -233,12 +225,12 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
-    setTempNoExp(params.tempNo)
+    setIdExp(params.id)
     setTempNameExp(params.tempName)
 
     const TableList = postListInit({
       data: {
-        tempNo: params.tempNo,
+        id: params.id,
         tempName: params.tempName,
       },
       pageNum: params.current,
@@ -267,7 +259,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         // { data: fields }
         {
           data: {
-            tempNo: fields.tempNo,
             tempName: fields.tempName,
             tempType: fields.tempType,
             tempCode: stringAddVal === "" ? document.getElementById("tempCode").value : stringAddVal,
@@ -303,7 +294,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         {
           data: {
             id: UpdateDate.id,
-            tempNo: fields.tempNo,
             tempName: fields.tempName,
             tempType: fields.tempType,
             tempCode: stringVal === "" ? fields.tempCode : stringVal,
@@ -375,7 +365,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const handleExport = async () => {
     let data = await exportTemp({
       data: {
-        tempNo: tempNoExp,
+        id: idExp,
         tempName: tempNameExp
       },
       userId: user.currentUser.id

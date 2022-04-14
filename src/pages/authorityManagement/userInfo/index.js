@@ -40,26 +40,27 @@ const Component = ({ userInfo, dispatch, user }) => {
    */
   const [IsUpdate, setIsUpdate] = useState(false);
   const [UpdateDate, setUpdateDate] = useState({});
-  const [userNoExp, setUserNoExp] = useState("");
+  const [idExp, setIdExp] = useState("");
   const [userNameExp, setUserNameExp] = useState("");
 
   const getColumns = () => [
     {
       title: "编号",
-      dataIndex: "userNo",
+      dataIndex: "id",
       valueType: "text",
       align: "center",
       width: 150,
-      initialValue: IsUpdate ? UpdateDate.userNo : "",
+      // initialValue: IsUpdate ? UpdateDate.userNo : "",
       fixed: "left",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "编号不能为空!",
-          },
-        ],
-      },
+      hideInForm:true,
+      // formItemProps: {
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "编号不能为空!",
+      //     },
+      //   ],
+      // },
     },
     {
       title: "账号",
@@ -258,14 +259,14 @@ const Component = ({ userInfo, dispatch, user }) => {
 
 
   const query = async (params, sorter, filter) => {
-    setUserNoExp(params.userNo)
+    setIdExp(params.id)
     setUserNameExp(params.userName)
 
     const TableList = postListInit({
       pageNum: params.current,
       pageSize: params.pageSize,
       data: {
-        userNo: params.userNo,
+        id: params.id,
         userName: params.userName,
         userId: user.currentUser.id
       },
@@ -344,7 +345,7 @@ const Component = ({ userInfo, dispatch, user }) => {
       let data = await updatePut({
         data: {
           id: UpdateDate.id,
-          userNo: fields.userNo,
+          // userNo: fields.userNo,
           account: fields.account,
           userName: fields.userName,
           userSex: fields.userSex === '男' || fields.userSex === '0' ? 0 : 1,
@@ -438,7 +439,7 @@ const Component = ({ userInfo, dispatch, user }) => {
 
     let data = await exportUser({
       data: {
-        userNo: userNoExp,
+        id: idExp,
         userName: userNameExp
       },
       userId: user.currentUser.id

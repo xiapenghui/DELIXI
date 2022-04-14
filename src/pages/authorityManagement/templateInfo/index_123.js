@@ -42,20 +42,20 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const getColumns = () => [
     {
       title: "模板编号",
-      dataIndex: "tempNo",
+      dataIndex: "id",
       valueType: "text",
       align: "center",
       width: 120,
-      initialValue: IsUpdate ? UpdateDate.tempNo : "",
       fixed: "left",
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "模板编号不能为空!",
-          },
-        ],
-      },
+      hideInForm:true
+      // formItemProps: {
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "模板编号不能为空!",
+      //     },
+      //   ],
+      // },
     },
 
     {
@@ -229,7 +229,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({
       data: {
-        tempNo: params.tempNo,
+        id: params.id,
         tempName: params.tempName,
       },
       pageNum: params.current,

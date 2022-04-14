@@ -329,7 +329,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
     {
-      title: "箱盒数量",
+      title:<a style={{ color: "red" }}>箱盒数量</a>,
       dataIndex: "boxesNumber",
       valueType: "text",
       align: "center",

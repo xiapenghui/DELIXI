@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Tabs, Table, Tag, Button } from "antd";
+import { Modal, Tabs, Table, Tag, Button ,message } from "antd";
 import { ArrowDownOutlined } from "@ant-design/icons";
 import { getLodop } from "../../../../utils/LodopFuncs";
 import "./modal.css";
@@ -16,7 +16,7 @@ const columns = [
     dataIndex: "barCodeType",
     key: "barCodeType",
     align: "center",
-  
+
   },
   {
     title: "条码",
@@ -58,7 +58,7 @@ const columns = [
     align: "center",
   },
 ];
- 
+
 
 const PrintForm = (props) => {
   const { modalVisible, onCancel, materialTypeList } = props;
@@ -69,46 +69,9 @@ const PrintForm = (props) => {
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   const [loading3, setLoading3] = useState(false);
-  const [noStart, setNoStart] = useState('')
-  const [CodeList, setCodeList] = useState(['123456789012', '123456789013'])
 
 
-  const [arr, setArr] = useState([
-    "22345678905",
-    "12345678901",
-    "12345678906",
-    // "12345678902",
-    // "12345678907",
-  ]);
 
-  useEffect(() => {
- 
-    if (modalVisible) {
-      setNoStart(
-        `LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-        LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-        LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-        LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-        LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-        LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-        LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-        LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-        LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-        LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-        LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);`
-      )
-     
-    }
-  }, [modalVisible]);
 
 
 
@@ -130,71 +93,17 @@ const PrintForm = (props) => {
     }
   };
 
+  const handCopy =(text)=>{
+    let oInput = document.createElement('input')
+    oInput.value = text
+    document.body.appendChild(oInput)
+    oInput.select() // 选择对象;
+    document.execCommand('Copy') // 执行浏览器复制命令
+    message.success('复制成功!');
+    oInput.remove()
+  }
 
 
-
-
-  //开始
-  //点击打印条码
-  const pintCode = () => {
-    var zhiList = noStart.replace('123456789', arr[0])
-    eval(zhiList)
-    LODOP.PRINT();
-    for (var i = 0; i < arr.length; i++) {
-      if (i > 0) {
-        LODOP.SET_PRINT_PAGESIZE(1, arr.length, "A3");
-        zhiList = zhiList.replace(arr[i-1], arr[i])
-        eval(zhiList)
-        LODOP.PRINT();
-        LODOP.PRINT_INIT("");
-      }
-    }
-  };
-
-
-  //只条码模板
-  const zhiPint = () => {
-    CreateOneFormPage()
-    LODOP.On_Return = (TaskID, Value) => {
-      setNoStart(Value)
-    }
-    LODOP.PRINT_DESIGN();
-  };
-
-
-  const CreateOneFormPage = () => {
-   
-    LODOP.PRINT_INITA(5, 5, 550, 250, "打印控件功能演示_Lodop功能");
-    LODOP.ADD_PRINT_RECT(8, 52, 488, 203, 0, 1);
-    LODOP.ADD_PRINT_TEXT(155, 392, 138, 40, "400828008");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_BARCODE(14, 57, 204, 157, "QRCode", "123456789");
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.2);
-    LODOP.ADD_PRINT_TEXT(90, 355, 174, 45, "222222222222222222");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(19, 340, 192, 55, "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 17);
-    LODOP.ADD_PRINT_TEXT(20, 273, 55, 30, "S/N:");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 16);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.ADD_PRINT_TEXT(92, 274, 70, 35, "DATE：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-    LODOP.SET_PRINT_STYLEA(0, "ScalY", 1.15);
-    LODOP.ADD_PRINT_TEXT(155, 261, 111, 39, "服务热线：");
-    LODOP.SET_PRINT_STYLEA(0, "FontSize", 15);
-    LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
-
-
-  };
-
-
-
-  //结束代码
-
-
-
- 
 
   return (
     <Modal
@@ -209,24 +118,11 @@ const PrintForm = (props) => {
       <div style={{ height: "40px" }}>
         <span>
           批次号： <Tag color="red">{materialTypeList.batchNumber}</Tag>
+          <Button type="primary" onClick={()=>handCopy(materialTypeList.batchNumber)}>复制</Button>
         </span>
-        <span>
+        <span style={{ marginLeft: "15px" }}>
           物料编号：<Tag color="volcano">{materialTypeList.materialNo}</Tag>
         </span>
-        {/* <Button type="primary" className="pintCode" onClick={pintCode}>
-          <ArrowDownOutlined />
-          打印条码
-        </Button>
-
-        <Button type="primary" className="pintRight" hidden={zhiCode} onClick={zhiPint}>
-          <Tag color="volcano"> 只码模板:</Tag>成品条码
-        </Button>
-        <Button type="primary" className="pintRight" hidden={heCode} >
-          <Tag color="volcano"> 盒码模板:</Tag>40x60
-        </Button>
-        <Button type="primary" className="pintRight" hidden={boxCode}>
-          <Tag color="volcano"> 箱码模板:</Tag>60x80
-        </Button> */}
       </div>
       <Tabs defaultActiveKey="1" onChange={callback} type="card" >
 

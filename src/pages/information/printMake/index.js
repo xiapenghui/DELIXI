@@ -57,6 +57,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialNo",
       key: "materialNo",
       align: "center",
+      width: 150,
       fixed: "left",
     },
     {
@@ -64,6 +65,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
+      width: 150,
     },
 
     {
@@ -71,6 +73,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "barCodeType",
       key: "barCodeType",
       align: "center",
+      width: 150,
     },
 
     {
@@ -95,6 +98,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
+      width: 200,
     },
     {
       title: "商品编码",
@@ -105,6 +109,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 150,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -119,6 +124,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 200,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -130,12 +136,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "printDateTime",
       key: "printDateTime",
       align: "center",
+      width: 150,
     },
     {
       title: "打印人员",
       dataIndex: "printer",
       key: "printer",
       align: "center",
+      width: 150,
     },
   ];
 
@@ -145,6 +153,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialNo",
       key: "materialNo",
       align: "center",
+      width: 150,
       fixed: "left",
     },
     {
@@ -152,6 +161,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
+      width: 150,
     },
 
     {
@@ -159,6 +169,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "barCodeType",
       key: "barCodeType",
       align: "center",
+      width: 150,
     },
 
     {
@@ -183,6 +194,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
+      width: 200,
     },
     {
       title: "商品编码",
@@ -193,6 +205,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 150,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -207,6 +220,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 200,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -218,12 +232,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "printDateTime",
       key: "printDateTime",
       align: "center",
+      width: 150,
     },
     {
       title: "打印人员",
       dataIndex: "printer",
       key: "printer",
       align: "center",
+      width: 150,
     },
   ];
 
@@ -234,6 +250,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialNo",
       key: "materialNo",
       align: "center",
+      width: 150,
       fixed: "left",
     },
     {
@@ -241,6 +258,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
+      width: 150,
     },
 
     {
@@ -248,6 +266,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "barCodeType",
       key: "barCodeType",
       align: "center",
+      width: 150,
     },
 
     {
@@ -272,6 +291,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "materialName",
       key: "materialName",
       align: "center",
+      width: 200,
     },
     {
       title: "商品编码",
@@ -282,6 +302,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 150,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -296,6 +317,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
+      width: 200,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -307,12 +329,14 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       dataIndex: "printDateTime",
       key: "printDateTime",
       align: "center",
+      width: 150,
     },
     {
       title: "打印人员",
       dataIndex: "printer",
       key: "printer",
       align: "center",
+      width: 150,
     },
   ];
 
@@ -335,12 +359,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [boxID, setBoxID] = useState([]);
 
   const [newImage, setNewImage] = useState("");
-  const [zhiHidden1, setZhiHidden1] = useState(true);
-  const [zhiHidden2, setZhiHidden2] = useState(false);
-  const [heHidden1, setHeHidden1] = useState(true);
-  const [heHidden2, setHeHidden2] = useState(false);
-  const [boxHidden1, setBoxHidden1] = useState(true);
-  const [boxHidden2, setBoxHidden2] = useState(false);
+  const [zhiHidden1, setZhiHidden1] = useState(false);
+  const [zhiHidden2, setZhiHidden2] = useState(true);
+  const [heHidden1, setHeHidden1] = useState(false);
+  const [heHidden2, setHeHidden2] = useState(true);
+  const [boxHidden1, setBoxHidden1] = useState(false);
+  const [boxHidden2, setBoxHidden2] = useState(true);
 
   const [printTypeName, setPrintTypeName] = useState(""); //设置打印单双排类型
   const [printTypeTimes, setPrintTypeTimes] = useState(0); //设置printTypeName更新次数
@@ -443,6 +467,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           setZhiString(data.data.tempCode);
           setPrintTypeName(data.data.tempName);
           message.success(data.message)
+        }else{
+          message.error(data.message)
         }
       }
     });
@@ -478,6 +504,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           setHeString(data.data.tempCode);
           setPrintTypeName(data.data.tempName);
           message.success(data.message)
+        }else{
+          message.error(data.message)
         }
       }
     });
@@ -522,6 +550,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           setBoxString(data.data.tempCode);
           setPrintTypeName(data.data.tempName);
           message.success(data.message)
+        }else{
+          message.error(data.message)
         }
       }
     });
@@ -559,6 +589,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           typeDescription: document.getElementById("form_in_modal_typeDescription1").value,
         });
         if (data.status == 200) {
+          debugger
           var dataString = data.data.barCodeList;
           var qrCodeList = data.data.qrCodeList;
           var materialList = data.data.materialList.map((item) => item.materialType)
