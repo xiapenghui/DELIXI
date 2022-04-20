@@ -24,7 +24,7 @@ import {
 } from "@/services/authorityManagement/templateinfo";
 
 const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
-  const { tempList } = templateinfo;
+  const { tempList, supplierSapCodeList } = templateinfo;
   const { currentUser } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -45,6 +45,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [stringAddVal, setStringAdddVal] = useState("");
   const [idExp, setIdExp] = useState("");
   const [tempNameExp, setTempNameExp] = useState("");
+  const [supplierSapCodeExp, setSupplierSapCodeExp] = useState("");
 
   const getColumns = () => [
     {
@@ -54,7 +55,41 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       align: "center",
       width: 120,
       fixed: "left",
-      hideInForm:true
+      hideInForm: true
+    },
+
+    {
+      title: "供应商SAP代码",
+      dataIndex: "supplierSapCode",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      valueEnum: supplierSapCodeList.length == 0 ? {} : [supplierSapCodeList],
+      initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {supplierSapCodeList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      formItemProps: {
+        rules: [
+          {
+            required: true,
+            message: "供应商SAP代码不能为空!",
+          },
+        ],
+      },
     },
 
     {
@@ -62,7 +97,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "tempName",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 200,
       initialValue: IsUpdate ? UpdateDate.tempName : "",
       formItemProps: {
         rules: [
@@ -74,12 +109,15 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       },
     },
 
+
+
+
     {
       title: "模板类型",
       dataIndex: "tempType",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       valueEnum: tempList.length == 0 ? {} : [tempList],
       initialValue: IsUpdate ? UpdateDate.tempType : "",
@@ -168,7 +206,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "tempSize",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 150,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.tempSize : "",
       formItemProps: {
@@ -186,7 +224,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "remarks",
       valueType: "text",
       align: "center",
-      width: 120,
+      width: 200,
       hideInSearch: true,
       initialValue: IsUpdate ? UpdateDate.remarks : "",
     },
@@ -227,11 +265,13 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const query = async (params, sorter, filter) => {
     setIdExp(params.id)
     setTempNameExp(params.tempName)
+    setSupplierSapCodeExp(params.supplierSapCode)
 
     const TableList = postListInit({
       data: {
         id: params.id,
         tempName: params.tempName,
+        supplierSapCode: params.supplierSapCode
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -259,6 +299,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         // { data: fields }
         {
           data: {
+            supplierSapCode: fields.supplierSapCode,
             tempName: fields.tempName,
             tempType: fields.tempType,
             tempCode: stringAddVal === "" ? document.getElementById("tempCode").value : stringAddVal,
@@ -294,6 +335,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         {
           data: {
             id: UpdateDate.id,
+            supplierSapCode: fields.supplierSapCode,
             tempName: fields.tempName,
             tempType: fields.tempType,
             tempCode: stringVal === "" ? fields.tempCode : stringVal,
@@ -366,7 +408,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     let data = await exportTemp({
       data: {
         id: idExp,
-        tempName: tempNameExp
+        tempName: tempNameExp,
+        supplierSapCode: supplierSapCodeExp
       },
       userId: user.currentUser.id
     });

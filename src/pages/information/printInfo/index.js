@@ -616,6 +616,32 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       },
     },
 
+
+    {
+      title: () => <a style={{ color: "red" }}>one标识</a>,
+      dataIndex: "oneLogo",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"oneLogo" + record.id}
+            defaultValue={text === "-" ? "" : text}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeOneLogo(document.getElementById("oneLogo" + record.id).value, record.id)}
+          ></input>
+        );
+      },
+    },
+
     // {
     //   title: '操作',
     //   dataIndex: 'option',
@@ -800,6 +826,18 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       }
     })
   }
+
+   //one标识
+   const changeOneLogo = async (value, id) => {
+    selectedObj.map((item, key) => {
+      if (item.id == id) {
+        item.oneLogo = value
+      }
+    })
+  }
+
+
+  
 
 
 

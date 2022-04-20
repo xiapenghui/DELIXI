@@ -360,6 +360,16 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
+    {
+      title: "one标识",
+      dataIndex: "oneLogo",
+      valueType: "text",
+      align: "center",
+      width: 120,
+      hideInSearch: true,
+    },
+
+
     // {
     //   title: '操作',
     //   dataIndex: 'option',

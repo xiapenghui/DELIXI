@@ -16,8 +16,8 @@ const TableName = 'templateinfo'
 const Model = {
   namespace: TableName,
   state: {
-    TableList: [],
-    tempList:[]
+    tempList:[],
+    supplierSapCodeList: []
   },
 
   subscriptions: {
@@ -75,9 +75,11 @@ const Model = {
   reducers: {
     querySuccessed(state, { payload }) {
       if (payload.type === "getDropDownInit") {
+        
         return {
           ...state, ...payload,
-          tempList: payload.data,
+          tempList: payload.data.tempTypeList,
+          supplierSapCodeList: payload.data.supplierSapCodeList,
         };
       } else if (payload.type === 'postListInit') {
         return {

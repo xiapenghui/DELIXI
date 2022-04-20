@@ -345,6 +345,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [materialId1, setMaterialId1] = useState('');
   const [materialId2, setMaterialId2] = useState('');
   const [materialId3, setMaterialId3] = useState('');
+  const [batchNumberVal, setBatchNumberVal] = useState('');
 
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
@@ -357,17 +358,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [boxHidden1, setBoxHidden1] = useState(false)
   const [boxHidden2, setBoxHidden2] = useState(true)
 
+  //是否打印盒尾箱
+  const [changeHeVal, setChangeHeVal] = useState("")
+  //是否打印箱尾箱
+  const [changeBoxVal, setChangeBoxVal] = useState("")
+
+
 
   const [printTypeName, setPrintTypeName] = useState(""); //设置打印单双排类型
   const [printTypeTimes, setPrintTypeTimes] = useState(0); //设置printTypeName更新次数  //tab标签切换获取index/key
   function callback(key) {
-    if (key == "1") {
-      zhiSearch();
-    } else if (key == "2") {
-      heSearch();
-    } else {
-      boxSearch();
-    }
+    // if (key == "1") {
+    //   zhiSearch();
+    // } else if (key == "2") {
+    //   heSearch();
+    // } else {
+    //   boxSearch();
+    // }
   }
 
   useEffect(() => {
@@ -389,36 +396,80 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //获取只码商品编码
   const changeMaterialId1 = (value) => {
     setMaterialId1(value)
+    form2.setFieldsValue({
+      materialId2: value
+    });
+    form3.setFieldsValue({
+      materialId3: value
+    });
   }
 
   //获取盒码商品编码
   const changeMaterialId2 = (value) => {
     setMaterialId2(value)
+    form1.setFieldsValue({
+      materialId1: value
+    });
+    form3.setFieldsValue({
+      materialId3: value
+    });
   }
 
   //获取箱码商品编码
   const changeMaterialId3 = (value) => {
     setMaterialId3(value)
+    form1.setFieldsValue({
+      materialId1: value
+    });
+    form2.setFieldsValue({
+      materialId2: value
+    });
+  }
+
+  //获取只码批次号失焦
+  const changeBatch1 = (e) => {
+    form2.setFieldsValue({
+      batchNumber2: e.target.value
+    });
+    form3.setFieldsValue({
+      batchNumber3: e.target.value
+    });
+  }
+
+  //获取盒码批次号失焦
+
+  const changeBatch2 = (e) => {
+    form1.setFieldsValue({
+      batchNumber1: e.target.value
+    });
+    form3.setFieldsValue({
+      batchNumber3: e.target.value
+    });
+  }
+
+  //获取箱码批次号失焦
+  const changeBatch3 = (e) => {
+    form1.setFieldsValue({
+      batchNumber1: e.target.value
+    });
+    form2.setFieldsValue({
+      batchNumber2: e.target.value
+    });
   }
 
 
 
-  //查询封装公用参数
-  // const params = (values) => {
-  //   return {
-  //     data: {
-  //       barCode: values.barCode,
-  //       materialId: values.materialId,
-  //       batchNumber: values.batchNumber,
-  //       materialNo: values.materialNo,
-  //       typeDescription: values.typeDescription,
-  //       state: 1,
-  //     },
-  //     pageNum: 1,
-  //     pageSize: 100000,
-  //     userId: user.currentUser.id
-  //   }
-  // }
+
+  //是否打印盒尾箱
+  const handleChangeHe = (e) => {
+    setChangeHeVal(e.target.checked)
+  }
+
+  //是否打印箱尾箱
+  const handleChangeBox = (e) => {
+    setChangeBoxVal(e.target.checked)
+  }
+
 
 
   //   @param 只条码 handleSearch 搜索
@@ -451,7 +502,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setZhiString(data.data.tempCode);
             setPrintTypeName(data.data.tempName);
             message.success(data.message)
-          }else{
+          } else {
             message.error(data.message)
           }
         }
@@ -487,7 +538,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setHeString(data.data.tempCode);
             setPrintTypeName(data.data.tempName);
             message.success(data.message)
-          }else{
+          } else {
             message.error(data.message)
           }
         }
@@ -530,7 +581,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             setBoxString(data.data.tempCode);
             setPrintTypeName(data.data.tempName);
             message.success(data.message)
-          }else{
+          } else {
             message.error(data.message)
           }
         }
@@ -544,7 +595,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
     LodopFuncs.getLodop()
-    if (materialId1 == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
+    if (form1.getFieldsValue().materialId1  == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
 
@@ -557,7 +608,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       }
       let data = await printBarCode({
         barCodeType: 1,
-        materialId: materialId1,
+        materialId: form1.getFieldsValue().materialId1,
         state: 1,
         userId: user.currentUser.id,
         startDate: moment(document.getElementById("form_in_modal_startDate1").value).format(
@@ -628,7 +679,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //只条码模板
   const zhiCode = () => {
     LodopFuncs.getLodop()
-    if (materialId1 == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
+    if (form1.getFieldsValue().materialId1 == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
       zhiCreateOneFormPage()
@@ -671,7 +722,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //点击打印盒条码  盒---开始
   const pintHeCode = async () => {
     LodopFuncs.getLodop()
-    if (materialId2 == "" && document.getElementById("form_in_modal_batchNumber2").value == "") {
+    if (form2.getFieldsValue().materialId2 == "" && document.getElementById("form_in_modal_batchNumber2").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
       if (heString === null) {
@@ -686,8 +737,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         }
         let data = await printBarCode({
           barCodeType: 2,
-          materialId: materialId2,
+          materialId: form2.getFieldsValue().materialId2,
           state: 1,
+          printTailBarCode: changeHeVal === "" ? true: false ,
           userId: user.currentUser.id,
           startDate: moment(document.getElementById("form_in_modal_startDate2").value).format(
             globalConfig.form.onlyDateFormat
@@ -873,7 +925,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             heSearch()
           }
         } else {
-          message.info(data.message)
+          message.warning(data.message)
         }
       }
     }
@@ -884,7 +936,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //盒条码模板
   const heCode = () => {
     LodopFuncs.getLodop()
-    if (materialId2 == "" && document.getElementById("form_in_modal_batchNumber2").value == "") {
+    if (form2.getFieldsValue().materialId2 == "" && document.getElementById("form_in_modal_batchNumber2").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
       heCreateOneFormPage()
@@ -951,15 +1003,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
   //点击打印箱条码  箱---开始
-
-
-
   const pintBoxCode = async () => {
     LodopFuncs.getLodop()
-    if (materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
+    if (form3.getFieldsValue().materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
-
       let content = noStart
       if (content === "") {
         eval(boxString)
@@ -968,9 +1016,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
       let data = await printBarCode({
         barCodeType: 3,
-        materialId: materialId3,
+        materialId: form3.getFieldsValue().materialId3,
         state: 1,
         userId: user.currentUser.id,
+        printTailBarCode: changeBoxVal === "" ? true: false ,
         startDate: moment(document.getElementById("form_in_modal_startDate3").value).format(
           globalConfig.form.onlyDateFormat
         ),
@@ -983,7 +1032,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
       });
       if (data.status == 200) {
-        debugger
         var dataString = data.data.barCodeList
         var printDateList = data.data.printDateList
         var materialList = data.data.materialList
@@ -1083,7 +1131,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //箱条码模板
   const boxCode = () => {
     LodopFuncs.getLodop()
-    if (materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
+    if (form3.getFieldsValue().materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
       boxCreateOneFormPage()
@@ -1181,7 +1229,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             name="form_in_modal"
             initialValues={{
               startDate1: moment().subtract("years"),
-              endDate1: moment().endOf('day')
+              endDate1: moment().endOf('day'),
+              materialId1: materialId1,
+              batchNumber1: batchNumberVal
             }}
           >
             <Row>
@@ -1274,7 +1324,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input></Input>
+                  <Input onBlur={changeBatch1}></Input>
 
                 </Form.Item>
               </Col>
@@ -1317,11 +1367,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             name="form_in_modal"
             initialValues={{
               startDate2: moment().subtract("years"),
-              endDate2: moment().endOf('day')
+              endDate2: moment().endOf('day'),
+              materialId2: materialId1,
+              batchNumber2: batchNumberVal
             }}
           >
             <Row>
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={4} style={{ display: 'block' }}>
                 <Form.Item
                   name="startDate2"
                   label="开始时间"
@@ -1333,7 +1385,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} >
+              <Col span={4} style={{ display: 'block' }} >
                 <Form.Item
                   name="endDate2"
                   label="结束时间"
@@ -1408,10 +1460,23 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input></Input>
+                  <Input onBlur={changeBatch2}></Input>
 
                 </Form.Item>
               </Col>
+
+              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+                <Form.Item
+                  name="printTailBarCode"
+                  label="不打印尾部条码"
+                  hasFeedback
+                // {...formItemLayout2}
+                >
+                  <Checkbox onChange={handleChangeHe}></Checkbox>
+
+                </Form.Item>
+              </Col>
+
               <Col span={8} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
@@ -1452,11 +1517,13 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             name="form_in_modal"
             initialValues={{
               startDate3: moment().subtract("years"),
-              endDate3: moment().endOf('day')
+              endDate3: moment().endOf('day'),
+              materialId3: materialId1,
+              batchNumber3: batchNumberVal
             }}
           >
             <Row>
-              <Col span={5} style={{ display: 'block' }} >
+              <Col span={4} style={{ display: 'block' }} >
                 <Form.Item
                   name="startDate3"
                   label="开始时间"
@@ -1468,7 +1535,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }}>
+              <Col span={4} style={{ display: 'block' }}>
                 <Form.Item
                   name="endDate3"
                   label="结束时间"
@@ -1544,7 +1611,19 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input></Input>
+                  <Input onBlur={changeBatch3}></Input>
+
+                </Form.Item>
+              </Col>
+
+              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+                <Form.Item
+                  name="printTailBarCode"
+                  label="不打印尾部条码"
+                  hasFeedback
+                // {...formItemLayout2}
+                >
+                  <Checkbox onChange={handleChangeBox}></Checkbox>
 
                 </Form.Item>
               </Col>
