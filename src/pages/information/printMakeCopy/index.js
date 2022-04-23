@@ -595,7 +595,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //点击打印只条码  只---开始
   const pintZhiCode = async () => {
     LodopFuncs.getLodop()
-    if (form1.getFieldsValue().materialId1  == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
+    if (form1.getFieldsValue().materialId1 == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
 
@@ -739,7 +739,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           barCodeType: 2,
           materialId: form2.getFieldsValue().materialId2,
           state: 1,
-          printTailBarCode: changeHeVal === "" ? true: false ,
+          printTailBarCode: changeHeVal === "" ? true : false,
           userId: user.currentUser.id,
           startDate: moment(document.getElementById("form_in_modal_startDate2").value).format(
             globalConfig.form.onlyDateFormat
@@ -753,6 +753,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           typeDescription: document.getElementById("form_in_modal_typeDescription2").value,
         });
         if (data.status == 200 && data.data.barCodeList.length > 0) {
+          debugger
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
@@ -773,12 +774,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               .replaceAll("系列123A", materialList[0].serial)
               .replaceAll("检02A", materialList[0].examination)
               .replaceAll("GB/tA", materialList[0].standard)
-              .replaceAll("浙江省A", materialList[0].address)
-              .replaceAll("上海灵娃A", materialList[0].productionPlant)
+              .replaceAll("地址A", materialList[0].address)
+              .replaceAll("生产企业A", materialList[0].productionPlant)
               .replaceAll("8888888888A", materialList[0].caseIEAN13)
               .replaceAll("9999999999A", materialList[0].caseITF14)
-              .replaceAll("中文名称A", materialList[0].materialName);
-
+              .replaceAll("中文名称A", materialList[0].materialName)
+              .replaceAll("S标识A", materialList[0].oneLogo)
             //以下判断如果值为空或无，隐藏字段
             if (materialList[0].standard === "无" ||
               materialList[0].standard === "" ||
@@ -801,11 +802,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 .replaceAll("系列123B", materialList[1].serial)
                 .replaceAll("检02B", materialList[1].examination)
                 .replaceAll("GB/tB", materialList[1].standard)
-                .replaceAll("浙江省B", materialList[1].address)
-                .replaceAll("上海灵娃B", materialList[1].productionPlant)
+                .replaceAll("地址B", materialList[1].address)
+                .replaceAll("生产企业B", materialList[1].productionPlant)
                 .replaceAll("8888888888B", materialList[1].caseIEAN13)
                 .replaceAll("9999999999B", materialList[1].caseITF14)
-                .replaceAll("中文名称B", materialList[1].materialName);
+                .replaceAll("中文名称B", materialList[1].materialName)
+                .replaceAll("S标识B", materialList[0].oneLogo)
               if (materialList[1].standard === "无" ||
                 materialList[1].standard === "" ||
                 materialList[1].standard === null) {
@@ -836,6 +838,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
                   .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
                   .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
+                  .replaceAll(materialList[i - 2].oneLogo, materialList[i].oneLogo)
 
                 if (i == dataString.length - 1) {
                   eval(heLeftList)
@@ -857,6 +860,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   .replaceAll(materialList[i - 2].caseIEAN13, materialList[i].caseIEAN13)
                   .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
                   .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
+                  .replaceAll(materialList[i - 2].oneLogo, materialList[i].oneLogo)
                 eval(heLeftList + heRightList)
                 LODOP.PRINT();
                 LODOP.PRINT_INIT("");
@@ -875,12 +879,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               .replaceAll("系列123", materialList[0].serial)
               .replaceAll("检02", materialList[0].examination)
               .replaceAll("GB/t", materialList[0].standard)
-              .replaceAll("浙江省", materialList[0].address)
-              .replaceAll("上海灵娃", materialList[0].productionPlant)
+              .replaceAll("地址", materialList[0].address)
+              .replaceAll("生产企业", materialList[0].productionPlant)
               .replaceAll("8888888888", materialList[0].caseIEAN13)
               .replaceAll("9999999999", materialList[0].caseITF14)
-              .replaceAll("中文名称", materialList[0].materialName);
-
+              .replaceAll("中文名称", materialList[0].materialName)
+              .replaceAll("S标识", materialList[0].oneLogo);
             if (
               materialList[0].standard === "无" ||
               materialList[0].standard === "" ||
@@ -914,7 +918,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   replaceAll(materialList[i - 1].productionPlant, materialList[i].productionPlant).
                   replaceAll(materialList[i - 1].caseIEAN13, materialList[i].caseIEAN13).
                   replaceAll(materialList[i - 1].caseITF14, materialList[i].caseITF14).
-                  replaceAll(materialList[i - 1].materialName, materialList[i].materialName);
+                  replaceAll(materialList[i - 1].materialName, materialList[i].materialName)
+                  replaceAll(materialList[i - 1].oneLogo, materialList[i].oneLogo);
                 console.log("heList123", heList);
                 eval(heList);
                 LODOP.PRINT();
@@ -966,14 +971,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('装盒A', "×10").
       replace('检02A', '检02').
       replace('GB/tA', "GB/t").
-      replace('浙江省A', "浙江省").
-      replace('上海灵娃A', "上海灵娃").
+      replace('地址A', "浙江省").
+      replace('生产企业A', "生产企业:德力西").
       replace('系列A', "系列").
       replace('系列123A', "领航者").
       replace('8888888888A', "8888888888").
       replace('9999999999A', "9999999999").
       replace('中文名称A', "家用交流电接触器").
-      replace('箱盒数', "S").
+      replace('S标识A', "S").
       replace('1234567890B', "1234567890").
       replace('2022-01-01B', "2022-01-01").
       replace('物料型号B', "CDCH6i16201N").
@@ -981,13 +986,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('装盒B', "×10").
       replace('检02B', '检02').
       replace('GB/tB', "GB/t").
-      replace('浙江省B', "浙江省").
-      replace('上海灵娃B', "上海灵娃").
+      replace('地址B', "地址:浙江省").
+      replace('生产企业B', "生产企业:德力西").
       replace('系列B', "系列").
       replace('系列123B', "领航者").
       replace('8888888888B', "8888888888").
       replace('9999999999B', "9999999999").
-      replace('中文名称B', "家用交流电接触器")
+      replace('中文名称B', "家用交流电接触器").
+      replace("S标识B", "S")
     eval(heList)
     LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
     LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试盒码");
@@ -1008,121 +1014,126 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     if (form3.getFieldsValue().materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
-      let content = noStart
-      if (content === "") {
-        eval(boxString)
-        content = boxString
-      }
+      if (boxString === null) {
+        message.warning("该物料未绑定箱码模板")
+      } else {
+        let content = noStart
+        if (content === "") {
+          eval(boxString)
+          content = boxString
+        }
 
-      let data = await printBarCode({
-        barCodeType: 3,
-        materialId: form3.getFieldsValue().materialId3,
-        state: 1,
-        userId: user.currentUser.id,
-        printTailBarCode: changeBoxVal === "" ? true: false ,
-        startDate: moment(document.getElementById("form_in_modal_startDate3").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        endDate: moment(document.getElementById("form_in_modal_endDate3").value).format(
-          globalConfig.form.onlyDateFormat
-        ),
-        barCode: document.getElementById("form_in_modal_barCode3").value,
-        batchNumber: document.getElementById("form_in_modal_batchNumber3").value,
-        materialNo: document.getElementById("form_in_modal_materialNo3").value,
-        typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
-      });
-      if (data.status == 200) {
-        var dataString = data.data.barCodeList
-        var printDateList = data.data.printDateList
-        var materialList = data.data.materialList
-        // var countList = data.data.countList
-        //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
-        //中报条码类型错误
-        var nums = [];
-        data.data.countList.map((item) => {
-          nums.push("×" + item);
+        let data = await printBarCode({
+          barCodeType: 3,
+          materialId: form3.getFieldsValue().materialId3,
+          state: 1,
+          userId: user.currentUser.id,
+          printTailBarCode: changeBoxVal === "" ? true : false,
+          startDate: moment(document.getElementById("form_in_modal_startDate3").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          endDate: moment(document.getElementById("form_in_modal_endDate3").value).format(
+            globalConfig.form.onlyDateFormat
+          ),
+          barCode: document.getElementById("form_in_modal_barCode3").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber3").value,
+          materialNo: document.getElementById("form_in_modal_materialNo3").value,
+          typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
         });
-        var countList = nums;
+        if (data.status == 200) {
+          debugger
+          var dataString = data.data.barCodeList
+          var printDateList = data.data.printDateList
+          var materialList = data.data.materialList
+          // var countList = data.data.countList
+          //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
+          //中报条码类型错误
+          var nums = [];
+          data.data.countList.map((item) => {
+            nums.push("×" + item);
+          });
+          var countList = nums;
 
-        var dataStringNew = []
-        var printDateListNew = []
-        var countListNew = []
-        var materialListNew = [];
+          var dataStringNew = []
+          var printDateListNew = []
+          var countListNew = []
+          var materialListNew = [];
 
-        //默认箱码打印两张，以下为循环两次
-        dataStringNew = JSON.parse(JSON.stringify(dataString))
-        dataString.map((item, index) => {
-          dataStringNew.splice(index * 2, 0, item);
-        })
-        printDateListNew = JSON.parse(JSON.stringify(printDateList))
-        printDateList.map((item, index) => {
-          printDateListNew.splice(index * 2, 0, item);
-        })
-        countListNew = JSON.parse(JSON.stringify(countList))
-        countList.map((item, index) => {
-          countListNew.splice(index * 2, 0, item);
-        })
-        materialListNew = JSON.parse(JSON.stringify(materialList));
-        materialList.map((item, index) => {
-          materialListNew.splice(index * 2, 0, item);
-        });
+          //默认箱码打印两张，以下为循环两次
+          dataStringNew = JSON.parse(JSON.stringify(dataString))
+          dataString.map((item, index) => {
+            dataStringNew.splice(index * 2, 0, item);
+          })
+          printDateListNew = JSON.parse(JSON.stringify(printDateList))
+          printDateList.map((item, index) => {
+            printDateListNew.splice(index * 2, 0, item);
+          })
+          countListNew = JSON.parse(JSON.stringify(countList))
+          countList.map((item, index) => {
+            countListNew.splice(index * 2, 0, item);
+          })
+          materialListNew = JSON.parse(JSON.stringify(materialList));
+          materialList.map((item, index) => {
+            materialListNew.splice(index * 2, 0, item);
+          });
 
 
-        var boxList = content
-          .replaceAll("1234567890", dataStringNew[0])
-          .replaceAll("2022-01-01", printDateListNew[0])
-          .replaceAll("装箱", countListNew[0])
-          .replaceAll("物料型号", materialListNew[0].materialType)
-          .replaceAll("物料描述", materialListNew[0].typeDescription)
-          .replaceAll("检02", materialListNew[0].examination)
-          .replaceAll("浙江省", materialListNew[0].address)
-          .replaceAll("GB/t", materialListNew[0].standard)
-          .replaceAll("系列123", materialListNew[0].serial)
-          .replaceAll("上海灵娃", materialListNew[0].productionPlant)
-          .replaceAll("8888888888", materialListNew[0].boxIEAN13)
-          .replaceAll("9999999999", materialListNew[0].boxITF14)
-          .replaceAll("箱重", materialListNew[0].bigBoxWeight)
-          .replaceAll("中文名称", materialListNew[0].materialName)
-          .replaceAll("箱盒数", materialListNew[0].oneLogo)
-          .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
-        if (materialList[0].standard === "无" || materialList[0].standard === "" || materialList[0].standard === null) {
-          boxList = boxList.replace("执行标准:", "").replace('无', '').replace(null, '')
-        }
-        if (materialList[0].serial === "" || materialList[0].serial === null) {
-          boxList = boxList.replace('系列', '').replace(null, '')
-        }
-        if (materialList[0].oneLogo === "" || materialList[0].oneLogo === null) {
-          boxList = boxList.replace('箱盒数', '').replace(null, '')
-        }
-        eval(boxList)
-
-        LODOP.PRINT();
-        for (var i = 0; i < dataStringNew.length; i++) {
-          if (i > 0) {
-            LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-            boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
-              replaceAll(printDateListNew[i - 1], printDateListNew[i]).
-              replaceAll(countListNew[i - 1], countListNew[i]).
-              replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
-              replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
-              replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
-              replaceAll(materialListNew[i - 1].standard, materialListNew[i].standard).
-              replaceAll(materialListNew[i - 1].serial, materialListNew[i].serial).
-              replaceAll(materialListNew[i - 1].productionPlant, materialListNew[i].productionPlant).
-              replaceAll(materialListNew[i - 1].boxIEAN13, materialListNew[i].boxIEAN13).
-              replaceAll(materialListNew[i - 1].boxITF14, materialListNew[i].boxITF14).
-              replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
-              replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
-              replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
-              replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
-              replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
-            // console.log('heList123', boxList)
-            eval(boxList)
-            LODOP.PRINT();
-            LODOP.PRINT_INIT("");
+          var boxList = content
+            .replaceAll("1234567890", dataStringNew[0])
+            .replaceAll("2022-01-01", printDateListNew[0])
+            .replaceAll("装箱", countListNew[0])
+            .replaceAll("物料型号", materialListNew[0].materialType)
+            .replaceAll("物料描述", materialListNew[0].typeDescription)
+            .replaceAll("检02", materialListNew[0].examination)
+            .replaceAll("地址", materialListNew[0].address)
+            .replaceAll("GB/t", materialListNew[0].standard)
+            .replaceAll("系列123", materialListNew[0].serial)
+            .replaceAll("生产企业", materialListNew[0].productionPlant)
+            .replaceAll("8888888888", materialListNew[0].boxIEAN13)
+            .replaceAll("9999999999", materialListNew[0].boxITF14)
+            .replaceAll("箱重", materialListNew[0].bigBoxWeight)
+            .replaceAll("中文名称", materialListNew[0].materialName)
+            .replaceAll("S标识", materialListNew[0].oneLogo)
+            .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
+          if (materialList[0].standard === "无" || materialList[0].standard === "" || materialList[0].standard === null) {
+            boxList = boxList.replace("执行标准:", "").replace('无', '').replace(null, '')
           }
+          if (materialList[0].serial === "" || materialList[0].serial === null) {
+            boxList = boxList.replace('系列', '').replace(null, '')
+          }
+          if (materialList[0].oneLogo === "" || materialList[0].oneLogo === null) {
+            boxList = boxList.replace('S标识', '').replace(null, '')
+          }
+          eval(boxList)
+
+          LODOP.PRINT();
+          for (var i = 0; i < dataStringNew.length; i++) {
+            if (i > 0) {
+              LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
+              boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
+                replaceAll(printDateListNew[i - 1], printDateListNew[i]).
+                replaceAll(countListNew[i - 1], countListNew[i]).
+                replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
+                replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
+                replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
+                replaceAll(materialListNew[i - 1].standard, materialListNew[i].standard).
+                replaceAll(materialListNew[i - 1].serial, materialListNew[i].serial).
+                replaceAll(materialListNew[i - 1].productionPlant, materialListNew[i].productionPlant).
+                replaceAll(materialListNew[i - 1].boxIEAN13, materialListNew[i].boxIEAN13).
+                replaceAll(materialListNew[i - 1].boxITF14, materialListNew[i].boxITF14).
+                replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
+                replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
+                replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
+                replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
+                replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
+              // console.log('heList123', boxList)
+              eval(boxList)
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
+          }
+          boxSearch()
         }
-        boxSearch()
       }
     }
   };
@@ -1159,15 +1170,15 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('装盒', 10).
       replace('检02', '检02').
       replace('GB/t', "GB/t").
-      replace('浙江省', "浙江省").
-      replace('上海灵娃', "上海灵娃").
+      replace('地址', "地址:浙江省").
+      replace('生产企业',"生产企业:德力西").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('中文名称', "家用交流电接触器").
       replace('装箱', 10).
       replace('装盒', 10).
       replace('箱重', 10).
-      replace('箱盒数', 10).
+      replace('S标识', "S").
       replace('系列123', "领航者").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
@@ -1178,7 +1189,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     LODOP.SET_PRINT_STYLEA(0, "FontColor", "#EEC591");
     LODOP.SET_PRINT_STYLEA(0, "Angle", 20);
     LODOP.SET_PRINT_STYLEA(0, "Repeat", 1);
-    LODOP.PRINT_DESIGN();
     LODOP.PRINT_DESIGN();
   }
   // 箱---结束

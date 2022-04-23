@@ -58,6 +58,32 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       // },
     },
 
+    // {
+    //   title: "供应商SAP代码",
+    //   dataIndex: "supplierSapCode",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 150,
+    //   valueEnum: supplierSapCodeList.length == 0 ? {} : [supplierSapCodeList],
+    //   initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
+    //   renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+    //     if (type === 'form' || type === 'table') {
+    //       return <Select
+    //         allowClear
+    //         showSearch
+    //         optionFilterProp='children'
+    //       >
+    //         {supplierSapCodeList.map(function (item, index) {
+    //           return <Select.Option key={item.key} value={item.key}>
+    //             {item.label}
+    //           </Select.Option>
+    //         })}
+    //       </Select>
+    //     }
+    //     return defaultRender(_);
+    //   },
+    // },
+
     {
       title: "模板名称",
       dataIndex: "tempName",

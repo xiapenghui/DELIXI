@@ -82,14 +82,14 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         }
         return defaultRender(_);
       },
-      formItemProps: {
-        rules: [
-          {
-            required: true,
-            message: "供应商SAP代码不能为空!",
-          },
-        ],
-      },
+      // formItemProps: {
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "供应商SAP代码不能为空!",
+      //     },
+      //   ],
+      // },
     },
 
     {
@@ -187,11 +187,15 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         if (type === 'form') {
           if (IsUpdate == true) {
             if (stringVal !== '') {
+              debugger
+              // 编辑
               return <textarea value={stringVal} row={3} className='ant-input' disabled={true}></textarea>
             } else {
+              // 复制
               return <textarea row={3} className='ant-input' disabled={true}></textarea>
             }
           } else {
+            // 新增
             return <textarea value={stringAddVal} row={3} className='ant-input' disabled={true}></textarea>
           }
         }
@@ -218,6 +222,27 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         ],
       },
     },
+
+    {
+      title: "维护人",
+      dataIndex: "operator",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
+    {
+      title: "维护时间",
+      dataIndex: "operationDateTime",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInSearch: true,
+      hideInForm: true,
+    },
+
 
     {
       title: "备注",
@@ -262,6 +287,17 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     },
   ];
 
+
+  useEffect(() => {
+    if (createModalVisible == true) {
+      setStringAdddVal('')
+    }
+    if(updateModalVisible == true || copyModalVisible == true) {
+      setStringVal('')
+    }
+
+}, [createModalVisible, updateModalVisible,copyModalVisible])
+
   const query = async (params, sorter, filter) => {
     setIdExp(params.id)
     setTempNameExp(params.tempName)
@@ -305,7 +341,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             tempCode: stringAddVal === "" ? document.getElementById("tempCode").value : stringAddVal,
             tempSize: fields.tempSize,
             remarks: fields.remarks
-          }
+          },
+          userId: user.currentUser.id
         }
       );
       if (data.status == "200") {
@@ -342,7 +379,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
             tempSize: fields.tempSize,
             remarks: fields.remarks
             // ...fields
-          }
+          },
+          userId: user.currentUser.id
         });
       if (data.status == "200") {
         hide();
@@ -476,9 +514,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           <Button type="primary" onClick={() => handleModalVisible(true)}>
             <PlusOutlined /> 新建
           </Button>,
-          <Button type="primary" onClick={() => downloadTemp()}>
-            <FileWordOutlined /> 下载模板
-          </Button>,
+          // <Button type="primary" onClick={() => downloadTemp()}>
+          //   <FileWordOutlined /> 下载模板
+          // </Button>,
           <Button type="primary" onClick={() => handleImportModalVisible(true)}>
             <ArrowDownOutlined /> 导入
           </Button>,

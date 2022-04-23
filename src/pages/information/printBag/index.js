@@ -668,8 +668,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         replace('装袋', dataString.basicQuantity).
         replace('检02', dataString.examination).
         replace('GB/t', dataString.standard).
-        replace('浙江省', dataString.address).
-        replace('上海灵娃', dataString.productionPlant).
+        replace('地址', dataString.address).
+        replace('生产企业', dataString.productionPlant).
         replace('9999999999', dataString.caseITF14).
         replace('中文名称', dataString.materialName).
         replace("系列123", dataString.serial)
@@ -750,8 +750,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         .replace("装袋", "×10")
         .replace("检02", "检02")
         .replace("GB/t", "GB/t")
-        .replace("浙江省", "浙江省")
-        .replace("上海灵娃", "上海灵娃")
+        .replace("地址", "地址:浙江省")
+        .replace("生产企业", "生产企业:德力西")
         .replace("系列", "系列")
         .replace("系列123", "领航者")
         .replace("8888888888", "8888888888")

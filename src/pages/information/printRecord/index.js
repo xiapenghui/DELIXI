@@ -162,6 +162,18 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
         return defaultRender(_);
       },
     },
+
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      ellipsis:true,
+      width: 200,
+      hideInSearch: true,
+    },
+
+
     
     {
       title: "物料描述",
