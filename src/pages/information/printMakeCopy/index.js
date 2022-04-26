@@ -814,7 +814,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 heRightList = heRightList.replace("执行标准:", "").replace('无', '').replace(null, '')
               }
               if (materialList[1].serial === "" ||
-                data.datmaterialList[1].serial === null) {
+                materialList[1].serial === null) {
                 heRightList = heRightList.replace('系列', '').replace(null, '')
               }
               eval(heLeftList + heRightList)
@@ -869,7 +869,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             message.info("打印中，请稍等...")
             heSearch()
           } else {
-            var countList = data.data.countList;
+            debugger
+            // var countList = data.data.countList;
+            var nums = [];
+            data.data.countList.map((item) => {
+              nums.push("×" + item);
+            });
+            var countList = nums;
+
             var heList = content[0]
               .replaceAll("1234567890", dataString[0])
               .replaceAll("2022-01-01", printDateList[0])
@@ -918,7 +925,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   replaceAll(materialList[i - 1].productionPlant, materialList[i].productionPlant).
                   replaceAll(materialList[i - 1].caseIEAN13, materialList[i].caseIEAN13).
                   replaceAll(materialList[i - 1].caseITF14, materialList[i].caseITF14).
-                  replaceAll(materialList[i - 1].materialName, materialList[i].materialName)
+                  replaceAll(materialList[i - 1].materialName, materialList[i].materialName).
                   replaceAll(materialList[i - 1].oneLogo, materialList[i].oneLogo);
                 console.log("heList123", heList);
                 eval(heList);
@@ -964,7 +971,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //测试盒模板
   const heCodeTest = () => {
     LodopFuncs.getLodop()
-    var heList = heString.replace('1234567890A', "1234567890").
+    var heList = heString.replace('1234567890A', "123456789012345678").
       replace('2022-01-01A', "2022-01-01").
       replace('物料型号A', "CDCH6i16201N").
       replace('物料描述A', "CDCH6i16A2P1NC220-240V").
@@ -975,8 +982,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('生产企业A', "生产企业:德力西").
       replace('系列A', "系列").
       replace('系列123A', "领航者").
-      replace('8888888888A', "8888888888").
-      replace('9999999999A', "9999999999").
+      replace('8888888888A', "8888888888888").
+      replace('9999999999A', "99999999999999").
       replace('中文名称A', "家用交流电接触器").
       replace('S标识A', "S").
       replace('1234567890B', "1234567890").
@@ -990,12 +997,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('生产企业B', "生产企业:德力西").
       replace('系列B', "系列").
       replace('系列123B', "领航者").
-      replace('8888888888B', "8888888888").
-      replace('9999999999B', "9999999999").
+      replace('8888888888B', "8888888888888").
+      replace('9999999999B', "99999999999999").
       replace('中文名称B', "家用交流电接触器").
       replace("S标识B", "S")
     eval(heList)
-    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
     LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试盒码");
     LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);
@@ -1091,7 +1098,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             .replaceAll("生产企业", materialListNew[0].productionPlant)
             .replaceAll("8888888888", materialListNew[0].boxIEAN13)
             .replaceAll("9999999999", materialListNew[0].boxITF14)
-            .replaceAll("箱重", materialListNew[0].bigBoxWeight)
+            .replaceAll("箱重", materialListNew[0].bigBoxWeight === null ? "" : materialListNew[0].bigBoxWeight)
             .replaceAll("中文名称", materialListNew[0].materialName)
             .replaceAll("S标识", materialListNew[0].oneLogo)
             .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
@@ -1122,7 +1129,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 replaceAll(materialListNew[i - 1].boxIEAN13, materialListNew[i].boxIEAN13).
                 replaceAll(materialListNew[i - 1].boxITF14, materialListNew[i].boxITF14).
                 replaceAll(materialListNew[i - 1].cartonsNumber, materialListNew[i].cartonsNumber).
-                replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight).
+                replaceAll(materialListNew[i - 1].bigBoxWeight, materialListNew[i].bigBoxWeight === null ? "" : materialListNew[i].bigBoxWeight).
                 replaceAll(materialListNew[i - 1].materialName, materialListNew[i].materialName).
                 replaceAll(materialListNew[i - 1].oneLogo, materialListNew[i].oneLogo).
                 replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage)
@@ -1163,7 +1170,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //测试箱箱模板
   const boxCodeTest = () => {
     LodopFuncs.getLodop()
-    var boxList = boxString.replace('1234567890', "1234567890").
+    var boxList = boxString.replace('1234567890', "123456789012345678").
       replaceAll('2022-01-01', "2022-01-01").
       replace('物料型号', "CDCH6i16201N").
       replace('物料描述', "CDCH6i16A2P1NC220-240V").
@@ -1171,7 +1178,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('检02', '检02').
       replace('GB/t', "GB/t").
       replace('地址', "地址:浙江省").
-      replace('生产企业',"生产企业:德力西").
+      replace('生产企业', "生产企业:德力西").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('X85220322A00030001', "X85220322A00030001").
       replace('中文名称', "家用交流电接触器").
@@ -1180,9 +1187,11 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('箱重', 10).
       replace('S标识', "S").
       replace('系列123', "领航者").
+      replace('8888888888', "8888888888888").
+      replace('9999999999', "99999999999999").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
-    LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+    // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
     LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试箱码");
     LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
     LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);

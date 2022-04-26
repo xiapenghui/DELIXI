@@ -1,5 +1,5 @@
-import { PlusOutlined, SnippetsOutlined, ArrowDownOutlined ,SmileOutlined  } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Select, Radio , notification} from "antd";
+import { PlusOutlined, SnippetsOutlined, ArrowDownOutlined, SmileOutlined } from "@ant-design/icons";
+import { Button, message, DatePicker, Form, Input, Select, Radio, notification } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -32,8 +32,8 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const [IsUpdate, setIsUpdate] = useState(false);
   const [bagString, setBagString] = useState('')
   const [bagSelectCol, setBagSelectCol] = useState('')
-  const [printTypeName, setPrintTypeName] = useState('')
- 
+  const [printTypeName, setPrintTypeName] = useState(""); //设置打印单双排类型
+
 
   const getColumns = () => [
 
@@ -231,7 +231,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     {
       title: "装袋数量",
       // title: () => <a style={{ color: "red" }}>装袋数量</a>,
-      dataIndex: "basicQuantity",
+      dataIndex: "cartonQuantity",
       valueType: "text",
       align: "center",
       width: 120,
@@ -239,11 +239,11 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       // render: (text, record, index, key) => {
       //   return (
       //     <input
-      //       id={"basicQuantity" + record.id}
+      //       id={"cartonQuantity" + record.id}
       //       defaultValue={text === "-" ? "" : text}
       //       style={{ border: "none", color: "red", textAlign: "center", width: "100px"}}
       //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeBasicQuantity(document.getElementById("basicQuantity" + record.id).value, record.id)}
+      //       onBlur={() => changeBasicQuantity(document.getElementById("cartonQuantity" + record.id).value, record.id)}
       //     ></input>
       //   );
       // },
@@ -523,7 +523,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   const changeBasicQuantity = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.basicQuantity = value
+        item.cartonQuantity = value
       }
     })
   };
@@ -639,7 +639,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   //多选袋条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      debugger
       setBagID(selectedRowKeys)
       bagCreateOneFormPage(selectedRowKeys[0])
       setBagSelectCol(selectedRows)
@@ -654,52 +653,132 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (bagID.length > 0 && Number(inputVal) > 0) {
-
       let content = noStart
       if (content === "") {
-        eval(bagString)
-        content = bagString
+        eval(bagString);
+        content = bagString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+      } else {
+        content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
       }
-      var dataString = bagSelectCol[0]
-      var bagList = content.replace('8888888888', dataString.caseIEAN13).
-        replace('2022-01-01', picker).
-        replace('物料型号', dataString.materialType).
-        replace('物料描述', dataString.typeDescription).
-        replace('装袋', dataString.basicQuantity).
-        replace('检02', dataString.examination).
-        replace('GB/t', dataString.standard).
-        replace('地址', dataString.address).
-        replace('生产企业', dataString.productionPlant).
-        replace('9999999999', dataString.caseITF14).
-        replace('中文名称', dataString.materialName).
-        replace("系列123", dataString.serial)
-      if (
-        dataString.standard === "无" ||
-        dataString.standard === "" ||
-        dataString.standard === null
-      ) {
-        bagList = bagList
-          .replace("执行标准:", "")
-          .replace("无", "")
-          .replace(null, "");
-      }
-      if (
-        dataString.serial === "" ||
-        dataString.serial === null
-      ) {
-        bagList = bagList.replace("系列", "").replace(null, "");
-      }
-      eval(bagList)
-      LODOP.PRINT();
-      message.info("打印中，请稍等...")
-      for (var i = 0; i < inputVal; i++) {
-        if (i > 0) {
+      if (printTypeName.includes("双排")) {
+        var dataString = bagSelectCol[0]
+        var bagLeftList;
+        for (let i = 1; i <= inputVal; i++) {
+          console.log(i)
+          if (i % 2 == 0) {
+            console.log('右')
+            var bagRightList = content[1].replace('8888888888B', dataString.caseIEAN13)
+              .replaceAll("2022-01-01B", picker)
+              .replaceAll("装袋B", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+              .replaceAll("物料型号B", dataString.materialType)
+              .replaceAll("物料描述B", dataString.typeDescription)
+              .replaceAll("系列123B", dataString.serial)
+              .replaceAll("检02B", dataString.examination)
+              .replaceAll("GB/tB", dataString.standard)
+              .replaceAll("地址B", dataString.address)
+              .replaceAll("生产企业B", dataString.productionPlant)
+              .replaceAll("8888888888B", dataString.caseIEAN13)
+              .replaceAll("9999999999B", dataString.caseITF14)
+              .replaceAll("中文名称B", dataString.materialName)
+            if (
+              dataString.standard === "无" ||
+              dataString.standard === "" ||
+              dataString.standard === null
+            ) {
+              bagRightList = bagRightList
+                .replace("执行标准:", "")
+                .replace("无", "")
+                .replace(null, "");
+            }
+            if (
+              dataString.serial === "" ||
+              dataString.serial === null
+            ) {
+              bagRightList = bagRightList.replace("系列", "").replace(null, "");
+            }
+            eval(bagLeftList + bagRightList);
+            LODOP.PRINT();
+            LODOP.PRINT_INIT("");
+          }
+          else {
+            console.log('左')
+            bagLeftList = content[0].replace('8888888888A', dataString.caseIEAN13)
+              .replaceAll("2022-01-01A", picker)
+              .replaceAll("装袋A", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+              .replaceAll("物料型号A", dataString.materialType)
+              .replaceAll("物料描述A", dataString.typeDescription)
+              .replaceAll("系列123A", dataString.serial)
+              .replaceAll("检02A", dataString.examination)
+              .replaceAll("GB/tA", dataString.standard)
+              .replaceAll("地址A", dataString.address)
+              .replaceAll("生产企业A", dataString.productionPlant)
+              .replaceAll("8888888888A", dataString.caseIEAN13)
+              .replaceAll("9999999999A", dataString.caseITF14)
+              .replaceAll("中文名称A", dataString.materialName)
+            if (
+              dataString.standard === "无" ||
+              dataString.standard === "" ||
+              dataString.standard === null
+            ) {
+              bagLeftList = bagLeftList
+                .replace("执行标准:", "")
+                .replace("无", "")
+                .replace(null, "");
+            }
+            if (
+              dataString.serial === "" ||
+              dataString.serial === null
+            ) {
+              bagLeftList = bagLeftList.replace("系列", "").replace(null, "");
+            }
+            if (i == inputVal) {
+              eval(bagLeftList);
+              LODOP.PRINT();
+              LODOP.PRINT_INIT("");
+            }
+          }
+        }
+        message.info("打印中，请稍等...");
+      } else {
+        debugger
+        var dataString = bagSelectCol[0]
+        var bagList = content[0]
+          .replaceAll("2022-01-01", picker)
+          .replaceAll("装袋", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+          .replaceAll("物料型号", dataString.materialType)
+          .replaceAll("物料描述", dataString.typeDescription)
+          .replaceAll("系列123", dataString.serial)
+          .replaceAll("检02", dataString.examination)
+          .replaceAll("GB/t", dataString.standard)
+          .replaceAll("地址", dataString.address)
+          .replaceAll("生产企业", dataString.productionPlant)
+          .replaceAll("8888888888", dataString.caseIEAN13)
+          .replaceAll("9999999999", dataString.caseITF14)
+          .replaceAll("中文名称", dataString.materialName)
+        if (
+          dataString.standard === "无" ||
+          dataString.standard === "" ||
+          dataString.standard === null
+        ) {
+          bagList = bagList
+            .replace("执行标准:", "")
+            .replace("无", "")
+            .replace(null, "");
+        }
+        if (
+          dataString.serial === "" ||
+          dataString.serial === null
+        ) {
+          bagList = bagList.replace("系列", "").replace(null, "");
+        }
+        for (let i = 0; i < inputVal; i++) {
+          console.log(i)
           LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-          bagList = bagList.replaceAll(dataString[i - 1], dataString[i]);
-          eval(bagList)
+          eval(bagList);
           LODOP.PRINT();
           LODOP.PRINT_INIT("");
         }
+        message.info("打印中，请稍等...");
       }
 
     } else {
@@ -744,21 +823,34 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
     } else {
       LodopFuncs.getLodop();
       var bagList = noStart
-        .replace("2022-01-01", "2022-01-01")
-        .replace("物料型号", "CDCH6i16201N")
-        .replace("物料描述", "CDCH6i16A2P1NC220-240V")
-        .replace("装袋", "×10")
-        .replace("检02", "检02")
-        .replace("GB/t", "GB/t")
-        .replace("地址", "地址:浙江省")
-        .replace("生产企业", "生产企业:德力西")
+        .replace("2022-01-01A", "2022-01-01")
+        .replace("物料型号A", "CDCH6i16201N")
+        .replace("物料描述A", "CDCH6i16A2P1NC220-240V")
+        .replace("装袋A", "×10")
+        .replace("检02A", "检02")
+        .replace("GB/tA", "GB/t")
+        .replace("地址A", "地址:浙江省")
+        .replace("生产企业A", "生产企业:德力西")
         .replace("系列", "系列")
-        .replace("系列123", "领航者")
-        .replace("8888888888", "8888888888")
-        .replace("9999999999", "9999999999")
+        .replace("系列123A", "领航者")
+        .replace("8888888888A", "8888888888888")
+        .replace("9999999999A", "99999999999999")
+        .replace("中文名称A", "家用交流电接触器")
+        .replace("2022-01-01B", "2022-01-01")
+        .replace("物料型号B", "CDCH6i16201N")
+        .replace("物料描述B", "CDCH6i16A2P1NC220-240V")
+        .replace("装袋B", "×10")
+        .replace("检02B", "检02")
+        .replace("GB/tB", "GB/t")
+        .replace("地址B", "地址:浙江省")
+        .replace("生产企业B", "生产企业:德力西")
+        .replace("系列", "系列")
+        .replace("系列123B", "领航者")
+        .replace("8888888888B", "8888888888888")
+        .replace("9999999999B", "99999999999999")
         .replace("中文名称", "家用交流电接触器")
       eval(bagList);
-      LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
+      // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
       LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试袋码");
       LODOP.SET_PRINT_STYLEA(0, "FontName", "华文彩云");
       LODOP.SET_PRINT_STYLEA(0, "FontSize", 12);

@@ -295,7 +295,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
     {
       title: () => <a style={{ color: "red" }}>盒重量</a>,
-      dataIndex: "weight",
+      dataIndex: "boxWeight",
       valueType: "text",
       align: "center",
       width: 120,
@@ -303,7 +303,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       render: (text, record, index, key) => {
         return (
           <input
-            id={"weight" + record.id}
+            id={"boxWeight" + record.id}
             defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
@@ -312,7 +312,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeWeight(document.getElementById("weight" + record.id).value, record.id)}
+            onBlur={() => changeWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -521,7 +521,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     },
     {
       title: () => <a style={{ color: "red" }}>箱重量</a>,
-      dataIndex: "boxWeight",
+      dataIndex: "bigBoxWeight",
       valueType: "text",
       align: "center",
       width: 150,
@@ -529,7 +529,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       render: (text, record, index, key) => {
         return (
           <input
-            id={"boxWeight" + record.id}
+            id={"bigBoxWeight" + record.id}
             defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
@@ -538,7 +538,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
+            onBlur={() => changeBoxWeight(document.getElementById("bigBoxWeight" + record.id).value, record.id)}
           ></input>
         );
       },
@@ -710,7 +710,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const changeBoxWeight = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.boxWeight = value
+        item.bigBoxWeight = value
       }
     })
   };
@@ -764,7 +764,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const changeWeight = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.weight = value
+        item.boxWeight = value
       }
     })
   };

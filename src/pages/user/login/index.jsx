@@ -7,7 +7,7 @@ import styles from './style.less';
 // import url from '../../../assets/bgi.jpg';
 // import url from '../../../assets/login.jpg';
 // const url = 'http://47.99.130.140/imgs/wallhaven-g83v2e.jpg'
- 
+
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginForm;
 
 
@@ -85,9 +85,9 @@ const Login = (props) => {
 
 
         <div>
-          <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)} style={{ color: '#67be8e' }}>
+          {/* <Checkbox checked={autoLogin} onChange={(e) => setAutoLogin(e.target.checked)} style={{ color: '#67be8e' }}>
             自动登录
-          </Checkbox>
+          </Checkbox> */}
           {/* <a
             style={{
               float: 'right',
@@ -98,9 +98,15 @@ const Login = (props) => {
         </div>
         <Submit loading={submitting}>登录</Submit>
         <div className={styles.other}>
-          <a  href="http://121.41.103.57:8088/DLX_OEM/api/Lodop6.226_Clodop4.158.rar" download="Lodop6.226_Clodop4.158.zip" > 插件本地下载</a>
-          <a className={styles.register} href="http://www.lodop.net/download.html" target="_blank">
+          <a href="http://121.41.103.57:8088/DLX_OEM/api/Lodop6.226_Clodop4.158.rar" download="Lodop6.226_Clodop4.158.zip" > 插件本地下载</a>
+          <a href="http://www.lodop.net/download.html" target="_blank">
             插件官网下载
+          </a>
+          <a href="http://121.41.103.57:8088/DLX_OEM/api/ChromeSetup.exe" target="_blank">
+            谷歌本地下载
+          </a>
+          <a href="http://121.41.103.57:8088/DLX_OEM/api/SunloginClient_12.5.1.44969_x64.exe" target="_blank">
+            向日葵本地下载
           </a>
           {/* <Link className={styles.register} to="/user/register">
             注册账户
