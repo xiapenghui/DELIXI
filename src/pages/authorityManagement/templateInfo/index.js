@@ -187,7 +187,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
         if (type === 'form') {
           if (IsUpdate == true) {
             if (stringVal !== '') {
-              debugger
               // 编辑
               return <textarea value={stringVal} row={3} className='ant-input' disabled={true}></textarea>
             } else {

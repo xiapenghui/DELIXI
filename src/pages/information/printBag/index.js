@@ -667,9 +667,9 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           console.log(i)
           if (i % 2 == 0) {
             console.log('右')
-            var bagRightList = content[1].replace('8888888888B', dataString.caseIEAN13)
+            var bagRightList = content[1]
               .replaceAll("2022-01-01B", picker)
-              .replaceAll("装袋B", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+              .replaceAll("装袋B",   dataString.cartonQuantity === null ? "x" + "" : "x" + dataString.cartonQuantity)
               .replaceAll("物料型号B", dataString.materialType)
               .replaceAll("物料描述B", dataString.typeDescription)
               .replaceAll("系列123B", dataString.serial)
@@ -702,9 +702,9 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           }
           else {
             console.log('左')
-            bagLeftList = content[0].replace('8888888888A', dataString.caseIEAN13)
+            bagLeftList = content[0]
               .replaceAll("2022-01-01A", picker)
-              .replaceAll("装袋A", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+              .replaceAll("装袋A", dataString.cartonQuantity === null ? "x" + "" : "x" + dataString.cartonQuantity)
               .replaceAll("物料型号A", dataString.materialType)
               .replaceAll("物料描述A", dataString.typeDescription)
               .replaceAll("系列123A", dataString.serial)
@@ -744,7 +744,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         var dataString = bagSelectCol[0]
         var bagList = content[0]
           .replaceAll("2022-01-01", picker)
-          .replaceAll("装袋", "x" + dataString.cartonQuantity === null ? "x" + "" : dataString.cartonQuantity)
+          .replaceAll("装袋", dataString.cartonQuantity === null ? "x" + "" : "x" + dataString.cartonQuantity)
           .replaceAll("物料型号", dataString.materialType)
           .replaceAll("物料描述", dataString.typeDescription)
           .replaceAll("系列123", dataString.serial)
