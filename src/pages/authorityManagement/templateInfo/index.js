@@ -97,7 +97,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "tempName",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 250,
       initialValue: IsUpdate ? UpdateDate.tempName : "",
       formItemProps: {
         rules: [
@@ -291,11 +291,11 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     if (createModalVisible == true) {
       setStringAdddVal('')
     }
-    if(updateModalVisible == true || copyModalVisible == true) {
+    if (updateModalVisible == true || copyModalVisible == true) {
       setStringVal('')
     }
-
-}, [createModalVisible, updateModalVisible,copyModalVisible])
+    
+  }, [createModalVisible, updateModalVisible, copyModalVisible])
 
   const query = async (params, sorter, filter) => {
     setIdExp(params.id)

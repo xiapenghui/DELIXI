@@ -602,9 +602,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       let content = noStart;
       if (content === "") {
         eval(zhiString)
-        content = zhiString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+        content = zhiString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
       } else {
-        content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+        content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
       }
       let data = await printBarCode({
         barCodeType: 1,
@@ -731,9 +731,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         let content = noStart
         if (content === "") {
           eval(heString)
-          content = heString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+          content = heString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
         } else {
-          content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");')
+          content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
         }
         let data = await printBarCode({
           barCodeType: 2,

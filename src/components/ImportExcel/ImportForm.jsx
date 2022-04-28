@@ -53,7 +53,7 @@ const ImportForm = (props) => {
         if (info.file.response.status === 200) {
           
           setTimeout(() => {
-            message.success(`${info.file.name} 文件上传成功!`);
+            message.success(`${info.file.name} 文件上传成功!请刷新列表`);
             onCancel()
             query({
               current: 1,

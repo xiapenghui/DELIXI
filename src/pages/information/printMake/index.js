@@ -617,9 +617,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       let content = noStart;
       if (content === "") {
         eval(zhiString);
-        content = zhiString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+        content = zhiString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
       } else {
-        content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+        content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
       }
       if (zhiID.length > 0) {
         let data = await printBarCode({
@@ -769,9 +769,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         let content = noStart;
         if (content === "") {
           eval(heString);
-          content = heString.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+          content = heString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
         } else {
-          content = noStart.split('LODOP.ADD_PRINT_TEXT(0,0,0,0,"");');
+          content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
         }
         if (heID.length > 0) {
 

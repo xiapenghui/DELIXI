@@ -1,0 +1,69 @@
+.ant-modal-body .ant-table-tbody{
+    height: auto !important; 
+}
+
+.pintCode{
+    float: right;
+}
+.pintRight{
+    float: right;
+    margin-right: 20px;
+}
+
+.ant-pro-page-container{
+    height: 100%;
+    margin: 0 !important;
+}
+.ant-tabs{
+    padding-left: 0 !important;
+}
+.ant-pro-grid-content{
+    height: calc(100% - 110px);
+}
+.ant-pro-grid-content-children,
+.ant-pro-grid-content-children>div,
+.ant-pro-page-container-children-content,
+.ant-tabs-content,
+.ant-tabs,
+.ant-spin-nested-loading,
+.ant-spin-container,
+.flex-table .ant-table,
+.ant-table-container,
+.ant-table-content{
+    height: 100%;
+    overflow: hidden;
+}
+.ant-tabs-tabpane{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-right: 20px;
+}
+.ant-table-wrapper.flex-table{
+    flex: 1;
+    overflow: hidden;
+    padding: 0 4px 0 24px !important;
+}
+.flex-table .ant-table-body {
+    height: calc(100% - 55px);
+}
+.ant-btn > span + .anticon{
+    margin-left: 0 !important;
+}
+/* .ant-row{
+    justify-content: space-between !important;
+} */
+.ant-layout{
+    max-height: 100vh;
+    overflow: hidden;
+}
+.ant-spin-container{
+    display: flex;
+    flex-direction: column;
+}
+.flex-table .ant-table{
+    flex: 1;
+}
+.flex-table  .ant-table-empty table{
+    height: 100%
+}

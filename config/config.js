@@ -109,7 +109,12 @@ export default defineConfig({
                   component: '../pages/information/printRecord',
                 },
 
-
+                {
+                  path: '/information/returnInfo',
+                  name: '三包退返管理',
+                  icon: 'smile',
+                  component: '../pages/information/returnInfo',
+                },
                
               ],
             },
