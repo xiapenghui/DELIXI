@@ -47,7 +47,7 @@ const Model = {
     * getDropDownInit({
       payload,
     }, { call, put, select }) {
-      const data = yield call(getDropDownInit)
+      const data = yield call(getDropDownInit,localStorage.user)
       if (data.status !== 200) {
         return message.error(data.message);
       } else if (data.status === 200) {

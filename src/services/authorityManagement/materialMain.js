@@ -6,8 +6,8 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`
 /**
  * 查询条件初始化
  */
-export async function getDropDownInit() {
-  return request(`${ip}/DLX_OEM/api/materialFactory/getDropDownInit`, {
+export async function getDropDownInit(params) {
+  return request(`${ip}/DLX_OEM/api/materialFactory/getDropDownInit/${params}`, {
     method: 'GET'
   });
 }

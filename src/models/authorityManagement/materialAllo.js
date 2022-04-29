@@ -11,7 +11,7 @@ import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { message } from 'antd';
 import { resolve } from 'path';
-
+ 
 const TableName = 'materialAllo'
 const Model = {
   namespace: TableName,
@@ -47,7 +47,7 @@ const Model = {
     * getDropDownInit({
       payload,
     }, { call, put, select }) {
-      const data = yield call(getDropDownInit)
+      const data = yield call(getDropDownInit,localStorage.user)
       if (data.status !== 200) {
         return message.error(data.message);
       } else if (data.status === 200) {

@@ -1,7 +1,7 @@
 import { stringify } from 'querystring';
 import { history } from 'umi';
 import {
-  getDropDownInit
+  // getDropDownInit
 } from '@/services/information/returnInfo';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
@@ -19,10 +19,10 @@ const Model = {
     setup({ dispatch, history }) {
       history.listen((location) => {
         if (location.pathname == `/information/${TableName}`) {
-          dispatch({
-            type: 'getDropDownInit',
-            payload: {}
-          })
+          // dispatch({
+          //   type: 'getDropDownInit',
+          //   payload: {}
+          // })
 
         }
       })

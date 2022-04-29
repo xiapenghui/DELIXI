@@ -30,8 +30,9 @@ import * as LodopFuncs from "../../../utils/LodopFuncs.js";
 import "../returnInfo/components/modal.css";
 const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
 import {
-  getOnlyBarCodeList,
-
+  checkBarCode,
+  generateBarCode,
+  scanBarCode
 } from "@/services/information/returnInfo";
 
 const returnInfoComponent = ({ returnInfo, user }) => {
@@ -53,35 +54,37 @@ const returnInfoComponent = ({ returnInfo, user }) => {
       width: 150,
       fixed: "left",
     },
-    {
-      title: "打印批次",
-      dataIndex: "batchNumber",
-      key: "batchNumber",
-      align: "center",
-      width: 150,
-    },
-
-    {
-      title: "条码类型",
-      dataIndex: "barCodeType",
-      key: "barCodeType",
-      align: "center",
-      width: 150,
-    },
 
     {
       title: "只条码",
-      dataIndex: "barCode",
-      key: "barCode",
+      dataIndex: "onlyBarCode",
+      key: "onlyBarCode",
       align: "center",
       width: 200,
       ellipsis: {
         showTitle: false,
       },
       align: "center",
-      render: (barCode) => (
-        <Tooltip placement="topLeft" title={barCode}>
-          {barCode}
+      render: (onlyBarCode) => (
+        <Tooltip placement="topLeft" title={onlyBarCode}>
+          {onlyBarCode}
+        </Tooltip>
+      ),
+    },
+
+    {
+      title: "供应商SAP编码",
+      dataIndex: "supplierName",
+      key: "supplierName",
+      align: "center",
+      width: 200,
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (supplierName) => (
+        <Tooltip placement="topLeft" title={supplierName}>
+          {supplierName}
         </Tooltip>
       ),
     },
@@ -93,6 +96,23 @@ const returnInfoComponent = ({ returnInfo, user }) => {
       align: "center",
       width: 200,
     },
+
+    {
+      title: "装盒数量",
+      dataIndex: "cartonsNumber",
+      valueType: "text",
+      align: "center",
+      width: 150,
+    },
+
+    {
+      title: "箱盒数量",
+      dataIndex: "boxesNumber",
+      valueType: "text",
+      align: "center",
+      width: 150,
+    },
+
     {
       title: "商品编码",
       dataIndex: "materialType",
@@ -117,27 +137,13 @@ const returnInfoComponent = ({ returnInfo, user }) => {
         showTitle: false,
       },
       align: "center",
-      width: 200,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
         </Tooltip>
       ),
     },
-    {
-      title: "打印时间",
-      dataIndex: "printDateTime",
-      key: "printDateTime",
-      align: "center",
-      width: 150,
-    },
-    {
-      title: "打印人员",
-      dataIndex: "printer",
-      key: "printer",
-      align: "center",
-      width: 150,
-    },
+
   ];
 
   const columns2 = [
@@ -149,35 +155,37 @@ const returnInfoComponent = ({ returnInfo, user }) => {
       width: 150,
       fixed: "left",
     },
-    {
-      title: "打印批次",
-      dataIndex: "batchNumber",
-      key: "batchNumber",
-      align: "center",
-      width: 150,
-    },
 
     {
-      title: "条码类型",
-      dataIndex: "barCodeType",
-      key: "barCodeType",
-      align: "center",
-      width: 150,
-    },
-
-    {
-      title: "盒条码",
-      dataIndex: "barCode",
-      key: "barCode",
+      title: "条码",
+      dataIndex: "onlyBarCode",
+      key: "onlyBarCode",
       align: "center",
       width: 200,
       ellipsis: {
         showTitle: false,
       },
       align: "center",
-      render: (barCode) => (
-        <Tooltip placement="topLeft" title={barCode}>
-          {barCode}
+      render: (onlyBarCode) => (
+        <Tooltip placement="topLeft" title={onlyBarCode}>
+          {onlyBarCode}
+        </Tooltip>
+      ),
+    },
+
+    {
+      title: "供应商SAP编码",
+      dataIndex: "supplierName",
+      key: "supplierName",
+      align: "center",
+      width: 200,
+      ellipsis: {
+        showTitle: false,
+      },
+      align: "center",
+      render: (supplierName) => (
+        <Tooltip placement="topLeft" title={supplierName}>
+          {supplierName}
         </Tooltip>
       ),
     },
@@ -188,6 +196,22 @@ const returnInfoComponent = ({ returnInfo, user }) => {
       key: "materialName",
       align: "center",
       width: 200,
+    },
+    
+    {
+      title: "装盒数量",
+      dataIndex: "cartonsNumber",
+      valueType: "text",
+      align: "center",
+      width: 150,
+    },
+
+    {
+      title: "箱盒数量",
+      dataIndex: "boxesNumber",
+      valueType: "text",
+      align: "center",
+      width: 150,
     },
     {
       title: "商品编码",
@@ -213,26 +237,11 @@ const returnInfoComponent = ({ returnInfo, user }) => {
         showTitle: false,
       },
       align: "center",
-      width: 200,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
         </Tooltip>
       ),
-    },
-    {
-      title: "打印时间",
-      dataIndex: "printDateTime",
-      key: "printDateTime",
-      align: "center",
-      width: 150,
-    },
-    {
-      title: "打印人员",
-      dataIndex: "printer",
-      key: "printer",
-      align: "center",
-      width: 150,
     },
   ];
 
@@ -242,7 +251,8 @@ const returnInfoComponent = ({ returnInfo, user }) => {
   const [dataSource1, setDataSource1] = useState([]);
   const [dataSource2, setDataSource2] = useState([]);
   const [materialTypeList, setMaterialTypeList] = useState([])
-
+  const [zhiSelectCol, setZhiSelectCol] = useState([])
+  const [otherSelectCol, setOtherSelectCol] = useState([])
 
 
 
@@ -264,10 +274,107 @@ const returnInfoComponent = ({ returnInfo, user }) => {
 
 
 
+  //多选只码条码
+  const rowSelection1 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setZhiSelectCol(selectedRows)
+    }
+  };
+
+
+  // 只码扫描
+  const onEnterZhi = async () => {
+    let inputCode1 = document.getElementById("inputCode1").value;
+    if (inputCode1 !== "") {
+      let data1 = await checkBarCode(inputCode1);
+      if (data1.status == 200) {
+        setDataSource1(data1.data)
+      } else {
+        message.error(data1.message);
+      }
+    }
+  }
+
+  // 只码生产
+
+  const zhiModel = async () => {
+    let PickerVal1 = document.getElementById("PickerVal1").value;
+    if (zhiSelectCol.length) {
+      debugger
+      let list1 = await generateBarCode({
+        materialFactoryList: zhiSelectCol,
+        printDate: PickerVal1,
+        userId: user.currentUser.id
+      },
+      );
+      if (list1.status == 200) {
+        setMaterialTypeList(list1.data)
+        handleModalVisible(true)
+      } else {
+        message.error(list1.message);
+      }
+    } else {
+      message.warning('请先选择一条数据！')
+    }
+  }
+
+
+
+
+
+  //多选条码
+  const rowSelection2 = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setOtherSelectCol(selectedRows)
+    }
+  };
+
+
+  // 条码扫描
+  const onEnterOther = async () => {
+    let inputCode2 = document.getElementById("inputCode2").value;
+    if (inputCode2 !== "") {
+      let data2 = await scanBarCode(inputCode2);
+      if (data2.status == 200) {
+        setDataSource2(data2.data)
+      } else {
+        message.error(data2.message);
+      }
+    }
+  }
+
+  // 条码生产
+  const otherModel = async () => {
+    let PickerVal2 = document.getElementById("PickerVal2").value;
+    if (otherSelectCol.length) {
+      let list2 = await generateBarCode({
+        materialFactoryList: otherSelectCol,
+        printDate: PickerVal2,
+        userId: user.currentUser.id
+      },
+      );
+      if (list2.status == 200) {
+        setMaterialTypeList(list2.data)
+        handleModalVisible(true)
+      } else {
+        message.error(list2.message);
+      }
+    } else {
+      message.warning('请先选择一条数据！')
+    }
+  }
+
+
+
+
+
+
+
+
   return (
     <PageContainer>
       <Tabs onChange={callback} type="card" style={{ background: "#fff" }}>
-        <TabPane tab="批量退返处理 " key="1">
+        <TabPane tab="零散退返产品处理" key="1">
           <Form
             // onFinish={zhiSearch}
             form={form1}
@@ -279,12 +386,12 @@ const returnInfoComponent = ({ returnInfo, user }) => {
             <Row>
               <Col span={5}>
                 <Form.Item
-                  name="batchNumber1"
+                  name="zhiCode"
                   label="只码"
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input></Input>
+                  <Input id="inputCode1" onPressEnter={onEnterZhi}></Input>
                 </Form.Item>
               </Col>
 
@@ -293,6 +400,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   type="primary"
                   htmlType="submit"
                   style={{ marginLeft: "10px" }}
+                  onClick={onEnterZhi}
                 >
                   扫描
                 </Button>
@@ -305,7 +413,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
+                  <DatePicker defaultValue={moment(new Date())} id="PickerVal1" allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -314,7 +422,8 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   type="primary"
                   htmlType="submit"
                   style={{ marginLeft: "10px" }}
-                  onClick={() => handleModalVisible(true)}
+                  // onClick={() => handleModalVisible(true)}
+                  onClick={zhiModel}
                 >
                   生产条码
                 </Button>
@@ -334,13 +443,13 @@ const returnInfoComponent = ({ returnInfo, user }) => {
               y: "100%",
             }}
             rowSelection={{
-              // ...rowSelection1,
+              ...rowSelection1,
             }}
             // pagination={{ pageSize: 20 }}
             pagination={{ showTotal: total => `总共 ${dataSource1.length} 条`, }}
           />
         </TabPane>
-        <TabPane tab="零散退返产品处理" key="2">
+        <TabPane tab="批量退返处理" key="2">
           <Form
             // onFinish={heSearch}
             form={form2}
@@ -351,12 +460,12 @@ const returnInfoComponent = ({ returnInfo, user }) => {
             <Row>
               <Col span={5}>
                 <Form.Item
-                  name="batchNumber2"
+                  name="otherCode"
                   label="条码"
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input></Input>
+                  <Input id="inputCode2" onPressEnter={onEnterOther}></Input>
                 </Form.Item>
               </Col>
 
@@ -365,6 +474,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   type="primary"
                   htmlType="submit"
                   style={{ marginLeft: "10px" }}
+                  onClick={onEnterOther}
                 >
                   扫描
                 </Button>
@@ -377,7 +487,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
+                  <DatePicker defaultValue={moment(new Date())} id="PickerVal2" allowClear={false} />
                 </Form.Item>
               </Col>
 
@@ -386,7 +496,8 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   type="primary"
                   htmlType="submit"
                   style={{ marginLeft: "10px" }}
-                  onClick={() => handleModalVisible(true)}
+                  // onClick={() => handleModalVisible(true)}
+                  onClick={otherModel}
                 >
                   生产条码
                 </Button>
@@ -403,7 +514,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
               y: "100%",
             }}
             rowSelection={{
-              // ...rowSelection2,
+              ...rowSelection2,
             }}
             // pagination={{ pageSize: 20 }}
             pagination={{ showTotal: total => `总共 ${dataSource2.length} 条`, }}
