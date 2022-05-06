@@ -154,7 +154,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       dataIndex: "boxLabelDescription",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 250,
       ellipsis: true,
       hideInSearch: true,
     },
@@ -537,6 +537,9 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
         rowKey="id"
         search={{
           labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           // <Button type="primary" onClick={() => handleModalVisible(true)}>

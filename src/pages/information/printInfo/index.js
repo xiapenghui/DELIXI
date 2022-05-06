@@ -46,7 +46,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 250,
       ellipsis: true,
       hideInTable: true,
     },
@@ -875,7 +875,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         message.error(data2.message);
       }
     } else {
-      message.info("请至少选择一条数据！并且打印日期和打印张数(大于0)不能为空！");
+      message.info("请至少选择一条数据！并且打印日期和订单数量(大于0)不能为空！");
     }
   }
 
@@ -969,6 +969,9 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         rowKey="id"
         search={{
           labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           <Form.Item
@@ -984,7 +987,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="订单数量:"
             name="number"
           >
-            <Input style={{ width: "70%" }} id="inputVal" defaultValue={10} />
+            <Input style={{ width: "70%" }} id="inputVal"  />
           </Form.Item>,
 
           // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>

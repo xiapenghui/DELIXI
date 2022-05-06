@@ -43,7 +43,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 250,
       ellipsis: true,
       hideInTable: true,
     },
@@ -864,6 +864,9 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         rowKey="id"
         search={{
           labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           <Form.Item
@@ -879,7 +882,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
             label="订单数量:"
             name="number"
           >
-            <Input id="inputVal" defaultValue={10} />
+            <Input id="inputVal" />
           </Form.Item>,
 
           <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCode}>袋码模板</Button>,

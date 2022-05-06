@@ -237,6 +237,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
         showTitle: false,
       },
       align: "center",
+      width: 250,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -425,7 +426,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   // onClick={() => handleModalVisible(true)}
                   onClick={zhiModel}
                 >
-                  生产条码
+                  生成条码
                 </Button>
               </Col>
 
@@ -499,7 +500,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
                   // onClick={() => handleModalVisible(true)}
                   onClick={otherModel}
                 >
-                  生产条码
+                  生成条码
                 </Button>
               </Col>
             </Row>

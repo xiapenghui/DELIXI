@@ -333,7 +333,10 @@ const factoryInfoComponent = ({ factoryInfo, dispatch, user }) => {
         scroll={{ y: 500 }}
         rowKey="id"
         search={{
-          labelWidth: 150,
+          labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>

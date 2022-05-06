@@ -47,3 +47,7 @@
 .flex-proTable .ant-table-body{
   height: calc(100% - 55px);
 }
+
+.ant-radio-inner{
+  border:  1px solid red;
+}

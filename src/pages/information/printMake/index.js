@@ -124,7 +124,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 200,
+      width: 250,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -220,7 +220,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 200,
+      width: 250,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -317,7 +317,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 200,
+      width: 250,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}

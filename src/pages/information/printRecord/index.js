@@ -181,7 +181,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       valueType: "text",
       align: "center",
       ellipsis:true,
-      width: 200,
+      width: 250,
       hideInSearch: true,
     },
 
@@ -337,7 +337,10 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
         search={{
           // collapsed: false,
           // collapseRender: false,
-          labelWidth: 150,
+          labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           // <Button type="primary" onClick={() => handleModalVisible(true)}>

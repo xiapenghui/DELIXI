@@ -597,6 +597,9 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
         rowKey="id"
         search={{
           labelWidth: 120,
+          optionRender: (searchConfig, formProps, dom) => [
+            ...dom.reverse()
+          ],
         }}
         toolBarRender={() => [
           <Button type="primary" onClick={() => handleModalVisible(true)}>
