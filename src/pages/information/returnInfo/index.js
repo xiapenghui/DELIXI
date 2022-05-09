@@ -137,6 +137,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
         showTitle: false,
       },
       align: "center",
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -237,7 +238,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -301,7 +302,6 @@ const returnInfoComponent = ({ returnInfo, user }) => {
   const zhiModel = async () => {
     let PickerVal1 = document.getElementById("PickerVal1").value;
     if (zhiSelectCol.length) {
-      debugger
       let list1 = await generateBarCode({
         materialFactoryList: zhiSelectCol,
         printDate: PickerVal1,

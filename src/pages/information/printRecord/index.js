@@ -181,7 +181,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       valueType: "text",
       align: "center",
       ellipsis:true,
-      width: 250,
+      width: 300,
       hideInSearch: true,
     },
 

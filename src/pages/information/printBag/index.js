@@ -43,7 +43,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 250,
+      width: 300,
       ellipsis: true,
       hideInTable: true,
     },
@@ -172,7 +172,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 200,
+      width: 300,
       ellipsis: true,
       hideInSearch: true,
       render: (text, record, index, key) => {
@@ -180,7 +180,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
           <input
             id={"typeDescription" + record.id}
             defaultValue={record.typeDescription}
-            style={{ border: "none", color: "red", textAlign: "center" }}
+            style={{ border: "none", color: "red", textAlign: "center" ,width:"300px" }}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
           ></input>
@@ -646,9 +646,9 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       let content = noStart
       if (content === "") {
         eval(bagString);
-        content = bagString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+        content = bagString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       } else {
-        content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+        content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       }
       if (printTypeName.includes("双排")) {
         var dataString = bagSelectCol[0]
@@ -730,7 +730,6 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
         }
         message.info("打印中，请稍等...");
       } else {
-        debugger
         var dataString = bagSelectCol[0]
         var bagList = content[0]
           .replaceAll("2022-01-01", picker)

@@ -124,7 +124,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -220,7 +220,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -317,7 +317,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -616,10 +616,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     } else {
       let content = noStart;
       if (content === "") {
+        debugger
         eval(zhiString);
-        content = zhiString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+        content = zhiString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       } else {
-        content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+        debugger
+        content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       }
       if (zhiID.length > 0) {
         let data = await printBarCode({
@@ -646,7 +648,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           var zhiLeftList = content[0]
             .replaceAll("9876543210", dataString[0])
             .replaceAll("1234567890", qrCodeList[0])
-            .replaceAll("1111111111", materialList[0]);
+            .replaceAll("1111111111", materialList[0].substring(0, 14))
           if (dataString.length == 1) {
             eval(zhiLeftList);
           } else {
@@ -654,7 +656,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             var zhiRightList = content[1]
               .replaceAll("kjihgfedcba", dataString[1])
               .replaceAll("abcdefghijk", qrCodeList[1])
-              .replaceAll("2222222222", materialList[1])
+              .replaceAll("2222222222", materialList[1].substring(0, 14))
             eval(zhiLeftList + zhiRightList);
           }
           LODOP.PRINT();
@@ -666,7 +668,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               zhiLeftList = zhiLeftList
                 .replaceAll(dataString[i - 2], dataString[i])
                 .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-                .replaceAll(materialList[i - 2], materialList[i]);
+                .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
               if (i == dataString.length - 1) {
                 eval(zhiLeftList);
                 LODOP.PRINT();
@@ -676,7 +678,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               zhiRightList = zhiRightList
                 .replaceAll(dataString[i - 2], dataString[i])
                 .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-                .replaceAll(materialList[i - 2], materialList[i]);
+                .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
               eval(zhiLeftList + zhiRightList);
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
@@ -769,9 +771,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         let content = noStart;
         if (content === "") {
           eval(heString);
-          content = heString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+          content = heString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
         } else {
-          content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");');
+          content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
         }
         if (heID.length > 0) {
 
@@ -840,7 +842,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               if (dataString.length == 1) {
                 eval(heLeftList);
               } else {
-                debugger
                 var heRightList = content[1]
                   .replaceAll("1234567890B", dataString[1])
                   .replaceAll("2022-01-01B", printDateList[1])
@@ -1065,7 +1066,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   //点击打印箱条码  箱---开始
   const pintBoxCode = async () => {
     LodopFuncs.getLodop();
-    debugger
     if (form3.getFieldsValue().materialId3 == "" && document.getElementById("form_in_modal_batchNumber3").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {

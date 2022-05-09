@@ -253,7 +253,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   ];
 
   const query = async (params, sorter, filter) => {
-    debugger
     const TableList = postListInit({
       data: {
         id: params.id,

@@ -126,6 +126,8 @@ const BasicLayout = (props) => {
   useEffect(() => {
     // setMenuLoading(true)
     console.log("user---menu--------->", user, route.menuData);
+    debugger
+    // localStorage.setItem("user123", user.currentUser.id);
     // if (location.pathname === '/welcome' || location.pathname === '/') {
     //   fetchCurrent_getMenuListByUserId(user.currentUser.id);
 
@@ -166,7 +168,7 @@ const BasicLayout = (props) => {
       actionRef={actionRef}
       // logo={ <img alt={'logo'} src={logo} style={{ width: '162px', height: '152px', marginBottom: '7px' }} />}
       // logo={<img alt={'logo'} src={logo} style={{ width: '155px', height: '32px', marginBottom: '7px' }} />}
-      logo={<img alt={'logo'} src={logo} style={{ width: '200px', height: '80px',padding:'5px 30px 5px 15px' }} />}
+      logo={<img alt={'logo'} src={logo} style={{ width: '200px', height: '80px', padding: '5px 30px 5px 15px' }} />}
       formatMessage={formatMessage}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}

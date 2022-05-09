@@ -112,7 +112,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -213,7 +213,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -314,7 +314,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 250,
+      width: 300,
       render: (modelDesc) => (
         <Tooltip placement="topLeft" title={modelDesc}>
           {modelDesc}
@@ -602,9 +602,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       let content = noStart;
       if (content === "") {
         eval(zhiString)
-        content = zhiString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
+        content = zhiString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);')
       } else {
-        content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
+        content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);')
       }
       let data = await printBarCode({
         barCodeType: 1,
@@ -630,14 +630,14 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var zhiLeftList = content[0]
           .replaceAll('9876543210', dataString[0])
           .replaceAll('1234567890', qrCodeList[0])
-          .replaceAll("1111111111", materialList[0]);
+          .replaceAll("1111111111", materialList[0].substring(0, 14));
         if (dataString.length == 1) {
           eval(zhiLeftList)
         } else {
           var zhiRightList = content[1]
             .replaceAll('kjihgfedcba', dataString[1])
             .replaceAll('abcdefghijk', qrCodeList[1])
-            .replaceAll("2222222222", materialList[1])
+            .replaceAll("2222222222", materialList[1].substring(0, 14))
           eval(zhiLeftList + zhiRightList)
         }
         LODOP.PRINT();
@@ -649,7 +649,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             zhiLeftList = zhiLeftList
               .replaceAll(dataString[i - 2], dataString[i])
               .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-              .replaceAll(materialList[i - 2], materialList[i]);
+              .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
             if (i == dataString.length - 1) {
               eval(zhiLeftList)
               LODOP.PRINT();
@@ -659,7 +659,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             zhiRightList = zhiRightList
               .replaceAll(dataString[i - 2], dataString[i])
               .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-              .replaceAll(materialList[i - 2], materialList[i]);
+              .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
             eval(zhiLeftList + zhiRightList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
@@ -731,9 +731,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         let content = noStart
         if (content === "") {
           eval(heString)
-          content = heString.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
+          content = heString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);')
         } else {
-          content = noStart.split('LODOP.ADD_PRINT_TEXT(-10,0,0,0,"");')
+          content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);')
         }
         let data = await printBarCode({
           barCodeType: 2,
@@ -753,7 +753,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           typeDescription: document.getElementById("form_in_modal_typeDescription2").value,
         });
         if (data.status == 200 && data.data.barCodeList.length > 0) {
-          debugger
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
@@ -869,7 +868,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             message.info("打印中，请稍等...")
             heSearch()
           } else {
-            debugger
             // var countList = data.data.countList;
             var nums = [];
             data.data.countList.map((item) => {
@@ -1048,7 +1046,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
         });
         if (data.status == 200) {
-          debugger
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList

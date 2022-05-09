@@ -16,10 +16,10 @@ const UserModel = {
     },
 
     *fetchCurrent(_, { call, put }) {
-     
       if (localStorage.getItem('user_token') != null) {
         const response = yield call(queryCurrent);
-        console.log("根据token获取登入信息----->",response.data)
+        debugger
+        console.log("根据token获取登入信息----->", response.data)
         localStorage.setItem("user", response.data.id);
         if (response.status === 200) {
           yield put({
@@ -30,19 +30,19 @@ const UserModel = {
           yield put({
             type: 'login/logout'
           })
-         
+
           return message.error(response.message)
         }
       }
     },
 
     *userOut(_, { call, put }) {
-     console.log("user> modells > 清除数据")
+      console.log("user> modells > 清除数据")
       yield put({
         type: 'saveCurrentUser',
-        payload:null,
+        payload: null,
       });
-      
+
     },
 
     // *getMenuListByUserId(_, { call, put }) {
@@ -96,7 +96,7 @@ const UserModel = {
     // },
 
     saveCurrentUser(state, action) {
-      return { ...state, currentUser: action.payload  };
+      return { ...state, currentUser: action.payload };
     },
 
     // querySuccess(state, { payload }) {

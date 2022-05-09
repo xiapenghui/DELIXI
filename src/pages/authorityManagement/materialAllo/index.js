@@ -566,7 +566,6 @@ const materialAlloComponent = ({ materialAllo, dispatch, user }) => {
 
   //导出
   const handleExport = async () => {
-    debugger
     let data = await exportMaterialFactory({
       data: {
         factoryId: factoryIdExp,

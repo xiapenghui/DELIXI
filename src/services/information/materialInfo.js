@@ -7,7 +7,7 @@ const ip = `${globalConfig.ip}:${globalConfig.port.sspalds_role}`;
  */
 
 export async function getDropDownInit() {
-  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit/all`, {
+  return request(`${ip}/DLX_OEM/api/printRecord/getDropDownInit/all/${localStorage.getItem("user")}`, {
     method: 'GET',
   })
 }

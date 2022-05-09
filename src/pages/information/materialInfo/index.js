@@ -154,7 +154,7 @@ const materialInfoComponent = ({ materialInfo, dispatch, user }) => {
       dataIndex: "boxLabelDescription",
       valueType: "text",
       align: "center",
-      width: 250,
+      width: 300,
       ellipsis: true,
       hideInSearch: true,
     },
