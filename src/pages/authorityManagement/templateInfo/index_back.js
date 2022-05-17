@@ -23,7 +23,7 @@ import {
 } from "@/services/authorityManagement/templateinfo";
 
 const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
-  const { tempList } = templateinfo;
+  const { tempList, supplierSapCodeList  } = templateinfo;
   const { currentUser } = user;
 
   const [createModalVisible, handleModalVisible] = useState(false);
@@ -58,31 +58,40 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       // },
     },
 
-    // {
-    //   title: "供应商SAP代码",
-    //   dataIndex: "supplierSapCode",
-    //   valueType: "text",
-    //   align: "center",
-    //   width: 150,
-    //   valueEnum: supplierSapCodeList.length == 0 ? {} : [supplierSapCodeList],
-    //   initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
-    //   renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-    //     if (type === 'form' || type === 'table') {
-    //       return <Select
-    //         allowClear
-    //         showSearch
-    //         optionFilterProp='children'
-    //       >
-    //         {supplierSapCodeList.map(function (item, index) {
-    //           return <Select.Option key={item.key} value={item.key}>
-    //             {item.label}
-    //           </Select.Option>
-    //         })}
-    //       </Select>
-    //     }
-    //     return defaultRender(_);
-    //   },
-    // },
+    {
+      title: "供应商SAP代码",
+      dataIndex: "supplierSapCode",
+      valueType: "text",
+      align: "center",
+      width: 150,
+      valueEnum: supplierSapCodeList.length == 0 ? {} : [supplierSapCodeList],
+      initialValue: IsUpdate ? UpdateDate.supplierSapCode : "",
+      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
+        if (type === 'form' || type === 'table') {
+          return <Select
+            allowClear
+            showSearch
+            optionFilterProp='children'
+          >
+            {supplierSapCodeList.map(function (item, index) {
+              return <Select.Option key={item.key} value={item.key}>
+                {item.label}
+              </Select.Option>
+            })}
+          </Select>
+        }
+        return defaultRender(_);
+      },
+      // formItemProps: {
+      //   rules: [
+      //     {
+      //       required: true,
+      //       message: "供应商SAP代码不能为空!",
+      //     },
+      //   ],
+      // },
+    },
+
 
     {
       title: "模板名称",
@@ -171,14 +180,6 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       hideInSearch: true,
       // hideInForm:true
       initialValue: IsUpdate ? UpdateDate.tempCode : "",
-      // renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-      //   if (type === 'form') {
-      //     if (stringVal !== '') {
-      //       return  <textarea value={stringVal} row={3} className='ant-input'></textarea>
-      //     } 
-      //   }
-      //   return defaultRender(_);
-      // }
     },
 
 
@@ -251,6 +252,8 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       ),
     },
   ];
+
+ 
 
   const query = async (params, sorter, filter) => {
     const TableList = postListInit({

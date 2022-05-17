@@ -16,10 +16,10 @@ import {
   generateBarCode,
   printBarCode,
   getBagTemp
-} from "@/services/information/printBag";
+} from "@/services/information/printSea";
 
-const printBagComponent = ({ printBag, dispatch, user }) => {
-  const { materialList } = printBag;
+const printSeaComponent = ({ printSea, dispatch, user }) => {
+  const { materialList } = printSea;
   const { currentUser } = user;
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [selectedObj, setSelectedObj] = useState([]);
@@ -137,23 +137,23 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
     {
-      title:"商品编码",
+      title: () => <a style={{ color: "red" }}>商品编码</a>,
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      // render: (text, record, index, key) => {
-      //   return (
-      //     <input
-      //       id={"materialType" + record.id}
-      //       defaultValue={text}
-      //       style={{ border: "none", color: "red", textAlign: "center" }}
-      //       disabled={bagID[0] == record.id ? false : true}
-      //       onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
-      //     ></input>
-      //   );
-      // },
+      render: (text, record, index, key) => {
+        return (
+          <input
+            id={"materialType" + record.id}
+            defaultValue={text}
+            style={{ border: "none", color: "red", textAlign: "center" }}
+            disabled={bagID[0] == record.id ? false : true}
+            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
+          ></input>
+        );
+      },
     },
 
     {
@@ -940,4 +940,4 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
   );
 };
 
-export default connect(({ printBag, user }) => ({ printBag, user }))(printBagComponent);
+export default connect(({ printSea, user }) => ({ printSea, user }))(printSeaComponent);

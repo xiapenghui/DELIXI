@@ -140,23 +140,23 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
 
     {
-      title: () => <a style={{ color: "red" }}>商品编码</a>,
+      title: "商品编码",
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
       width: 200,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialType" + record.id}
-            defaultValue={text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
-          ></input>
-        );
-      },
+      // render: (text, record, index, key) => {
+      //   return (
+      //     <input
+      //       id={"materialType" + record.id}
+      //       defaultValue={text}
+      //       style={{ border: "none", color: "red", textAlign: "center" }}
+      //       disabled={bagID[0] == record.id ? false : true}
+      //       onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
+      //     ></input>
+      //   );
+      // },
     },
 
     {

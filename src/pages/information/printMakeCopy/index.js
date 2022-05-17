@@ -570,12 +570,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             userId: user.currentUser.id
           });
           if (data.status === 200) {
-            if (data.data.threeC === "0") {
-              setNewImage('')
-            } else if (data.data.threeC === "1") {
-              setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`)
+            if (data.data.threeC === "1") {
+              setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
+            } else if (data.data.threeC === "2") {
+              setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
             } else {
-              setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`)
+              setNewImage("");
             }
             setDataSource3(data.data.list);
             setBoxString(data.data.tempCode);
@@ -1233,6 +1233,12 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   }
 
 
+  //选择打印机
+  const chengePint = () => {
+    // LODOP.PRINTA();
+    window.print()
+  }
+
 
   return (
     <PageContainer>
@@ -1321,7 +1327,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: "block" }} hidden={zhiHidden1}>
+              <Col span={4} style={{ display: "block" }} hidden={zhiHidden1}>
                 <Form.Item
                   name="materialNo1"
                   label="物料代号"
@@ -1333,7 +1339,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               </Col>
 
 
-              <Col span={5} style={{ display: 'block' }} hidden={zhiHidden1}>
+              <Col span={4} style={{ display: 'block' }} hidden={zhiHidden1}>
                 <Form.Item
                   name="batchNumber1"
                   label="打印批次"
@@ -1345,8 +1351,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
+              <Col span={10} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
+                <Button type="primary" style={{ marginLeft: "10px" }} onClick={chengePint}> 选择打印机 </Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCodeTest} >测试只码 </Button>
@@ -1458,7 +1465,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: "block" }} hidden={heHidden1}>
+              <Col span={4} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
                   name="materialNo2"
                   label="物料代号"
@@ -1481,7 +1488,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={4} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="printTailBarCode"
                   label="不打印尾部条码"
@@ -1493,8 +1500,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
+              <Col span={10} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
+                <Button type="primary" style={{ marginLeft: "10px" }} onClick={chengePint}> 选择打印机 </Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCodeTest} >测试盒码 </Button>
@@ -1608,7 +1616,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: "block" }} hidden={boxHidden1}>
+              <Col span={4} style={{ display: "block" }} hidden={boxHidden1}>
                 <Form.Item
                   name="materialNo3"
                   label="物料代号"
@@ -1632,7 +1640,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={5} style={{ display: 'block' }} hidden={boxHidden1}>
+              <Col span={4} style={{ display: 'block' }} hidden={boxHidden1}>
                 <Form.Item
                   name="printTailBarCode"
                   label="不打印尾部条码"
@@ -1644,8 +1652,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 </Form.Item>
               </Col>
 
-              <Col span={8} style={{ textAlign: 'right' }}>
+              <Col span={10} style={{ textAlign: 'right' }}>
                 <Button type="primary" htmlType="submit" style={{ marginLeft: '10px' }}>查询</Button>
+                <Button type="primary" style={{ marginLeft: "10px" }} onClick={chengePint}> 选择打印机 </Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}> 箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCodeTest} >测试箱码 </Button>
