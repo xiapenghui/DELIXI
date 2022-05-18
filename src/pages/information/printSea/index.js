@@ -21,16 +21,68 @@ import {
 const printSeaComponent = ({ printSea, dispatch, user }) => {
   const { materialList } = printSea;
   const { currentUser } = user;
-  const [selectedRowsState, setSelectedRows] = useState([]);
+  const [selectedRowsState,] = useState([]);
   const [selectedObj, setSelectedObj] = useState([]);
   const actionRef = useRef();
 
-  const [noStart, setNoStart] = useState('')
+  const [noStart, setNoStart] = useState(`
+  LODOP.PRINT_INITA(0,0,"70.14mm","70.06mm","打印控件功能演示_Lodop功能");
+  LODOP.ADD_PRINT_TEXT(7,5,200,20,"物料名称");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
+  LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+  LODOP.ADD_PRINT_TEXT(7,222,39,20,"装盒");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+  LODOP.ADD_PRINT_LINE(28,2,27,262,0,1);
+  LODOP.ADD_PRINT_TEXT(28,5,173,15,"名称1");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(43,5,175,15,"名称2");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(58,5,175,15,"名称3");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(74,5,175,15,"名称4");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(90,5,175,15,"名称5");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(105,6,175,15,"名称6");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
+  LODOP.ADD_PRINT_TEXT(120,5,175,20,"物料描述");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",10);
+  LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+  LODOP.ADD_PRINT_LINE(144,6,143,156,0,1);
+  LODOP.ADD_PRINT_BARCODE(146,7,150,40,"2_5interleaved","8888888888");
+  LODOP.ADD_PRINT_LINE(190,8,189,158,0,1);
+  LODOP.ADD_PRINT_TEXT(161,170,95,27,"3series");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",18);
+  LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
+  LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+  LODOP.ADD_PRINT_LINE(191,183,190,263,0,3);
+  LODOP.ADD_PRINT_TEXT(193,169,98,17,"MORE VALUE FOR PRICE!");
+  LODOP.SET_PRINT_STYLEA(0,"FontName","微软雅黑");
+  LODOP.SET_PRINT_STYLEA(0,"FontSize",5);
+  LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
+  LODOP.ADD_PRINT_TEXT(211,169,95,20,"生产地");
+  LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+  LODOP.ADD_PRINT_IMAGE(199,12,40,40,'<img src="http://121.41.103.57:8088/DLX_OEM/api/CE.png">');
+  LODOP.SET_PRINT_STYLEA(0,"Stretch",1);
+  LODOP.ADD_PRINT_IMAGE(197,70,40,40,'<img src="http://121.41.103.57:8088/DLX_OEM/api/TUV.png"/>');
+  LODOP.SET_PRINT_STYLEA(0,"Stretch",1);
+  LODOP.ADD_PRINT_IMAGE(38,203,50,100,'<img src="http://121.41.103.57:8088/DLX_OEM/api/HDB3W.png"/>');
+  LODOP.SET_PRINT_STYLEA(0,"Stretch",1);
+  `)
   const [bagID, setBagID] = useState([])
   /**
    * 编辑初始化
    */
-  const [IsUpdate, setIsUpdate] = useState(false);
+
   const [bagString, setBagString] = useState('')
   const [bagSelectCol, setBagSelectCol] = useState('')
   const [printTypeName, setPrintTypeName] = useState(""); //设置打印单双排类型
@@ -38,387 +90,327 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
 
   const getColumns = () => [
 
+
+    {
+      title: "通用物料代号",
+      dataIndex: "generalNo",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      fixed: "left",
+      ellipsis: true,
+    },
+
+    {
+      title: "SAP物料号",
+      dataIndex: "SAPNo",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+    },
+
+    {
+      title: "客户物料号",
+      dataIndex: "userNo",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+
     {
       title: "物料描述",
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 300,
+      width: 200,
       ellipsis: true,
       hideInTable: true,
-    },
-
-    {
-      title: "供应商号",
-      dataIndex: "supplierName",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-    },
-
-    {
-      title: "商品编码",
-      dataIndex: "materialId",
-      valueType: "text",
-      align: "center",
-      width: 150,
-      hideInTable: true,
-      valueEnum: materialList.length == 0 ? {} : [materialList],
-      initialValue: IsUpdate ? UpdateDate.materialId : "",
-      renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        if (type === 'form' || type === 'table') {
-          return <Select
-            allowClear
-            showSearch
-            optionFilterProp='children'
-          >
-            {materialList.map(function (item, index) {
-              return <Select.Option key={item.key} value={item.key}>
-                {item.label}
-              </Select.Option>
-            })}
-          </Select>
-        }
-        return defaultRender(_);
-      },
-    },
-
-    {
-      title: () => <a style={{ color: "red" }}>中文名称</a>,
-      dataIndex: "materialName",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-      ellipsis: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialName" + record.id}
-            defaultValue={record.materialName}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialName(document.getElementById("materialName" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: () => <a style={{ color: "red" }}>英文名称</a>,
-      dataIndex: "materialDescription",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      ellipsis: true,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialDescription" + record.id}
-            defaultValue={record.materialDescription}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialDescription(document.getElementById("materialDescription" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: "商品编码",
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInTable: true,
-    },
-
-
-    {
-      title: () => <a style={{ color: "red" }}>商品编码</a>,
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"materialType" + record.id}
-            defaultValue={text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMater(document.getElementById("materialType" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: "物料代号",
-      dataIndex: "materialNo",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      fixed: "left",
-      // hideInSearch: true,
-    },
-
-
-    {
-      title: () => <a style={{ color: "red" }}>物料描述</a>,
-      dataIndex: "typeDescription",
-      valueType: "text",
-      align: "center",
-      width: 300,
-      ellipsis: true,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"typeDescription" + record.id}
-            defaultValue={record.typeDescription}
-            style={{ border: "none", color: "red", textAlign: "center", width: "300px" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: "是否袋码",
-      dataIndex: "only",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      render: (text) => {
-        if (text == true) {
-          return text = "是"
-        } else {
-          return text = "否"
-        }
-      }
-    },
-
-    {
-      title: () => <a style={{ color: "red" }}>系列</a>,
-      dataIndex: "serial",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"serial" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{ border: "none", color: "red", textAlign: "center" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeSerial(document.getElementById("serial" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: () => <a style={{ color: "red" }}>装袋数量</a>,
-      dataIndex: "cartonQuantity",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"cartonQuantity" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{ border: "none", color: "red", textAlign: "center", width: "100px" }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBasicQuantity(document.getElementById("cartonQuantity" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-
-    {
-      title: "袋单位",
-      dataIndex: "unit",
-      valueType: "text",
-      align: "center",
-      width: 120,
       hideInSearch: true,
     },
 
 
-
     {
-      title: "EAN13码",
-      dataIndex: "caseIEAN13",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      hideInSearch: true,
-    },
-
-
-
-
-
-
-    {
-      title: "工厂",
-      dataIndex: "factoryName",
+      title: "品牌",
+      dataIndex: "brand",
       valueType: "text",
       align: "center",
       width: 200,
       ellipsis: true,
       hideInSearch: true,
     },
+
     {
-      title: () => <a style={{ color: "red" }}>生产企业</a>,
-      dataIndex: "productionPlant",
-      valueType: "text",
-      align: "center",
-      width: 250,
-      ellipsis: true,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"productionPlant" + record.id}
-            defaultValue={record.productionPlant}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "200px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeProductionPlant(document.getElementById("productionPlant" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-    {
-      title: () => <a style={{ color: "red" }}>地址</a>,
-      dataIndex: "address",
-      valueType: "text",
-      align: "center",
-      ellipsis: true,
-      width: 250,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"address" + record.id}
-            defaultValue={record.address === "-" ? "" : record.address}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "200px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeAddress(document.getElementById("address" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-    {
-      title: "备注",
-      dataIndex: "remarks",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      ellipsis: true,
-      hideInSearch: true,
-    },
-    {
-      title: () => <a style={{ color: "red" }}>执行标准</a>,
-      dataIndex: "standard",
+      title: "工厂代号",
+      dataIndex: "factoryNo",
       valueType: "text",
       align: "center",
       width: 200,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"standard" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeStandard(document.getElementById("standard" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-    {
-      title: () => <a style={{ color: "red" }}>检验员</a>,
-      dataIndex: "examination",
-      valueType: "text",
-      align: "center",
-      width: 120,
-      hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"examination" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeExamination(document.getElementById("examination" + record.id).value, record.id)}
-          ></input>
-        );
-      },
-    },
-    {
-      title: "变更标记",
-      dataIndex: "state",
-      valueType: "text",
-      align: "center",
-      width: 120,
+      ellipsis: true,
       hideInSearch: true,
     },
 
 
     {
-      title: () => <a style={{ color: "red" }}>生产日期</a>,
-      dataIndex: "date",
+      title: "名称1",
+      dataIndex: "name1",
       valueType: "text",
       align: "center",
-      width: 180,
+      width: 200,
+      ellipsis: true,
       hideInSearch: true,
-      render: (text, record, index, key) => {
-        return (
-          <input
-            id={"date" + record.id}
-            defaultValue={text === "-" ? "" : text}
-            style={{
-              border: "none",
-              color: "red",
-              textAlign: "center",
-              width: "100px",
-            }}
-            disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeDate(document.getElementById("date" + record.id).value, record.id)}
-          ></input>
-        );
-      },
     },
+
+
+    {
+      title: "名称2",
+      dataIndex: "name2",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+
+    {
+      title: "名称3",
+      dataIndex: "name3",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "名称4",
+      dataIndex: "name4",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "名称5",
+      dataIndex: "name5",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "名称6",
+      dataIndex: "name6",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "装盒数",
+      dataIndex: "cartonsNumber",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "装箱数",
+      dataIndex: "packingQuantity",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+
+    {
+      title: "盒重",
+      dataIndex: "boxWeight",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "箱毛重",
+      dataIndex: "boxHair",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "产品码",
+      dataIndex: "productCode",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "袋贴码",
+      dataIndex: "bagCode",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "盒贴码",
+      dataIndex: "heCode",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+
+    {
+      title: "箱贴码",
+      dataIndex: "boxCode",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "认证标记1",
+      dataIndex: "sign1",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "认证标记2",
+      dataIndex: "sign2",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "认证标记3",
+      dataIndex: "sign3",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "认证标记4",
+      dataIndex: "sign4",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "认证标记5",
+      dataIndex: "sign5",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "制造地",
+      dataIndex: "adress",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "产品勾勒图",
+      dataIndex: "productImg",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "备注1",
+      dataIndex: "remark1",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+    {
+      title: "备注2",
+      dataIndex: "remark2",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      ellipsis: true,
+      hideInSearch: true,
+    },
+
+
+
+    // {
+    //   title: () => <a style={{ color: "red" }}>装袋数量</a>,
+    //   dataIndex: "cartonQuantity",
+    //   valueType: "text",
+    //   align: "center",
+    //   width: 120,
+    //   hideInSearch: true,
+    //   render: (text, record, index, key) => {
+    //     return (
+    //       <input
+    //         id={"cartonQuantity" + record.id}
+    //         defaultValue={text === "-" ? "" : text}
+    //         style={{ border: "none", color: "red", textAlign: "center", width: "100px" }}
+    //         disabled={bagID[0] == record.id ? false : true}
+    //         onBlur={() => changeBasicQuantity(document.getElementById("cartonQuantity" + record.id).value, record.id)}
+    //       ></input>
+    //     );
+    //   },
+    // },
+
+
 
     // {
     //   title: '操作',
@@ -455,59 +447,6 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
 
 
 
-  //获取中文名称
-  const changeMaterialName = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.materialName = value
-      }
-    })
-  };
-
-
-  //获取英文名称
-  const changeMaterialDescription = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.materialDescription = value
-      }
-    })
-  };
-
-
-  //获取物料型号
-  const changeMater = async (value, id) => {
-
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-
-        item.materialType = value
-      }
-    })
-  };
-
-
-
-
-
-
-  // 物料描述
-  const changeTypeDescription = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.typeDescription = value
-      }
-    })
-  };
-
-  // 系列
-  const changeSerial = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.serial = value
-      }
-    })
-  };
 
   // 装袋数量
   const changeBasicQuantity = async (value, id) => {
@@ -520,59 +459,12 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
 
 
 
-  //生产企业
-  const changeProductionPlant = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.productionPlant = value
-      }
-    })
-  };
-
-  //  地址
-  const changeAddress = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.address = value
-      }
-    })
-  };
-
-  //  执行标准
-  const changeStandard = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.standard = value
-      }
-    })
-  };
-
-
-  //  检验员
-  const changeExamination = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.examination = value
-      }
-    })
-  };
-
-  //  检验员
-  const changeDate = async (value, id) => {
-    selectedObj.map((item, key) => {
-      if (item.id == id) {
-        item.date = value
-      }
-    })
-  };
 
 
 
   const query = async (params, sorter, filter) => {
-
     const TableList = postListInit({
       data: {
-        bagged: true,
         materialId: params.materialId,
         materialType: params.materialType,
         materialNo: params.materialNo,
@@ -584,11 +476,44 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
     });
     return TableList.then(function (value) {
       return {
-        data: value.data.list,
-        current: value.pageNum,
-        pageSize: value.pageSize,
-        success: true,
-        total: value.data.total,
+        // data: value.data.list,
+        data: [
+          {
+            generalNo: 'HDB3wHN1C10',
+            SAPNo: 'HIHDB3wHN1C10',
+            userNo: 'HIHDB3wHN1C10',
+            typeDescription: 'HDB3wH C 1P 6kA 10A',
+            brand: 'HIMEL',
+            factoryNo: 'DE02',
+            name1: 'Miniature Circuit Breaker',
+            name2: 'Disjoncteur en miniature',
+            name3: 'Devre Kesici (Otomatik Sigorta)',
+            name4: 'Interruptor Automático',
+            name5: 'قاطع دائرة كهربائية مصغر',
+            name6: 'Автоматический выключатель',
+            cartonsNumber: '12',
+            packingQuantity: '144',
+            boxWeight: '1.2',
+            boxHair: '14.8',
+            productCode: '843375403467',
+            bagCode: '843375453467',
+            heCode: '8433754034670',
+            boxCode: '8433754534675',
+            sign1: 'CE',
+            sign2: 'TUV',
+            sign3: '',
+            sign4: '',
+            sign5: '',
+            adress: 'MADE IN CHINA',
+            productImg: 'CDB3W1P',
+            remark1: '',
+            remark2: ''
+          }
+        ],
+        // current: value.pageNum,
+        // pageSize: value.pageSize,
+        // success: true,
+        // total: value.data.total,
       };
     });
   };
@@ -629,8 +554,9 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
   //多选袋条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
+      debugger
       setBagID(selectedRowKeys)
-      bagCreateOneFormPage(selectedRowKeys[0])
+      // bagCreateOneFormPage(selectedRowKeys[0])
       setBagSelectCol(selectedRows)
       setSelectedObj(selectedRows)
     }
@@ -639,10 +565,12 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
 
   //点击打印袋条码  袋---开始
   const pintBagCode = async () => {
+    debugger
     LodopFuncs.getLodop()
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
-    if (bagID.length > 0 && Number(inputVal) > 0) {
+    // if (bagID.length > 0 && Number(inputVal) > 0) {
+    if (bagSelectCol.length > 0 && Number(inputVal) > 0) {
       let content = noStart
       if (content === "") {
         eval(bagString);
@@ -733,27 +661,17 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
         var dataString = bagSelectCol[0]
         var bagList = content[0]
           .replaceAll("2022-01-01", picker)
-          .replaceAll("装袋", dataString.cartonQuantity === null ? "x" + "" : "x" + dataString.cartonQuantity)
-          .replaceAll("物料型号", dataString.materialType)
+          .replaceAll("装盒", dataString.cartonsNumber === null ? "x" + "" : "x" + dataString.cartonsNumber)
+          .replaceAll("物料名称", dataString.generalNo)
+          .replaceAll("名称1", dataString.name1)
+          .replaceAll("名称2", dataString.name2)
+          .replaceAll("名称3", dataString.name3)
+          .replaceAll("名称4", dataString.name4)
+          .replaceAll("名称5", dataString.name5)
+          .replaceAll("名称6", dataString.name6)
           .replaceAll("物料描述", dataString.typeDescription)
-          .replaceAll("系列123", dataString.serial)
-          .replaceAll("检02", dataString.examination)
-          .replaceAll("GB/t", dataString.standard)
-          .replaceAll("地址", dataString.address)
-          .replaceAll("生产企业", dataString.productionPlant)
-          .replaceAll("8888888888", dataString.caseIEAN13)
-          .replaceAll("9999999999", dataString.caseITF14)
-          .replaceAll("中文名称", dataString.materialName)
-        if (
-          dataString.standard === "无" ||
-          dataString.standard === "" ||
-          dataString.standard === null
-        ) {
-          bagList = bagList
-            .replace("执行标准:", "")
-            .replace("无", "")
-            .replace(null, "");
-        }
+          .replaceAll("8888888888", dataString.productCode)
+          .replaceAll("生产地", dataString.adress)
         if (
           dataString.serial === "" ||
           dataString.serial === null
@@ -771,17 +689,18 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
       }
 
     } else {
-      message.warning('请勾选一条数据!')
+      message.warning('请至少选择一条数据！并且打印日期和订单数量(大于0)不能为空!')
     }
   };
 
 
   //袋条码模板
   const bagCode = () => {
+    LodopFuncs.getLodop()
     if (bagID.length == 0) {
       message.warning("请先勾选一条数据")
     } else {
-      LodopFuncs.getLodop()
+      bagCreateOneFormPage()
       LODOP.On_Return = (TaskID, Value) => {
         setNoStart(Value)
       }
@@ -789,16 +708,21 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
     }
   };
 
-  const bagCreateOneFormPage = async (selectedRowKeys) => {
-    let data = await getBagTemp(selectedRowKeys)
-    if (data.status == 200) {
-      setNoStart(data.data.tempCode)
-      setPrintTypeName(data.data.tempName)
-      eval(data.data.tempCode)
-    } else {
-      message.warning(data.message)
-    }
-  }
+  const bagCreateOneFormPage = () => {
+    eval(noStart);
+  };
+
+
+  // const bagCreateOneFormPage = async (selectedRowKeys) => {
+  //   let data = await getBagTemp(selectedRowKeys)
+  //   if (data.status == 200) {
+  //     setNoStart(data.data.tempCode)
+  //     setPrintTypeName(data.data.tempName)
+  //     eval(data.data.tempCode)
+  //   } else {
+  //     message.warning(data.message)
+  //   }
+  // }
 
   // 袋---结束
 
@@ -892,9 +816,9 @@ const printSeaComponent = ({ printSea, dispatch, user }) => {
             <Input id="inputVal" />
           </Form.Item>,
           <Button type="primary" style={{ marginLeft: "10px" }} onClick={chengePint}> 选择打印机 </Button>,
-          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCode}>袋码模板</Button>,
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCode}>海外模板</Button>,
           <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBagCode}><ArrowDownOutlined />点击打印</Button>,
-          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCodeTest}>测试袋码</Button>
+          <Button type="primary" style={{ marginLeft: '10px' }} onClick={bagCodeTest}>测试海外码</Button>
 
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}

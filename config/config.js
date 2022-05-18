@@ -115,7 +115,13 @@ export default defineConfig({
                   icon: 'smile',
                   component: '../pages/information/returnInfo',
                 },
-               
+
+                {
+                  path: '/information/printSea',
+                  name: '打印海外条码',
+                  icon: 'smile',
+                  component: '../pages/information/printSea',
+                },
               ],
             },
             {

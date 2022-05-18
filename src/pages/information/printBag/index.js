@@ -37,7 +37,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
 
 
   const getColumns = () => [
-
+    
     {
       title: "物料描述",
       dataIndex: "typeDescription",
@@ -771,7 +771,7 @@ const printBagComponent = ({ printBag, dispatch, user }) => {
       }
 
     } else {
-      message.warning('请勾选一条数据!')
+      message.warning('请至少选择一条数据！并且打印日期和订单数量(大于0)不能为空！')
     }
   };
 

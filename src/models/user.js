@@ -18,7 +18,6 @@ const UserModel = {
     *fetchCurrent(_, { call, put }) {
       if (localStorage.getItem('user_token') != null) {
         const response = yield call(queryCurrent);
-        debugger
         console.log("根据token获取登入信息----->", response.data)
         localStorage.setItem("user", response.data.id);
         if (response.status === 200) {

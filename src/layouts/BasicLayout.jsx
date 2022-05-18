@@ -126,7 +126,6 @@ const BasicLayout = (props) => {
   useEffect(() => {
     // setMenuLoading(true)
     console.log("user---menu--------->", user, route.menuData);
-    debugger
     // localStorage.setItem("user123", user.currentUser.id);
     // if (location.pathname === '/welcome' || location.pathname === '/') {
     //   fetchCurrent_getMenuListByUserId(user.currentUser.id);

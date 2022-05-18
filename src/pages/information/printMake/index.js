@@ -616,11 +616,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     } else {
       let content = noStart;
       if (content === "") {
-        debugger
         eval(zhiString);
         content = zhiString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       } else {
-        debugger
         content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
       }
       if (zhiID.length > 0) {
