@@ -51,7 +51,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
-      width: 150,
+      width: 180,
     },
 
     {
@@ -97,7 +97,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 150,
+      width: 180,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -152,7 +152,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
-      width: 150,
+      width: 180,
     },
 
     {
@@ -198,7 +198,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 150,
+      width: 180,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -252,7 +252,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       dataIndex: "batchNumber",
       key: "batchNumber",
       align: "center",
-      width: 150,
+      width: 180,
     },
 
     {
@@ -299,7 +299,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         showTitle: false,
       },
       align: "center",
-      width: 150,
+      width: 180,
       render: (materialType) => (
         <Tooltip placement="topLeft" title={materialType}>
           {materialType}
@@ -1357,8 +1357,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCode}>只码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintZhiCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={zhiCodeTest} >测试只码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button>
+                {/* <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggol} hidden={zhiHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={zhiToggo2} hidden={zhiHidden1}> <ArrowUpOutlined /></Button> */}
               </Col>
             </Row>
           </Form>
@@ -1506,8 +1506,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCode} >盒码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintHeCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={heCodeTest} >测试盒码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol} hidden={heHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2} hidden={heHidden1}> <ArrowUpOutlined /></Button>
+                {/* <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggol} hidden={heHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={heToggo2} hidden={heHidden1}> <ArrowUpOutlined /></Button> */}
               </Col>
             </Row>
 
@@ -1658,8 +1658,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCode}> 箱码模板</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={pintBoxCode}><ArrowDownOutlined />点击打印</Button>
                 <Button type="primary" style={{ marginLeft: '10px' }} onClick={boxCodeTest} >测试箱码 </Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol} hidden={boxHidden2}> <ArrowDownOutlined /></Button>
-                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2} hidden={boxHidden1}> <ArrowUpOutlined /></Button>
+                {/* <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggol} hidden={boxHidden2}> <ArrowDownOutlined /></Button>
+                <Button type="primary" style={{ marginLeft: '10px' }} shape="circle" onClick={boxToggo2} hidden={boxHidden1}> <ArrowUpOutlined /></Button> */}
 
               </Col>
 

@@ -19,8 +19,8 @@ const UserModel = {
       if (localStorage.getItem('user_token') != null) {
         const response = yield call(queryCurrent);
         console.log("根据token获取登入信息----->", response.data)
-        localStorage.setItem("user", response.data.id);
         if (response.status === 200) {
+          localStorage.setItem("user", response.data.id);
           yield put({
             type: 'saveCurrentUser',
             payload: response.data,

@@ -78,5 +78,12 @@ export async function exportTemp(params) {
   });
 }
  
-
+// 一键还原模板
+// id:模板id,userId:用户id
+export async function resTemplate(id,userId) {
+  return request(`${ip}/DLX_OEM/api/temp/restoreOriginalTemplate/${id}/${userId}`, {
+    method: "GET",
+  });
+}
+ 
  

@@ -98,7 +98,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "tempName",
       valueType: "text",
       align: "center",
-      width: 150,
+      width: 300,
       initialValue: IsUpdate ? UpdateDate.tempName : "",
       formItemProps: {
         rules: [

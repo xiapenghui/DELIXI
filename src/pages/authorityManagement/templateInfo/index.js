@@ -1,5 +1,5 @@
 import { PlusOutlined, FileWordOutlined, ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Select, notification } from "antd";
+import { Button, message, DatePicker, Form, Input, Select, notification, Popconfirm } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -21,6 +21,7 @@ import {
   getTempl,
   addPost,
   updatePut,
+  resTemplate
 } from "@/services/authorityManagement/templateinfo";
 
 const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
@@ -46,6 +47,9 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
   const [idExp, setIdExp] = useState("");
   const [tempNameExp, setTempNameExp] = useState("");
   const [supplierSapCodeExp, setSupplierSapCodeExp] = useState("");
+
+  const [pigeNo, setPigeNo] = useState(1)
+
 
   const getColumns = () => [
     {
@@ -97,7 +101,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       dataIndex: "tempName",
       valueType: "text",
       align: "center",
-      width: 250,
+      width: 300,
       initialValue: IsUpdate ? UpdateDate.tempName : "",
       formItemProps: {
         rules: [
@@ -259,7 +263,7 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
       valueType: "option",
       align: "center",
       fixed: "right",
-      width: 120,
+      width: 180,
       render: (_, record) => (
         <>
           <a
@@ -281,6 +285,13 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
           >
             复制
           </a>
+          <Popconfirm placement="top" title="您确定要还原初始模板吗?" onConfirm={() => changeBack({ ...record })} okText="确定" cancelText="取消">
+            <a
+              style={{ marginLeft: "20px" }}
+            >
+              一键还原
+            </a>
+          </Popconfirm>
         </>
       ),
     },
@@ -294,10 +305,11 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     if (updateModalVisible == true || copyModalVisible == true) {
       setStringVal('')
     }
-    
+
   }, [createModalVisible, updateModalVisible, copyModalVisible])
 
   const query = async (params, sorter, filter) => {
+    setPigeNo(params.current)
     setIdExp(params.id)
     setTempNameExp(params.tempName)
     setSupplierSapCodeExp(params.supplierSapCode)
@@ -457,6 +469,23 @@ const templateinfoComponent = ({ templateinfo, dispatch, user }) => {
     } else {
       message.error(data.message);
       return false;
+    }
+  };
+
+
+
+  //一键还原
+  const changeBack = async (row) => {
+    let data = await resTemplate(row.id, user.currentUser.id);
+    if (data.status === 200) {
+      message.success(data.message);
+      query({
+        current: pigeNo,
+        pageSize: 20
+      })
+      actionRef.current.reload();
+    } else {
+      message.error(data.message);
     }
   };
 

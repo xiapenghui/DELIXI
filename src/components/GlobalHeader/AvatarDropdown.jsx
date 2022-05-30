@@ -26,6 +26,7 @@ class AvatarDropdown extends React.Component {
       }
       localStorage.removeItem("user_menu")
       localStorage.removeItem("user_token")
+      localStorage.removeItem("user")
       dispatch({
         type: 'user/userOut',
       });
@@ -82,7 +83,7 @@ class AvatarDropdown extends React.Component {
       });
       localStorage.removeItem("user_menu");
       localStorage.removeItem("user_token");
-
+      localStorage.removeItem("user")
     }
 
     const handleCancel = () => {
