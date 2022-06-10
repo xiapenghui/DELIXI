@@ -350,7 +350,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const [zhiString, setZhiString] = useState('')
   const [heString, setHeString] = useState('')
   const [boxString, setBoxString] = useState('')
-  const [newImage, setNewImage] = useState('')
   const [zhiHidden1, setZhiHidden1] = useState(false)
   const [zhiHidden2, setZhiHidden2] = useState(true)
   const [heHidden1, setHeHidden1] = useState(false)
@@ -386,6 +385,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         icon: <SmileOutlined style={{ color: "red" }} />,
       });
     }
+
     // setPrintTypeTimes((printTypeTimes) => {
     //   return printTypeTimes + 1;
     // });
@@ -570,13 +570,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             userId: user.currentUser.id
           });
           if (data.status === 200) {
-            if (data.data.threeC === "1") {
-              setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
-            } else if (data.data.threeC === "2") {
-              setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
-            } else {
-              setNewImage("");
-            }
             setDataSource3(data.data.list);
             setBoxString(data.data.tempCode);
             setPrintTypeName(data.data.tempName);
@@ -1046,6 +1039,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
         });
         if (data.status == 200) {
+          var newImage = "";
+          if (data.data.materialList[0].threeC === "1") {
+            newImage = `<img src='${ip}/DLX_OEM/api/3c.png'>`;
+          } else if (data.data.materialList[0].threeC === "2") {
+            newImage = `<img src='${ip}/DLX_OEM/api/cqc.png'>`;
+          } else if (data.data.materialList[0].threeC === "3") {
+            newImage = `<img src='${ip}/DLX_OEM/api/cvc.png'>`;
+          } else {
+            newImage = "";
+          }
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList

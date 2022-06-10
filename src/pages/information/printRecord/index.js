@@ -1,5 +1,5 @@
-import { PlusOutlined , ArrowUpOutlined} from "@ant-design/icons";
-import { Button, message, TimePicker, DatePicker, Input ,Tag ,Select  } from "antd";
+import { PlusOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { Button, message, TimePicker, DatePicker, Input, Tag, Select } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -16,8 +16,8 @@ import {
   exportPrintInfoRecord
 } from "@/services/information/printRecord";
 
-const printRecordComponent = ({ printRecord, dispatch ,user}) => {
-  const { TableList, typeList, riskList, isNoList ,materialList} = printRecord;
+const printRecordComponent = ({ printRecord, dispatch, user }) => {
+  const { TableList, typeList, riskList, isNoList, materialList } = printRecord;
   const { currentUser } = user;
   const [createModalVisible, handleModalVisible] = useState(false);
   const [updateModalVisible, handleUpdateModalVisible] = useState(false);
@@ -49,7 +49,7 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       width: 200,
       fixed: "left",
     },
-    
+
     {
       title: "打印时间从",
       dataIndex: "startDate",
@@ -58,8 +58,8 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       align: "center",
       width: 150,
       hideInTable: true,
-      // initialValue: new Date(),
-      // initialValue: moment(UpdateDate.tsdateStart),
+      initialValue: moment(new Date()),
+      // initialValue: moment(UpdateDate.startDate),
     },
 
     {
@@ -70,8 +70,8 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       align: "center",
       width: 150,
       hideInTable: true,
-      // initialValue: new Date(),
-      // initialValue: moment(UpdateDate.tsdateEnd),
+      initialValue: moment(new Date()),
+      // initialValue: moment(UpdateDate.endDate),
     },
 
 
@@ -91,13 +91,13 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       align: "center",
       width: 150,
       hideInSearch: true,
-        render: (text, record) => {
-        let color = text ==="未打印" ? "red" : "green";
-          return (
-            <Tag color={color}>
-              {text}
-            </Tag>
-          );
+      render: (text, record) => {
+        let color = text === "未打印" ? "red" : "green";
+        return (
+          <Tag color={color}>
+            {text}
+          </Tag>
+        );
       },
     },
 
@@ -168,19 +168,19 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       dataIndex: "materialType",
       valueType: "text",
       align: "center",
-      ellipsis:true,
+      ellipsis: true,
       width: 200,
       hideInSearch: true,
     },
 
 
-    
+
     {
       title: "物料描述",
       dataIndex: "materialDescription",
       valueType: "text",
       align: "center",
-      ellipsis:true,
+      ellipsis: true,
       width: 300,
       hideInSearch: true,
     },
@@ -238,11 +238,11 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       data: {
         startDate: params.startDate,
         endDate: params.endDate,
-        materialNo:params.materialNo,
-        materialId:params.materialId,
-        onlyBarCode:params.onlyBarCode,
-        boxBarCode:params.boxBarCode,
-        bigBoxBarCode:params.bigBoxBarCode
+        materialNo: params.materialNo,
+        materialId: params.materialId,
+        onlyBarCode: params.onlyBarCode,
+        boxBarCode: params.boxBarCode,
+        bigBoxBarCode: params.bigBoxBarCode
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -263,13 +263,13 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
    * @param fields
    */
 
- 
+
   /**
    * 更新节点
    * @param handleUpdate 编辑保存
    */
 
-   
+
   /**
    *  删除节点
    * @param selectedRows
@@ -300,15 +300,15 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
   };
 
 
-   //导出
-   const handleExport = async () => {
+  //导出
+  const handleExport = async () => {
     let data = await exportPrintInfoRecord({
       data: {
         startDate: startDateExp,
         endDate: endDateExp,
         materialNo: materialNoExp,
         materialId: materialIdExp,
-        onlyBarCode:onlyBarCodeExp,
+        onlyBarCode: onlyBarCodeExp,
         boxBarCode: boxBarCodeExp,
         bigBoxBarCode: bigBoxBarCodeExp
       },
@@ -323,9 +323,9 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
       return false;
     }
   };
- 
 
- 
+
+
   return (
     <PageContainer>
       <ProTable
@@ -384,11 +384,11 @@ const printRecordComponent = ({ printRecord, dispatch ,user}) => {
           </Button> */}
         </FooterToolbar>
       )}
-       
+
     </PageContainer>
   );
 };
 
-export default connect(({ printRecord ,user}) => ({ printRecord ,user }))(
+export default connect(({ printRecord, user }) => ({ printRecord, user }))(
   printRecordComponent
 );

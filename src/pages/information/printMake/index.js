@@ -358,11 +358,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const [heID, setHeID] = useState([]);
   const [boxID, setBoxID] = useState([]);
 
-  const [newImage, setNewImage] = useState("");
   const [cartonsNumber2Val, setCartonsNumber2Val] = useState(""); //获取盒条码输入箱盒数
-  const [cartonsNumber3Val, setCartonsNumber3Val] = useState(""); //获取箱条码输入箱盒数
-
-
 
   const [zhiHidden1, setZhiHidden1] = useState(false);
   const [zhiHidden2, setZhiHidden2] = useState(true);
@@ -472,13 +468,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
   const changeCartonsNumber2 = (e) => {
     setCartonsNumber2Val(e.target.value)
   }
-
-
-  //获取箱条码箱盒数
-  const changeCartonsNumber3 = (e) => {
-    setCartonsNumber3Val(e.target.value)
-  }
-
 
 
 
@@ -608,13 +597,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           }
         );
         if (data.status === 200) {
-          if (data.data.threeC === "1") {
-            setNewImage(`<img src='${ip}/DLX_OEM/api/3c.png'>`);
-          } else if (data.data.threeC === "2") {
-            setNewImage(`<img src='${ip}/DLX_OEM/api/cqc.png'>`);
-          } else {
-            setNewImage("");
-          }
           setDataSource3(data.data.list);
           setBoxString(data.data.tempCode);
           setPrintTypeName(data.data.tempName);
@@ -1225,7 +1207,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         content = boxString;
       }
       if (boxID.length > 0) {
-        let data = await printBarCode({
+        var paramsBox = {
           barCodeIdList: boxID,
           barCodeType: 3,
           materialId: form3.getFieldsValue().materialId3,
@@ -1241,14 +1223,33 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           batchNumber: document.getElementById("form_in_modal_batchNumber3").value,
           materialNo: document.getElementById("form_in_modal_materialNo3").value,
           typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
-        });
+        }
+        if (status != 'No') {
+          //有防串码不需要重新计算箱盒数
+          paramsBox = paramsBox
+        } else {
+          //无防串码重新计算箱盒数
+          paramsBox.printType = 1
+          paramsBox.packingQuantity = document.getElementById("form_in_modal_packingQuantity").value
+        }
+
+        let data = await printBarCode(paramsBox);
         if (data.status == 200) {
-          debugger
+          var newImage = "";
+          if (data.data.materialList[0].threeC === "1") {
+            newImage = `<img src='${ip}/DLX_OEM/api/3c.png'>`;
+          } else if (data.data.materialList[0].threeC === "2") {
+            newImage = `<img src='${ip}/DLX_OEM/api/cqc.png'>`;
+          } else if (data.data.materialList[0].threeC === "3") {
+            newImage = `<img src='${ip}/DLX_OEM/api/cvc.png'>`;
+          } else {
+            newImage = "";
+          }
           var dataString = data.data.barCodeList;
           var printDateList = data.data.printDateList;
           var materialList = data.data.materialList;
           // var countList = data.data.countList;
-
+          debugger
           var nums = [];
           data.data.countList.map((item) => {
             nums.push("×" + item);
@@ -1282,13 +1283,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           });
 
           if (status == 'No') {
-            debugger
             //无防窜码
             var boxList = content.replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1SET_PRINT_STYLEA')
               // .replaceAll("1234567890", dataStringNew[0])
               .replaceAll("2022-01-01", printDateListNew[0])
-              // .replaceAll("装箱", countListNew[0])
-              .replaceAll("装箱", cartonsNumber3Val != '' ? 'x' + cartonsNumber3Val : countListNew[0])
+              .replaceAll("装箱", countListNew[0])
               .replaceAll("物料型号", materialListNew[0].materialType)
               .replaceAll("物料描述", materialListNew[0].typeDescription)
               .replaceAll("检02", materialListNew[0].examination)
@@ -1353,8 +1352,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 // boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
                 boxList = boxList.
                   replaceAll(printDateListNew[i - 1], printDateListNew[i]).
-                  // replaceAll(countListNew[i - 1], countListNew[i]).
-                  replaceAll(countListNew[i - 1], cartonsNumber3Val != '' ? 'x' + cartonsNumber3Val : countListNew[i]).
+                  replaceAll(countListNew[i - 1], countListNew[i]).
                   replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
                   replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
                   replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
@@ -1407,7 +1405,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //箱条码无防窜码按钮
   const pintNoBoxCode = (status) => {
-    pintBoxCode(status)
+    //如果箱盒数为空则不打印
+    if (document.getElementById("form_in_modal_packingQuantity").value == '') {
+      message.info('箱盒数必须填且大于0')
+    } else {
+      pintBoxCode(status)
+    }
   };
 
 
@@ -2050,12 +2053,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
               <Col span={4} style={{ display: "block" }} hidden={heHidden1}>
                 <Form.Item
-                  name="cartonsNumber3"
+                  name="packingQuantity"
                   label="箱盒数:"
                   hasFeedback
                   {...formItemLayout2}
                 >
-                  <Input onBlur={changeCartonsNumber3}></Input>
+                  <Input></Input>
                 </Form.Item>
               </Col>
 

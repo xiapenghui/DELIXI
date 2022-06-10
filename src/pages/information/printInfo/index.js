@@ -175,7 +175,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       dataIndex: "typeDescription",
       valueType: "text",
       align: "center",
-      width: 300,
+      width: 420,
       ellipsis: true,
       hideInSearch: true,
       render: (text, record, index, key) => {
@@ -183,7 +183,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           <input
             id={"typeDescription" + record.id}
             defaultValue={record.typeDescription}
-            style={{ border: "none", color: "red", textAlign: "center" ,width:"300px" }}
+            style={{ border: "none", color: "red", textAlign: "left" ,width:"400px" }}
             disabled={bagID[0] == record.id ? false : true}
             onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
           ></input>
