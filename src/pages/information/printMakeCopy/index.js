@@ -429,10 +429,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   //获取只码批次号失焦
   const changeBatch1 = (e) => {
     form2.setFieldsValue({
-      batchNumber2: e.target.value
+      batchNumber2: e.target.value.trim()
     });
     form3.setFieldsValue({
-      batchNumber3: e.target.value
+      batchNumber3: e.target.value.trim()
     });
   }
 
@@ -440,20 +440,20 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
   const changeBatch2 = (e) => {
     form1.setFieldsValue({
-      batchNumber1: e.target.value
+      batchNumber1: e.target.value.trim()
     });
     form3.setFieldsValue({
-      batchNumber3: e.target.value
+      batchNumber3: e.target.value.trim()
     });
   }
 
   //获取箱码批次号失焦
   const changeBatch3 = (e) => {
     form1.setFieldsValue({
-      batchNumber1: e.target.value
+      batchNumber1: e.target.value.trim()
     });
     form2.setFieldsValue({
-      batchNumber2: e.target.value
+      batchNumber2: e.target.value.trim()
     });
   }
 
@@ -487,7 +487,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 endDate: moment(values.endDate1).format(globalConfig.form.onlyDateFormat),
                 barCode: values.barCode1,
                 materialId: values.materialId1,
-                batchNumber: values.batchNumber1,
+                batchNumber: values.batchNumber1.trim(),
                 materialNo: values.materialNo1,
                 typeDescription: values.typeDescription1,
                 state: 1,
@@ -524,7 +524,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 endDate: moment(values.endDate2).format(globalConfig.form.onlyDateFormat),
                 barCode: values.barCode2,
                 materialId: values.materialId2,
-                batchNumber: values.batchNumber2,
+                batchNumber: values.batchNumber2.trim(),
                 materialNo: values.materialNo2,
                 typeDescription: values.typeDescription2,
                 state: 1,
@@ -560,7 +560,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               endDate: moment(values.endDate3).format(globalConfig.form.onlyDateFormat),
               barCode: values.barCode3,
               materialId: values.materialId3,
-              batchNumber: values.batchNumber3,
+              batchNumber: values.batchNumber3.trim(),
               materialNo: values.materialNo3,
               typeDescription: values.typeDescription3,
               state: 1,
@@ -611,7 +611,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           globalConfig.form.onlyDateFormat
         ),
         barCode: document.getElementById("form_in_modal_barCode1").value,
-        batchNumber: document.getElementById("form_in_modal_batchNumber1").value,
+        batchNumber: document.getElementById("form_in_modal_batchNumber1").value.trim(),
         materialNo: document.getElementById("form_in_modal_materialNo1").value,
         typeDescription: document.getElementById("form_in_modal_typeDescription1").value,
       });
@@ -741,7 +741,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             globalConfig.form.onlyDateFormat
           ),
           barCode: document.getElementById("form_in_modal_barCode2").value,
-          batchNumber: document.getElementById("form_in_modal_batchNumber2").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber2").value.trim(),
           materialNo: document.getElementById("form_in_modal_materialNo2").value,
           typeDescription: document.getElementById("form_in_modal_typeDescription2").value,
         });
@@ -1034,7 +1034,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             globalConfig.form.onlyDateFormat
           ),
           barCode: document.getElementById("form_in_modal_barCode3").value,
-          batchNumber: document.getElementById("form_in_modal_batchNumber3").value,
+          batchNumber: document.getElementById("form_in_modal_batchNumber3").value.trim(),
           materialNo: document.getElementById("form_in_modal_materialNo3").value,
           typeDescription: document.getElementById("form_in_modal_typeDescription3").value,
         });

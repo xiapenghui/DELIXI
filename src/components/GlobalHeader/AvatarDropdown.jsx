@@ -175,7 +175,8 @@ class AvatarDropdown extends React.Component {
               hasFeedback
               {...formItemLayout}
               rules={[{
-                required: true, message: '请输入新密码',
+                required: true, message: '密码长度不能小于8位',
+                type: 'string', min: 8
               }]}
             >
               <Input.Password
@@ -189,7 +190,8 @@ class AvatarDropdown extends React.Component {
               hasFeedback
               {...formItemLayout}
               rules={[{
-                required: true, message: '请确认新密码',
+                required: true, message: '密码长度不能小于8位',
+                type: 'string', min: 8
               }]}
             >
               <Input.Password
