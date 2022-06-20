@@ -1249,7 +1249,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           var printDateList = data.data.printDateList;
           var materialList = data.data.materialList;
           // var countList = data.data.countList;
-          debugger
+
           var nums = [];
           data.data.countList.map((item) => {
             nums.push("×" + item);
@@ -1281,6 +1281,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           materialList.map((item, index) => {
             materialListNew.splice(index * 2, 0, item);
           });
+
 
           if (status == 'No') {
             //无防窜码
@@ -1329,12 +1330,16 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           ) {
             boxList = boxList.replace("执行标准:", "").replace("无", "").replace(null, "");
           }
+
           if (
             materialList[0].serial === "" ||
             materialList[0].serial === null
           ) {
-            boxList = boxList.replace("系列", "").replace(null, "");
+            // boxList = boxList.replace("系列", "").replace(null, "");
+            //个别数据描述里面含有系列2字，因此需要替换最后一个，需先转成一行在去替换
+            boxList = boxList.replace(/[\r\n]/g, "").replace(/(.*)系列/, '$1').replace(null, "");
           }
+
           if (
             materialList[0].oneLogo === "" ||
             materialList[0].oneLogo === null

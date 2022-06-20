@@ -31,6 +31,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [materialTypeRow, setMaterialTypeRow] = useState('')
   const [materialTypeList, setMaterialTypeList] = useState([])
   const [bagID, setBagID] = useState([])
+  const [loading, setLoading] = useState(false)
+  
 
 
   /**
@@ -837,12 +839,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   }
 
 
-  
-
-
-
-
-
 
 
   //多选袋条码
@@ -856,11 +852,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
 
   //点击确认生成条码
   const confirm = async () => {
-
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
     if (selectedObj.length > 0 && Number(inputVal) > 0) {
-
+      handleModalVisible(true);
+      setLoading(true)
+      setMaterialTypeList([])
       let data2 = await generateBarCode({
         materialFactoryList: selectedObj,
         printDate: picker,
@@ -868,11 +865,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         userId: user.currentUser.id
       });
       if (data2.status == '200') {
-
-        handleModalVisible(true);
         setMaterialTypeList(data2.data)
+        setLoading(false)
       } else {
         message.error(data2.message);
+        setLoading(false)
       }
     } else {
       message.info("请至少选择一条数据！并且打印日期和订单数量(大于0)不能为空！");
@@ -1040,6 +1037,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         onCancel={() => handleModalVisible(false)}
         modalVisible={createModalVisible}
         materialTypeList={materialTypeList}
+        loading={loading}
         title="打印条码"
       ></PrintForm>
 

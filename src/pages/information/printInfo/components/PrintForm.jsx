@@ -61,18 +61,16 @@ const columns = [
 
 
 const PrintForm = (props) => {
-  const { modalVisible, onCancel, materialTypeList } = props;
+  const { modalVisible, onCancel, materialTypeList ,loading } = props;
   const [keys, setKeys] = useState(1);
   const [zhiCode, setZhiCode] = useState(false);
   const [heCode, setHeCode] = useState(true);
   const [boxCode, setBoxCode] = useState(true);
-  const [loading1, setLoading1] = useState(false);
-  const [loading2, setLoading2] = useState(false);
-  const [loading3, setLoading3] = useState(false);
+ 
 
 
 
-
+debugger
 
 
   //tabs切换获取当前index
@@ -130,9 +128,9 @@ const PrintForm = (props) => {
           <Table
             dataSource={materialTypeList.onlyBarCodeList}
             columns={columns}
-            pagination={false}
-            loading={loading1}
-            // pagination={{ pageSize: 20 }}
+            // pagination={false}
+            loading={loading}
+            pagination={{ pageSize: 50 }}
             scroll={{ y: 300 }}
           />
         </TabPane>
@@ -140,9 +138,9 @@ const PrintForm = (props) => {
           <Table
             dataSource={materialTypeList.boxBarCodeList}
             columns={columns}
-            pagination={false}
-            loading={loading2}
-            // pagination={{ pageSize: 20 }}
+            // pagination={false}
+            loading={loading}
+            pagination={{ pageSize: 50 }}
             scroll={{ y: 300 }}
           />
         </TabPane>
@@ -150,9 +148,9 @@ const PrintForm = (props) => {
           <Table
             dataSource={materialTypeList.bigBoxBarCodeList}
             columns={columns}
-            pagination={false}
-            loading={loading3}
-            // pagination={{ pageSize: 20 }}
+            // pagination={false}
+            loading={loading}
+            pagination={{ pageSize: 50 }}
             scroll={{ y: 300 }}
           />
         </TabPane>

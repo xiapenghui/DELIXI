@@ -1106,7 +1106,9 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             boxList = boxList.replace("执行标准:", "").replace('无', '').replace(null, '')
           }
           if (materialList[0].serial === "" || materialList[0].serial === null) {
-            boxList = boxList.replace('系列', '').replace(null, '')
+            // boxList = boxList.replace('系列', '').replace(null, '')
+            //个别数据描述里面含有系列2字，因此需要替换最后一个，需先转成一行在去替换
+            boxList = boxList.replace(/[\r\n]/g, "").replace(/(.*)系列/, '$1').replace(null, "");
           }
           if (materialList[0].oneLogo === "" || materialList[0].oneLogo === null) {
             boxList = boxList.replace('S标识', '').replace(null, '')
