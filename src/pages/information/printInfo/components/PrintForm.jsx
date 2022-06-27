@@ -67,11 +67,7 @@ const PrintForm = (props) => {
   const [heCode, setHeCode] = useState(true);
   const [boxCode, setBoxCode] = useState(true);
  
-
-
-
-debugger
-
+ 
 
   //tabs切换获取当前index
   const callback = (key) => {

@@ -399,6 +399,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //获取只码商品编码
   const changeMaterialId1 = (value) => {
+    //只码商品编码同步到盒和箱
     setMaterialId1(value);
     form2.setFieldsValue({
       materialId2: value
@@ -410,6 +411,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //获取盒码商品编码
   const changeMaterialId2 = (value) => {
+     //盒码商品编码同步到只和箱
     setMaterialId2(value);
     form1.setFieldsValue({
       materialId1: value
@@ -421,6 +423,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
 
   //获取箱码商品编码
   const changeMaterialId3 = (value) => {
+     //箱码商品编码同步到只和盒
     setMaterialId3(value);
     form1.setFieldsValue({
       materialId1: value
@@ -640,13 +643,15 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           typeDescription: document.getElementById("form_in_modal_typeDescription1").value,
         });
         if (data.status == 200) {
+          debugger
           var dataString = data.data.barCodeList;
           var qrCodeList = data.data.qrCodeList;
           var materialList = data.data.materialList.map((item) => item.materialType)
           var zhiLeftList = content[0]
             .replaceAll("9876543210", dataString[0])
             .replaceAll("1234567890", qrCodeList[0])
-            .replaceAll("1111111111", materialList[0].substring(0, 14))
+            //下面三元的意识是，默认保留14位，超出中间星号代替
+            .replaceAll("1111111111", materialList[0].length >= 15 ?  materialList[0].substr(0, 7) + '*' +  materialList[0].substr(-7) :  materialList[0])
           if (dataString.length == 1) {
             eval(zhiLeftList);
           } else {
@@ -654,7 +659,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             var zhiRightList = content[1]
               .replaceAll("kjihgfedcba", dataString[1])
               .replaceAll("abcdefghijk", qrCodeList[1])
-              .replaceAll("2222222222", materialList[1].substring(0, 14))
+              //下面三元的意识是，默认保留14位，超出中间星号代替
+              .replaceAll("2222222222", materialList[1].length >= 15 ? materialList[1].substr(0, 7) + '*' + materialList[1].substr(-7) : materialList[1])
             eval(zhiLeftList + zhiRightList);
           }
           LODOP.PRINT();
@@ -666,7 +672,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               zhiLeftList = zhiLeftList
                 .replaceAll(dataString[i - 2], dataString[i])
                 .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-                .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
+                .replaceAll(materialList[i - 2], materialList[i].length >= 15 ? materialList[i].substr(0, 7) + '*' + materialList[i].substr(-7) : materialList[i]);
               if (i == dataString.length - 1) {
                 eval(zhiLeftList);
                 LODOP.PRINT();
@@ -676,31 +682,13 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               zhiRightList = zhiRightList
                 .replaceAll(dataString[i - 2], dataString[i])
                 .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-                .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
+                .replaceAll(materialList[i - 2], materialList[i].length >= 15 ? materialList[i].substr(0, 7) + '*' + materialList[i].substr(-7) : materialList[i]);
               eval(zhiLeftList + zhiRightList);
               LODOP.PRINT();
               LODOP.PRINT_INIT("");
             }
           }
           message.info("打印中，请稍等...");
-
-          // var zhiList = content.replaceAll('9876543210', dataString[0]).
-          //   replaceAll('1234567890', qrCodeList[0]).
-          //   replace('2022-01-01', data.data.material.date)
-          // eval(zhiList)
-          // LODOP.PRINT();
-          // for (var i = 0; i < 2; i++) {
-          //   if (i > 0) {
-          //
-          //     LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
-          //     zhiList = zhiList.replaceAll(dataString[i - 1], dataString[i]).
-          //       replaceAll(qrCodeList[i - 1], qrCodeList[i])
-          //     console.log('zhiList123', zhiList)
-          //     eval(zhiList)
-          //     LODOP.PRINT();
-          //     LODOP.PRINT_INIT("");
-          //   }
-          // }
         } else {
           message.error(data.message);
         }
@@ -768,6 +756,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
         let content = noStart;
         if (content === "") {
           eval(heString);
+          // 以LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1)分割为左右模板;
           content = heString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
         } else {
           content = noStart.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
@@ -1248,45 +1237,58 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           var dataString = data.data.barCodeList;
           var printDateList = data.data.printDateList;
           var materialList = data.data.materialList;
+          var firstBarCodeList = data.data.firstBarCodeList;
           // var countList = data.data.countList;
 
+          // 拼接x和箱盒数，因为不拼接箱盒数会repalceAll掉EAN13和ITF14的条码，会使条码报错
           var nums = [];
           data.data.countList.map((item) => {
             nums.push("×" + item);
           });
-          var countList = nums;
 
+          var countList = nums;
           var dataStringNew = [];
           var printDateListNew = [];
           var countListNew = [];
           var materialListNew = [];
+          var firstBarCodeListNew =[]
 
-
+          //重复两次防串码
           dataStringNew = JSON.parse(JSON.stringify(dataString));
           dataString.map((item, index) => {
             dataStringNew.splice(index * 2, 0, item);
           });
 
+          //重复两次日期
           printDateListNew = JSON.parse(JSON.stringify(printDateList));
           printDateList.map((item, index) => {
             printDateListNew.splice(index * 2, 0, item);
           });
 
+          //重复两次箱盒数
           countListNew = JSON.parse(JSON.stringify(countList));
           countList.map((item, index) => {
             countListNew.splice(index * 2, 0, item);
           });
 
+          //重复两次标签数据
           materialListNew = JSON.parse(JSON.stringify(materialList));
           materialList.map((item, index) => {
             materialListNew.splice(index * 2, 0, item);
           });
 
+          //重复两次序号
+          firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
+          firstBarCodeList.map((item, index) => {
+            firstBarCodeListNew.splice(index * 2, 0, item);
+          });
+          
+
 
           if (status == 'No') {
             //无防窜码
             var boxList = content.replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1SET_PRINT_STYLEA')
-              // .replaceAll("1234567890", dataStringNew[0])
+              .replaceAll("序号", '')
               .replaceAll("2022-01-01", printDateListNew[0])
               .replaceAll("装箱", countListNew[0])
               .replaceAll("物料型号", materialListNew[0].materialType)
@@ -1306,6 +1308,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             //有防窜码
             var boxList = content
               .replaceAll("1234567890", dataStringNew[0])
+              .replaceAll("序号", firstBarCodeListNew[0])
               .replaceAll("2022-01-01", printDateListNew[0])
               .replaceAll("装箱", countListNew[0])
               .replaceAll("物料型号", materialListNew[0].materialType)
@@ -1324,8 +1327,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           }
 
           console.log('boxList', boxList)
-
-
           if (materialList[0].standard === "无" || materialList[0].standard === "" || materialList[0].standard === null
           ) {
             boxList = boxList.replace("执行标准:", "").replace("无", "").replace(null, "");
@@ -1357,6 +1358,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 // boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
                 boxList = boxList.
                   replaceAll(printDateListNew[i - 1], printDateListNew[i]).
+                  replaceAll("序号", '').
                   replaceAll(countListNew[i - 1], countListNew[i]).
                   replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
                   replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
@@ -1377,6 +1379,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               } else {
 
                 boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
+                  replaceAll(24[i - 1], firstBarCodeListNew[i]).
                   replaceAll(printDateListNew[i - 1], printDateListNew[i]).
                   replaceAll(countListNew[i - 1], countListNew[i]).
                   replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
@@ -1460,6 +1463,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       .replace("系列123", "领航者")
       .replace("8888888888", "8888888888888")
       .replace("9999999999", "99999999999999")
+      .replace("序号", "00001")
       .replace(
         `<img src='${ip}/DLX_OEM/api/3c.png'>`,
         `<img src='${ip}/DLX_OEM/api/3c.png'>`

@@ -591,7 +591,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
     if (form1.getFieldsValue().materialId1 == "" && document.getElementById("form_in_modal_batchNumber1").value == "") {
       message.warning('请先选择商品编码或打印批次')
     } else {
-
       let content = noStart;
       if (content === "") {
         eval(zhiString)
@@ -623,14 +622,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
         var zhiLeftList = content[0]
           .replaceAll('9876543210', dataString[0])
           .replaceAll('1234567890', qrCodeList[0])
-          .replaceAll("1111111111", materialList[0].substring(0, 14));
+          //下面三元的意识是，默认保留14位，超出中间星号代替
+          .replaceAll("1111111111", materialList[0].length >= 15 ? materialList[0].substr(0, 7) + '*' + materialList[0].substr(-7) : materialList[0]);
         if (dataString.length == 1) {
           eval(zhiLeftList)
         } else {
           var zhiRightList = content[1]
             .replaceAll('kjihgfedcba', dataString[1])
             .replaceAll('abcdefghijk', qrCodeList[1])
-            .replaceAll("2222222222", materialList[1].substring(0, 14))
+            //下面三元的意识是，默认保留14位，超出中间星号代替
+            .replaceAll("2222222222", materialList[1].length >= 15 ? materialList[1].substr(0, 7) + '*' + materialList[1].substr(-7) : materialList[1])
           eval(zhiLeftList + zhiRightList)
         }
         LODOP.PRINT();
@@ -642,7 +643,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             zhiLeftList = zhiLeftList
               .replaceAll(dataString[i - 2], dataString[i])
               .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-              .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
+              .replaceAll(materialList[i - 2], materialList[i].length >= 15 ? materialList[i].substr(0, 7) + '*' + materialList[i].substr(-7) : materialList[i]);
             if (i == dataString.length - 1) {
               eval(zhiLeftList)
               LODOP.PRINT();
@@ -652,7 +653,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             zhiRightList = zhiRightList
               .replaceAll(dataString[i - 2], dataString[i])
               .replaceAll(qrCodeList[i - 2], qrCodeList[i])
-              .replaceAll(materialList[i - 2], materialList[i].substring(0, 14));
+              .replaceAll(materialList[i - 2], materialList[i].length >= 15 ? materialList[i].substr(0, 7) + '*' + materialList[i].substr(-7) : materialList[i]);
             eval(zhiLeftList + zhiRightList)
             LODOP.PRINT();
             LODOP.PRINT_INIT("");
@@ -1052,6 +1053,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
+          var firstBarCodeList = data.data.firstBarCodeList;
           // var countList = data.data.countList
           //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
           //中报条码类型错误
@@ -1065,28 +1067,43 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var printDateListNew = []
           var countListNew = []
           var materialListNew = [];
+          var firstBarCodeListNew =[]
 
           //默认箱码打印两张，以下为循环两次
+          //重复两次防串码
           dataStringNew = JSON.parse(JSON.stringify(dataString))
           dataString.map((item, index) => {
             dataStringNew.splice(index * 2, 0, item);
           })
+
+           //重复两次日期
           printDateListNew = JSON.parse(JSON.stringify(printDateList))
           printDateList.map((item, index) => {
             printDateListNew.splice(index * 2, 0, item);
           })
+
+           //重复两次箱盒数
           countListNew = JSON.parse(JSON.stringify(countList))
           countList.map((item, index) => {
             countListNew.splice(index * 2, 0, item);
           })
+
+          //重复两次标签数据
           materialListNew = JSON.parse(JSON.stringify(materialList));
           materialList.map((item, index) => {
             materialListNew.splice(index * 2, 0, item);
           });
 
 
+          //重复两次序号
+          firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
+          firstBarCodeList.map((item, index) => {
+            firstBarCodeListNew.splice(index * 2, 0, item);
+          });
+
           var boxList = content
             .replaceAll("1234567890", dataStringNew[0])
+            .replaceAll("序号", firstBarCodeListNew[0])
             .replaceAll("2022-01-01", printDateListNew[0])
             .replaceAll("装箱", countListNew[0])
             .replaceAll("物料型号", materialListNew[0].materialType)
@@ -1120,6 +1137,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             if (i > 0) {
               LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
               boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
+                replaceAll(firstBarCodeListNew[i - 1], firstBarCodeListNew[i]).
                 replaceAll(printDateListNew[i - 1], printDateListNew[i]).
                 replaceAll(countListNew[i - 1], countListNew[i]).
                 replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
@@ -1191,6 +1209,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('系列123', "领航者").
       replace('8888888888', "8888888888888").
       replace('9999999999', "99999999999999").
+      replace("序号", "00001").
       replace(`<img src='${ip}/DLX_OEM/api/3c.png'>`, `<img src='${ip}/DLX_OEM/api/3c.png'>`)
     eval(boxList)
     // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);

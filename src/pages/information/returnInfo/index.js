@@ -510,7 +510,7 @@ const returnInfoComponent = ({ returnInfo, user }) => {
             dataSource={dataSource2}
             columns={columns2}
             style={{ padding: "0 20px" }}
-            rowKey="id"
+            rowKey="id*id"
             scroll={{
               y: "100%",
             }}
