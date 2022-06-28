@@ -750,6 +750,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
+          var firstBarCodeList = data.data.firstBarCodeList;
+
           // var countList = data.data.countList
           if (printTypeName.includes("双排")) {
             //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
@@ -760,6 +762,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             })
             var countList = nums
             var heLeftList = content[0].replaceAll('1234567890A', dataString[0])
+              .replaceAll('序号A', firstBarCodeList[0])
               .replaceAll('2022-01-01A', printDateList[0])
               .replaceAll('装盒A', countList[0])
               .replaceAll("物料型号A", materialList[0].materialType)
@@ -788,6 +791,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             } else {
               var heRightList = content[1]
                 .replaceAll("1234567890B", dataString[1])
+                .replaceAll('序号B', firstBarCodeList[1])
                 .replaceAll("2022-01-01B", printDateList[1])
                 .replaceAll("装盒B", countList[1])
                 .replaceAll("物料型号B", materialList[1].materialType)
@@ -819,6 +823,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               if (i % 2 == 0) {
                 // 左边 
                 heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
+                  .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                   .replaceAll(printDateList[i - 2], printDateList[i])
                   .replaceAll(countList[i - 2], countList[i])
                   .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
@@ -841,6 +846,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               } else {
                 heRightList = heRightList
                   .replaceAll(dataString[i - 2], dataString[i])
+                  .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                   .replaceAll(printDateList[i - 2], printDateList[i])
                   .replaceAll(countList[i - 2], countList[i])
                   .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
@@ -871,6 +877,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
             var heList = content[0]
               .replaceAll("1234567890", dataString[0])
+              .replaceAll("序号", firstBarCodeList[0])
               .replaceAll("2022-01-01", printDateList[0])
               .replaceAll("装盒", countList[0])
               .replaceAll("物料型号", materialList[0].materialType)
@@ -906,6 +913,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               if (i > 0) {
                 LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
                 heList = heList.replaceAll(dataString[i - 1], dataString[i]).
+                  replaceAll(firstBarCodeList[i - 1], firstBarCodeList[i]).
                   replaceAll(printDateList[i - 1], printDateList[i]).
                   replaceAll(countList[i - 1], countList[i]).
                   replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
@@ -978,6 +986,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('9999999999A', "99999999999999").
       replace('中文名称A', "家用交流电接触器").
       replace('S标识A', "S").
+      replace('序号A', "0001").
       replace('1234567890B', "1234567890").
       replace('2022-01-01B', "2022-01-01").
       replace('物料型号B', "CDCH6i16201N").
@@ -992,7 +1001,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
       replace('8888888888B', "8888888888888").
       replace('9999999999B', "99999999999999").
       replace('中文名称B', "家用交流电接触器").
-      replace("S标识B", "S")
+      replace("S标识B", "S").
+      replace('序号B', "0002")
     eval(heList)
     // LODOP.ADD_PRINT_LINE("36.99mm", "43.89mm", "36.99mm", "92.1mm", 0, 1);
     LODOP.ADD_PRINT_TEXT(57, 53, 115, 35, "测试盒码");

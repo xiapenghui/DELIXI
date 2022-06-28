@@ -1,5 +1,13 @@
 import { PlusOutlined, SnippetsOutlined } from "@ant-design/icons";
-import { Button, message, DatePicker, Form, Input, Popconfirm, Select } from "antd";
+import {
+  Button,
+  message,
+  DatePicker,
+  Form,
+  Input,
+  Popconfirm,
+  Select,
+} from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { Link, connect } from "umi";
 import { PageContainer, FooterToolbar } from "@ant-design/pro-layout";
@@ -17,7 +25,7 @@ import {
   getAddDropDownInit,
   addPost,
   updatePut,
-  generateBarCode
+  generateBarCode,
 } from "@/services/information/printInfo";
 
 const printInfoComponent = ({ printInfo, dispatch, user }) => {
@@ -28,12 +36,10 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [selectedObj, setSelectedObj] = useState([]);
   const actionRef = useRef();
-  const [materialTypeRow, setMaterialTypeRow] = useState('')
-  const [materialTypeList, setMaterialTypeList] = useState([])
-  const [bagID, setBagID] = useState([])
-  const [loading, setLoading] = useState(false)
-  
-
+  const [materialTypeRow, setMaterialTypeRow] = useState("");
+  const [materialTypeList, setMaterialTypeList] = useState([]);
+  const [bagID, setBagID] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   /**
    * 编辑初始化
@@ -42,7 +48,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   const [UpdateDate, setUpdateDate] = useState({});
 
   const getColumns = () => [
-
     {
       title: "物料描述",
       dataIndex: "typeDescription",
@@ -72,18 +77,18 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       valueEnum: materialList.length == 0 ? {} : [materialList],
       initialValue: IsUpdate ? UpdateDate.materialId : "",
       renderFormItem: (_, { type, defaultRender, ...rest }, form) => {
-        if (type === 'form' || type === 'table') {
-          return <Select
-            allowClear
-            showSearch
-            optionFilterProp='children'
-          >
-            {materialList.map(function (item, index) {
-              return <Select.Option key={item.key} value={item.key}>
-                {item.label}
-              </Select.Option>
-            })}
-          </Select>
+        if (type === "form" || type === "table") {
+          return (
+            <Select allowClear showSearch optionFilterProp="children">
+              {materialList.map(function (item, index) {
+                return (
+                  <Select.Option key={item.key} value={item.key}>
+                    {item.label}
+                  </Select.Option>
+                );
+              })}
+            </Select>
+          );
         }
         return defaultRender(_);
       },
@@ -104,7 +109,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             defaultValue={record.materialName}
             style={{ border: "none", color: "red", textAlign: "center" }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialName(document.getElementById("materialName" + record.id).value, record.id)}
+            onBlur={() =>
+              changeMaterialName(
+                document.getElementById("materialName" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -125,7 +135,13 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             defaultValue={record.materialDescription}
             style={{ border: "none", color: "red", textAlign: "center" }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeMaterialDescription(document.getElementById("materialDescription" + record.id).value, record.id)}
+            onBlur={() =>
+              changeMaterialDescription(
+                document.getElementById("materialDescription" + record.id)
+                  .value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -139,7 +155,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 200,
       hideInTable: true,
     },
-
 
     {
       title: "商品编码",
@@ -171,7 +186,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       // hideInSearch: true,
     },
 
-
     {
       title: () => <a style={{ color: "red" }}>物料描述</a>,
       dataIndex: "typeDescription",
@@ -185,9 +199,19 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           <input
             id={"typeDescription" + record.id}
             defaultValue={record.typeDescription}
-            style={{ border: "none", color: "red", textAlign: "left" ,width:"400px" }}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "left",
+              width: "400px",
+            }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeTypeDescription(document.getElementById("typeDescription" + record.id).value, record.id)}
+            onBlur={() =>
+              changeTypeDescription(
+                document.getElementById("typeDescription" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -202,11 +226,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
       render: (text) => {
         if (text == true) {
-          return text = "是"
+          return (text = "是");
         } else {
-          return text = "否"
+          return (text = "否");
         }
-      }
+      },
     },
 
     {
@@ -223,7 +247,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             defaultValue={text === "-" ? "" : text}
             style={{ border: "none", color: "red", textAlign: "center" }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeSerial(document.getElementById("serial" + record.id).value, record.id)}
+            onBlur={() =>
+              changeSerial(
+                document.getElementById("serial" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -241,9 +270,19 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
           <input
             id={"basicQuantity" + record.id}
             defaultValue={text === "-" ? "" : text}
-            style={{ border: "none", color: "red", textAlign: "center", width: "100px"}}
+            style={{
+              border: "none",
+              color: "red",
+              textAlign: "center",
+              width: "100px",
+            }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBasicQuantity(document.getElementById("basicQuantity" + record.id).value, record.id)}
+            onBlur={() =>
+              changeBasicQuantity(
+                document.getElementById("basicQuantity" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -257,9 +296,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 120,
       hideInSearch: true,
     },
-
-
-
 
     {
       title: () => <a style={{ color: "red" }}>装盒数量</a>,
@@ -280,7 +316,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeCartonsNumber(document.getElementById("cartonsNumber" + record.id).value, record.id)}
+            onBlur={() =>
+              changeCartonsNumber(
+                document.getElementById("cartonsNumber" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -314,7 +355,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeWeight(document.getElementById("boxWeight" + record.id).value, record.id)}
+            onBlur={() =>
+              changeWeight(
+                document.getElementById("boxWeight" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -329,9 +375,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
     {
-      title:<a style={{ color: "red" }}>箱盒数量</a>,
+      title: <a style={{ color: "red" }}>箱盒数量</a>,
       dataIndex: "boxesNumber",
       valueType: "text",
       align: "center",
@@ -349,7 +394,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxesNumber(document.getElementById("boxesNumber" + record.id).value, record.id)}
+            onBlur={() =>
+              changeBoxesNumber(
+                document.getElementById("boxesNumber" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -364,7 +414,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
     {
       title: "箱EAN13码",
       dataIndex: "boxIEAN13",
@@ -373,7 +422,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 200,
       hideInSearch: true,
     },
-
 
     {
       title: "盒ITF14码",
@@ -384,7 +432,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       hideInSearch: true,
     },
 
-
     {
       title: "箱ITF14码",
       dataIndex: "boxITF14",
@@ -393,9 +440,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
       width: 200,
       hideInSearch: true,
     },
-
-
-
 
     {
       title: "工厂",
@@ -426,7 +470,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "200px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeProductionPlant(document.getElementById("productionPlant" + record.id).value, record.id)}
+            onBlur={() =>
+              changeProductionPlant(
+                document.getElementById("productionPlant" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -451,7 +500,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "200px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeAddress(document.getElementById("address" + record.id).value, record.id)}
+            onBlur={() =>
+              changeAddress(
+                document.getElementById("address" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -476,7 +530,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         return (
           <input
             id={"standard" + record.id}
-            defaultValue={text  === "-" ? "" : text}
+            defaultValue={text === "-" ? "" : text}
             style={{
               border: "none",
               color: "red",
@@ -484,7 +538,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeStandard(document.getElementById("standard" + record.id).value, record.id)}
+            onBlur={() =>
+              changeStandard(
+                document.getElementById("standard" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -508,7 +567,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeExamination(document.getElementById("examination" + record.id).value, record.id)}
+            onBlur={() =>
+              changeExamination(
+                document.getElementById("examination" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -540,7 +604,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeBoxWeight(document.getElementById("bigBoxWeight" + record.id).value, record.id)}
+            onBlur={() =>
+              changeBoxWeight(
+                document.getElementById("bigBoxWeight" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -564,7 +633,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changePacking(document.getElementById("packingQuantity" + record.id).value, record.id)}
+            onBlur={() =>
+              changePacking(
+                document.getElementById("packingQuantity" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -588,7 +662,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeDate(document.getElementById("date" + record.id).value, record.id)}
+            onBlur={() =>
+              changeDate(
+                document.getElementById("date" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -612,12 +691,16 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changethreeC(document.getElementById("threeC" + record.id).value, record.id)}
+            onBlur={() =>
+              changethreeC(
+                document.getElementById("threeC" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
     },
-
 
     {
       title: () => <a style={{ color: "red" }}>one标识</a>,
@@ -638,7 +721,12 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
               width: "100px",
             }}
             disabled={bagID[0] == record.id ? false : true}
-            onBlur={() => changeOneLogo(document.getElementById("oneLogo" + record.id).value, record.id)}
+            onBlur={() =>
+              changeOneLogo(
+                document.getElementById("oneLogo" + record.id).value,
+                record.id
+              )
+            }
           ></input>
         );
       },
@@ -664,232 +752,226 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     // },
   ];
 
-
-
-
-
   //获取中文名称
   const changeMaterialName = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.materialName = value
+        item.materialName = value;
       }
-    })
+    });
   };
-
 
   //获取英文名称
   const changeMaterialDescription = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.materialDescription = value
+        item.materialDescription = value;
       }
-    })
+    });
   };
-
 
   //获取物料型号
   const changeMater = async (value, id) => {
-
     selectedObj.map((item, key) => {
       if (item.id == id) {
-
-        item.materialType = value
+        item.materialType = value;
       }
-    })
+    });
   };
 
   //获取装盒数量
   const changeCartonsNumber = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.cartonsNumber = value
+        item.cartonsNumber = value;
       }
-    })
+    });
   };
 
   //获取箱重量
   const changeBoxWeight = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.bigBoxWeight = value
+        item.bigBoxWeight = value;
       }
-    })
+    });
   };
 
   //获取装箱数量
   const changePacking = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.packingQuantity = value
+        item.packingQuantity = value;
       }
-    })
+    });
   };
 
   //获取3C
   const changethreeC = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.threeC = value
+        item.threeC = value;
       }
-    })
+    });
   };
 
   // 物料描述
   const changeTypeDescription = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.typeDescription = value
+        item.typeDescription = value;
       }
-    })
+    });
   };
 
   // 系列
   const changeSerial = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.serial = value
+        item.serial = value;
       }
-    })
+    });
   };
 
   // 装袋数量
   const changeBasicQuantity = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.basicQuantity = value
+        item.basicQuantity = value;
       }
-    })
+    });
   };
 
   // 盒重量
   const changeWeight = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.boxWeight = value
+        item.boxWeight = value;
       }
-    })
+    });
   };
-
-
 
   //生产企业
   const changeProductionPlant = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.productionPlant = value
+        item.productionPlant = value;
       }
-    })
+    });
   };
 
   //  地址
   const changeAddress = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.address = value
+        item.address = value;
       }
-    })
+    });
   };
 
   //  执行标准
   const changeStandard = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.standard = value
+        item.standard = value;
       }
-    })
+    });
   };
-
 
   //  检验员
   const changeExamination = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.examination = value
+        item.examination = value;
       }
-    })
+    });
   };
 
   //  检验员
   const changeDate = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.date = value
+        item.date = value;
       }
-    })
+    });
   };
-
 
   //箱盒数量
   const changeBoxesNumber = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.boxesNumber = value
+        item.boxesNumber = value;
       }
-    })
-  }
+    });
+  };
 
-   //one标识
-   const changeOneLogo = async (value, id) => {
+  //one标识
+  const changeOneLogo = async (value, id) => {
     selectedObj.map((item, key) => {
       if (item.id == id) {
-        item.oneLogo = value
+        item.oneLogo = value;
       }
-    })
-  }
-
-
-
+    });
+  };
 
   //多选袋条码
   const rowSelection1 = {
     onChange: (selectedRowKeys, selectedRows) => {
-      setBagID(selectedRowKeys)
-      setSelectedObj(selectedRows)
-    }
+      setBagID(selectedRowKeys);
+      setSelectedObj(selectedRows);
+    },
   };
 
+  //失焦订单数量
+  const inputNum = () => {
+    let inputVal = document.getElementById("inputVal").value;
+    if (inputVal > 2000) {
+      message.error("为保证只盒箱对应生成效率,请输入数量少于或等于2000");
+    }
+  };
 
   //点击确认生成条码
   const confirm = async () => {
     let inputVal = document.getElementById("inputVal").value;
     let picker = document.getElementById("PickerVal").value;
-    if (selectedObj.length > 0 && Number(inputVal) > 0) {
+    if (
+      selectedObj.length > 0 &&
+      Number(inputVal) > 0 &&
+      Number(inputVal) <= 2000
+    ) {
       handleModalVisible(true);
-      setLoading(true)
-      setMaterialTypeList([])
+      setLoading(true);
+      setMaterialTypeList([]);
       let data2 = await generateBarCode({
         materialFactoryList: selectedObj,
         printDate: picker,
         printQuantity: inputVal,
-        userId: user.currentUser.id
+        userId: user.currentUser.id,
       });
-      if (data2.status == '200') {
-        setMaterialTypeList(data2.data)
-        setLoading(false)
+      if (data2.status == "200") {
+        setMaterialTypeList(data2.data);
+        setLoading(false);
       } else {
         message.error(data2.message);
-        setLoading(false)
+        setLoading(false);
       }
     } else {
-      message.info("请至少选择一条数据！并且打印日期和订单数量(大于0)不能为空！");
+      message.error("请至少选择一条数据！并且订单数量(小于等于2000)不能为空！");
     }
-  }
-
+  };
 
   const query = async (params, sorter, filter) => {
-
     const TableList = postListInit({
       data: {
         bagged: false,
         materialId: params.materialId,
         materialType: params.materialType,
         materialNo: params.materialNo,
-        typeDescription: params.typeDescription
+        typeDescription: params.typeDescription,
       },
       pageNum: params.current,
       pageSize: params.pageSize,
-      userId: user.currentUser.id
+      userId: user.currentUser.id,
     });
     return TableList.then(function (value) {
       return {
@@ -954,8 +1036,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     }
   };
 
-
-
   return (
     <PageContainer>
       <ProTable
@@ -966,9 +1046,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         rowKey="id"
         search={{
           labelWidth: 120,
-          optionRender: (searchConfig, formProps, dom) => [
-            ...dom.reverse()
-          ],
+          optionRender: (searchConfig, formProps, dom) => [...dom.reverse()],
         }}
         toolBarRender={() => [
           <Form.Item
@@ -976,7 +1054,11 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="打印日期:"
             name="data"
           >
-            <DatePicker defaultValue={moment(new Date())} id="PickerVal" allowClear={false} />
+            <DatePicker
+              defaultValue={moment(new Date())}
+              id="PickerVal"
+              allowClear={false}
+            />
           </Form.Item>,
 
           <Form.Item
@@ -984,22 +1066,27 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
             label="订单数量:"
             name="number"
           >
-            <Input style={{ width: "70%" }} id="inputVal"  />
+            <Input style={{ width: "70%" }} id="inputVal" onBlur={inputNum} />
           </Form.Item>,
 
           // <Button type="primary" onClick={() => handleModalVisible(selectedRowsState?.length > 0 ? true :false)}>
 
-          <Popconfirm placement="top" title="您确定要生成条码吗?" onConfirm={confirm} okText="确定" cancelText="取消">
+          <Popconfirm
+            placement="top"
+            title="您确定要生成条码吗?"
+            onConfirm={confirm}
+            okText="确定"
+            cancelText="取消"
+          >
             <Button type="primary">
               <SnippetsOutlined /> 生成条码
             </Button>
-          </Popconfirm>
-
+          </Popconfirm>,
         ]}
         request={(params, sorter, filter) => query(params, sorter, filter)}
         columns={getColumns()}
         rowSelection={{
-          type: 'radio',
+          type: "radio",
           onChange: (_, selectedRows) => setSelectedRows(selectedRows),
           ...rowSelection1,
         }}
@@ -1074,4 +1161,6 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   );
 };
 
-export default connect(({ printInfo, user }) => ({ printInfo, user }))(printInfoComponent);
+export default connect(({ printInfo, user }) => ({ printInfo, user }))(
+  printInfoComponent
+);
