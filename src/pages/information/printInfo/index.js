@@ -925,8 +925,8 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
   //失焦订单数量
   const inputNum = () => {
     let inputVal = document.getElementById("inputVal").value;
-    if (inputVal > 2000) {
-      message.error("为保证只盒箱对应生成效率,请输入数量少于或等于2000");
+    if (inputVal > 5000) {
+      message.info("为保证只盒箱对应生成效率,请输入数量少于或等于5000");
     }
   };
 
@@ -937,7 +937,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
     if (
       selectedObj.length > 0 &&
       Number(inputVal) > 0 &&
-      Number(inputVal) <= 2000
+      Number(inputVal) <= 5000
     ) {
       handleModalVisible(true);
       setLoading(true);
@@ -956,7 +956,7 @@ const printInfoComponent = ({ printInfo, dispatch, user }) => {
         setLoading(false);
       }
     } else {
-      message.error("请至少选择一条数据！并且订单数量(小于等于2000)不能为空！");
+      message.info("请至少选择一条数据！并且订单数量(小于等于5000)不能为空！");
     }
   };
 

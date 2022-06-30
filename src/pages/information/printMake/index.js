@@ -1015,7 +1015,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               var countList = nums;
               //等于NO执行无防窜码
               if (status == 'No') {
-                var heList = content[0].replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1SET_PRINT_STYLEA')
+                var heList = content[0].replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1ADD_PRINT_LINE')
                   .replaceAll("2022-01-01", printDateList[0])
                   .replaceAll("序号", '')
                   .replaceAll("装盒", cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[0])
