@@ -750,7 +750,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
-          var firstBarCodeList = data.data.firstBarCodeList;
+          // var firstBarCodeList = data.data.firstBarCodeList;
 
           // var countList = data.data.countList
           if (printTypeName.includes("双排")) {
@@ -762,7 +762,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             })
             var countList = nums
             var heLeftList = content[0].replaceAll('1234567890A', dataString[0])
-              .replaceAll('序号A', firstBarCodeList[0])
+              // .replaceAll('序号A', firstBarCodeList[0])
               .replaceAll('2022-01-01A', printDateList[0])
               .replaceAll('装盒A', countList[0])
               .replaceAll("物料型号A", materialList[0].materialType)
@@ -791,7 +791,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             } else {
               var heRightList = content[1]
                 .replaceAll("1234567890B", dataString[1])
-                .replaceAll('序号B', firstBarCodeList[1])
+                // .replaceAll('序号B', firstBarCodeList[1])
                 .replaceAll("2022-01-01B", printDateList[1])
                 .replaceAll("装盒B", countList[1])
                 .replaceAll("物料型号B", materialList[1].materialType)
@@ -823,7 +823,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               if (i % 2 == 0) {
                 // 左边 
                 heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
-                  .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
+                  // .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                   .replaceAll(printDateList[i - 2], printDateList[i])
                   .replaceAll(countList[i - 2], countList[i])
                   .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
@@ -837,16 +837,16 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                   .replaceAll(materialList[i - 2].caseITF14, materialList[i].caseITF14)
                   .replaceAll(materialList[i - 2].materialName, materialList[i].materialName)
                   .replaceAll(materialList[i - 2].oneLogo, materialList[i].oneLogo)
-
                 if (i == dataString.length - 1) {
                   eval(heLeftList)
                   LODOP.PRINT();
                   LODOP.PRINT_INIT("");
                 }
+                console.log('左',dataString[i])
               } else {
                 heRightList = heRightList
                   .replaceAll(dataString[i - 2], dataString[i])
-                  .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
+                  // .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                   .replaceAll(printDateList[i - 2], printDateList[i])
                   .replaceAll(countList[i - 2], countList[i])
                   .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
@@ -863,6 +863,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
                 eval(heLeftList + heRightList)
                 LODOP.PRINT();
                 LODOP.PRINT_INIT("");
+                console.log('右',dataString[i])
               }
             }
             message.info("打印中，请稍等...")
@@ -877,7 +878,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
             var heList = content[0]
               .replaceAll("1234567890", dataString[0])
-              .replaceAll("序号", firstBarCodeList[0])
+              // .replaceAll("序号", firstBarCodeList[0])
               .replaceAll("2022-01-01", printDateList[0])
               .replaceAll("装盒", countList[0])
               .replaceAll("物料型号", materialList[0].materialType)
@@ -913,7 +914,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
               if (i > 0) {
                 LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
                 heList = heList.replaceAll(dataString[i - 1], dataString[i]).
-                  replaceAll(firstBarCodeList[i - 1], firstBarCodeList[i]).
+                  // replaceAll(firstBarCodeList[i - 1], firstBarCodeList[i]).
                   replaceAll(printDateList[i - 1], printDateList[i]).
                   replaceAll(countList[i - 1], countList[i]).
                   replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
@@ -1031,7 +1032,6 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           eval(boxString)
           content = boxString
         }
-
         let data = await printBarCode({
           barCodeType: 3,
           materialId: form3.getFieldsValue().materialId3,
@@ -1063,8 +1063,8 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var dataString = data.data.barCodeList
           var printDateList = data.data.printDateList
           var materialList = data.data.materialList
-          var firstBarCodeList = data.data.firstBarCodeList;
-          // var countList = data.data.countList
+          // var firstBarCodeList = data.data.firstBarCodeList;
+         
           //循环拼接X，防止循环装盒出现12，如果出现12，会循环覆盖条码默认 type 128Auto 中的  12，会在打印
           //中报条码类型错误
           var nums = [];
@@ -1077,7 +1077,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
           var printDateListNew = []
           var countListNew = []
           var materialListNew = [];
-          var firstBarCodeListNew =[]
+          // var firstBarCodeListNew =[]
 
           //默认箱码打印两张，以下为循环两次
           //重复两次防串码
@@ -1106,14 +1106,15 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
 
 
           //重复两次序号
-          firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
-          firstBarCodeList.map((item, index) => {
-            firstBarCodeListNew.splice(index * 2, 0, item);
-          });
+          // firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
+          // firstBarCodeList.map((item, index) => {
+          //   firstBarCodeListNew.splice(index * 2, 0, item);
+          // });
 
+   
           var boxList = content
             .replaceAll("1234567890", dataStringNew[0])
-            .replaceAll("序号", firstBarCodeListNew[0])
+            // .replaceAll("序号", firstBarCodeListNew[0])
             .replaceAll("2022-01-01", printDateListNew[0])
             .replaceAll("装箱", countListNew[0])
             .replaceAll("物料型号", materialListNew[0].materialType)
@@ -1147,9 +1148,10 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
             if (i > 0) {
               LODOP.SET_PRINT_PAGESIZE(1, 3, "A3");
               boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
-                replaceAll(firstBarCodeListNew[i - 1], firstBarCodeListNew[i]).
+                // replaceAll(firstBarCodeListNew[i - 1], firstBarCodeListNew[i]).
                 replaceAll(printDateListNew[i - 1], printDateListNew[i]).
                 replaceAll(countListNew[i - 1], countListNew[i]).
+                replaceAll(materialListNew[i - 1].materialType, materialListNew[i].materialType).
                 replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
                 replaceAll(materialListNew[i - 1].examination, materialListNew[i].examination).
                 replaceAll(materialListNew[i - 1].address, materialListNew[i].address).
@@ -1201,7 +1203,7 @@ const printMakeCopyComponent = ({ printMakeCopy, dispatch, user, pintCode }) => 
   const boxCodeTest = () => {
     LodopFuncs.getLodop()
     var boxList = boxString.replace('1234567890', "123456789012345678").
-      replaceAll('2022-01-01', "2022-01-01").
+      replace('2022-01-01', "2022-01-01").
       replace('物料型号', "CDCH6i16201N").
       replace('物料描述', "CDCH6i16A2P1NC220-240V").
       replace('装盒', 10).

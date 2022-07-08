@@ -1,4 +1,4 @@
-import { LogoutOutlined, SettingOutlined, UserOutlined, EditOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined, EditOutlined, EyeInvisibleOutlined, EyeTwoTone ,DeleteOutlined} from '@ant-design/icons';
 import { Avatar, Menu, Spin, Modal, Input, Form, message } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { history, connect } from 'umi';
@@ -37,8 +37,17 @@ class AvatarDropdown extends React.Component {
         modalVisiable: true
       })
       return;
+    }else if(key ==='cache'){
+      const { dispatch } = this.props;
+      localStorage.clear();
+      message.success('清理缓存成功,请重新登录')
+      setTimeout(()=>{
+        dispatch({
+          type: 'user/userOut',
+        })
+      },2000)
+      return;
     }
-
     history.push(`/account/${key}`);
   };
   render() {
@@ -116,6 +125,11 @@ class AvatarDropdown extends React.Component {
         <Menu.Item key="updatePassword">
           <EditOutlined />
           修改密码
+        </Menu.Item>
+
+        <Menu.Item key="cache">
+          <DeleteOutlined />
+          清理缓存
         </Menu.Item>
       </Menu>
     );

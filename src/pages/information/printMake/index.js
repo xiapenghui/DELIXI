@@ -643,7 +643,6 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           typeDescription: document.getElementById("form_in_modal_typeDescription1").value,
         });
         if (data.status == 200) {
-          debugger
           var dataString = data.data.barCodeList;
           var qrCodeList = data.data.qrCodeList;
           var materialList = data.data.materialList.map((item) => item.materialType)
@@ -753,8 +752,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
       if (heString === null) {
         message.warning("该物料未绑定盒码模板")
       } else {
+        
         let content = noStart;
         if (content === "") {
+          
           eval(heString);
           // 以LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1)分割为左右模板;
           content = heString.split('LODOP.SET_PRINT_STYLEA(0,"PreviewOnly",1);');
@@ -785,9 +786,8 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             var dataString = data.data.barCodeList;
             var printDateList = data.data.printDateList;
             var materialList = data.data.materialList;
-            var firstBarCodeList = data.data.firstBarCodeList;
-
-            // var countList = data.data.countList
+            // var firstBarCodeList = data.data.firstBarCodeList;
+ 
             if (printTypeName.includes("双排")) {
               var nums = [];
               data.data.countList.map((item) => {
@@ -797,7 +797,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               if (status == 'No') {
                 //等于No执行无防窜码
                 var heLeftList = content[0].replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1SET_PRINT_STYLEA')
-                  .replaceAll("序号A", '')
+                  // .replaceAll("序号A", '')
                   .replaceAll("2022-01-01A", printDateList[0])
                   .replaceAll("装盒A", cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[0])
                   .replaceAll("物料型号A", materialList[0].materialType)
@@ -816,7 +816,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 //其他执行有防窜码
                 var heLeftList = content[0]
                   .replaceAll("1234567890A", dataString[0])
-                  .replaceAll("序号A", firstBarCodeList[0])
+                  // .replaceAll("序号A", firstBarCodeList[0])
                   .replaceAll("2022-01-01A", printDateList[0])
                   .replaceAll("装盒A", countList[0])
                   .replaceAll("物料型号A", materialList[0].materialType)
@@ -854,7 +854,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   //等于NO执行无防窜码
                   var heRightList = content[1].replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1SET_PRINT_STYLEA')
                     .replaceAll("2022-01-01B", printDateList[1])
-                    .replaceAll("序号B", '')
+                    // .replaceAll("序号B", '')
                     .replaceAll("装盒B", cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[1])
                     .replaceAll("物料型号B", materialList[1].materialType)
                     .replaceAll("物料描述B", materialList[1].typeDescription)
@@ -866,13 +866,12 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     .replaceAll("8888888888B", materialList[1].caseIEAN13)
                     .replaceAll("9999999999B", materialList[1].caseITF14)
                     .replaceAll("中文名称B", materialList[1].materialName)
-                    .replaceAll("S标识B", materialList[0].oneLogo)
+                    .replaceAll("S标识B", materialList[1].oneLogo)
                 } else {
-
                   //执行有防窜码
                   var heRightList = content[1]
                     .replaceAll("1234567890B", dataString[1])
-                    .replaceAll("序号B", firstBarCodeList[1])
+                    // .replaceAll("序号B", firstBarCodeList[1])
                     .replaceAll("2022-01-01B", printDateList[1])
                     .replaceAll("装盒B", countList[1])
                     .replaceAll("物料型号B", materialList[1].materialType)
@@ -885,7 +884,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     .replaceAll("8888888888B", materialList[1].caseIEAN13)
                     .replaceAll("9999999999B", materialList[1].caseITF14)
                     .replaceAll("中文名称B", materialList[1].materialName)
-                    .replaceAll("S标识B", materialList[0].oneLogo)
+                    .replaceAll("S标识B", materialList[1].oneLogo)
                 }
 
                 console.log('heRightList', heRightList)
@@ -918,7 +917,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   if (status == 'No') {
                     heLeftList = heLeftList
                       .replaceAll(printDateList[i - 2], printDateList[i])
-                      .replaceAll(firstBarCodeList[i - 2], '')
+                      // .replaceAll(firstBarCodeList[i - 2], '')
                       .replaceAll(countList[i - 2], cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[i])
                       .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
                       .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
@@ -940,7 +939,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     //执行有防窜码
                     heLeftList = heLeftList.replaceAll(dataString[i - 2], dataString[i])
                       .replaceAll(printDateList[i - 2], printDateList[i])
-                      .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
+                      // .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                       .replaceAll(countList[i - 2], countList[i])
                       .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
                       .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
@@ -958,6 +957,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                       LODOP.PRINT();
                       LODOP.PRINT_INIT("");
                     }
+
                   }
 
                 } else {
@@ -966,7 +966,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   if (status == 'No') {
                     heRightList = heRightList
                       .replaceAll(printDateList[i - 2], printDateList[i])
-                      .replaceAll(firstBarCodeList[i - 2], '')
+                      // .replaceAll(firstBarCodeList[i - 2], '')
                       .replaceAll(countList[i - 2], cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[i])
                       .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
                       .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
@@ -986,7 +986,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     //有防窜码
                     heRightList = heRightList.replaceAll(dataString[i - 2], dataString[i])
                       .replaceAll(printDateList[i - 2], printDateList[i])
-                      .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
+                      // .replaceAll(firstBarCodeList[i - 2], firstBarCodeList[i])
                       .replaceAll(countList[i - 2], countList[i])
                       .replaceAll(materialList[i - 2].materialType, materialList[i].materialType)
                       .replaceAll(materialList[i - 2].typeDescription, materialList[i].typeDescription)
@@ -1017,7 +1017,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               if (status == 'No') {
                 var heList = content[0].replace(/[\r\n]/g, "").replace(/(.*)ADD_PRINT_BARCODE/, '$1ADD_PRINT_LINE')
                   .replaceAll("2022-01-01", printDateList[0])
-                  .replaceAll("序号", '')
+                  // .replaceAll("序号", '')
                   .replaceAll("装盒", cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[0])
                   .replaceAll("物料型号", materialList[0].materialType)
                   .replaceAll("物料描述", materialList[0].typeDescription)
@@ -1034,7 +1034,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 //有防窜码
                 var heList = content[0]
                   .replaceAll("1234567890", dataString[0])
-                  .replaceAll("序号", firstBarCodeList[0])
+                  // .replaceAll("序号", firstBarCodeList[0])
                   .replaceAll("2022-01-01", printDateList[0])
                   .replaceAll("装盒", countList[0])
                   .replaceAll("物料型号", materialList[0].materialType)
@@ -1075,7 +1075,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                   if (status == 'No') {
                     heList = heList.
                       replaceAll(printDateList[i - 1], printDateList[i]).
-                      replaceAll(firstBarCodeList[i -1], '').
+                      // replaceAll(firstBarCodeList[i -1], '').
                       replaceAll(countList[i - 1], cartonsNumber2Val != '' ? 'x' + cartonsNumber2Val : countList[i]).
                       replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
                       replaceAll(materialList[i - 1].typeDescription, materialList[i].typeDescription).
@@ -1093,7 +1093,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                     LODOP.PRINT_INIT("");
                   } else {
                     heList = heList.replaceAll(dataString[i - 1], dataString[i]).
-                      replaceAll(firstBarCodeList[i -1], firstBarCodeList[i]).
+                      // replaceAll(firstBarCodeList[i -1], firstBarCodeList[i]).
                       replaceAll(printDateList[i - 1], printDateList[i]).
                       replaceAll(countList[i - 1], countList[i]).
                       replaceAll(materialList[i - 1].materialType, materialList[i].materialType).
@@ -1250,7 +1250,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           var dataString = data.data.barCodeList;
           var printDateList = data.data.printDateList;
           var materialList = data.data.materialList;
-          var firstBarCodeList = data.data.firstBarCodeList;
+          // var firstBarCodeList = data.data.firstBarCodeList;
           // var countList = data.data.countList;
 
           // 拼接x和箱盒数，因为不拼接箱盒数会repalceAll掉EAN13和ITF14的条码，会使条码报错
@@ -1259,12 +1259,13 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
             nums.push("×" + item);
           });
 
+        
           var countList = nums;
           var dataStringNew = [];
           var printDateListNew = [];
           var countListNew = [];
           var materialListNew = [];
-          var firstBarCodeListNew =[]
+          // var firstBarCodeListNew =[]
 
           //重复两次防串码
           dataStringNew = JSON.parse(JSON.stringify(dataString));
@@ -1291,10 +1292,10 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
           });
 
           //重复两次序号
-          firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
-          firstBarCodeList.map((item, index) => {
-            firstBarCodeListNew.splice(index * 2, 0, item);
-          });
+          // firstBarCodeListNew = JSON.parse(JSON.stringify(firstBarCodeList));
+          // firstBarCodeList.map((item, index) => {
+          //   firstBarCodeListNew.splice(index * 2, 0, item);
+          // });
           
 
 
@@ -1318,10 +1319,11 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
               .replaceAll("S标识", materialListNew[0].oneLogo)
               .replaceAll(`<img src='${ip}/DLX_OEM/api/3c.png'>`, newImage);
           } else {
+            
             //有防窜码
             var boxList = content
               .replaceAll("1234567890", dataStringNew[0])
-              .replaceAll("序号", firstBarCodeListNew[0])
+              // .replaceAll("序号", firstBarCodeListNew[0])
               .replaceAll("2022-01-01", printDateListNew[0])
               .replaceAll("装箱", countListNew[0])
               .replaceAll("物料型号", materialListNew[0].materialType)
@@ -1390,9 +1392,9 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
                 LODOP.PRINT();
                 LODOP.PRINT_INIT("");
               } else {
-
+                
                 boxList = boxList.replaceAll(dataStringNew[i - 1], dataStringNew[i]).
-                  replaceAll(24[i - 1], firstBarCodeListNew[i]).
+                  // replaceAll(firstBarCodeListNew[i - 1], firstBarCodeListNew[i]).
                   replaceAll(printDateListNew[i - 1], printDateListNew[i]).
                   replaceAll(countListNew[i - 1], countListNew[i]).
                   replaceAll(materialListNew[i - 1].typeDescription, materialListNew[i].typeDescription).
@@ -1458,7 +1460,7 @@ const printMakeCopyComponent = ({ printMake, dispatch, user, pintCode }) => {
     LodopFuncs.getLodop();
     var boxList = boxString
       .replace("1234567890", "123456789012345678")
-      .replaceAll("2022-01-01", "2022-01-01")
+      .replace("2022-01-01", "2022-01-01")
       .replace("物料型号", "CDCH6i16201N")
       .replace("物料描述", "CDCH6i16A2P1NC220-240V")
       .replace("装盒", 10)
