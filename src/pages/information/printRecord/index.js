@@ -36,6 +36,7 @@ const printRecordComponent = ({ printRecord, dispatch, user }) => {
   const [boxBarCodeExp, setBoxBarCodeExp] = useState("");
   const [bigBoxBarCodeExp, setBigBoxBarCodeExp] = useState("");
   const [materialIdExp, setMaterialIdExp] = useState("");
+  const [batchNumberExp, setBatchNumberExp] = useState("");
 
 
 
@@ -81,7 +82,7 @@ const printRecordComponent = ({ printRecord, dispatch, user }) => {
       valueType: "text",
       align: "center",
       width: 150,
-      hideInSearch: true,
+      // hideInSearch: true,
     },
 
     {
@@ -233,6 +234,7 @@ const printRecordComponent = ({ printRecord, dispatch, user }) => {
     setBoxBarCodeExp(params.boxBarCode)
     setBigBoxBarCodeExp(params.bigBoxBarCode)
     setMaterialIdExp(params.materialId)
+    setBatchNumberExp(params.batchNumber)
 
     const TableList = postListInit({
       data: {
@@ -242,7 +244,8 @@ const printRecordComponent = ({ printRecord, dispatch, user }) => {
         materialId: params.materialId,
         onlyBarCode: params.onlyBarCode,
         boxBarCode: params.boxBarCode,
-        bigBoxBarCode: params.bigBoxBarCode
+        bigBoxBarCode: params.bigBoxBarCode,
+        batchNumber: params.batchNumber
       },
       pageNum: params.current,
       pageSize: params.pageSize,
@@ -310,7 +313,8 @@ const printRecordComponent = ({ printRecord, dispatch, user }) => {
         materialId: materialIdExp,
         onlyBarCode: onlyBarCodeExp,
         boxBarCode: boxBarCodeExp,
-        bigBoxBarCode: bigBoxBarCodeExp
+        bigBoxBarCode: bigBoxBarCodeExp,
+        batchNumber:batchNumberExp
       },
       userId: user.currentUser.id
     });

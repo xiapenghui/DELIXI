@@ -126,15 +126,6 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
 
 
 
-    {
-      title: "物料代码",
-      dataIndex: "materialNo",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      // hideInSearch: true,
-      hideInForm: true,
-    },
 
     {
       title: "商品编码",
@@ -171,6 +162,25 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
       },
     },
 
+    {
+      title: "商品编码",
+      dataIndex: "materialType",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      hideInForm: true,
+    },
+
+    
+    {
+      title: "物料代码",
+      dataIndex: "materialNo",
+      valueType: "text",
+      align: "center",
+      width: 200,
+      // hideInSearch: true,
+      hideInForm: true,
+    },
 
  
     {
@@ -185,17 +195,6 @@ const materialMainComponent = ({ materialMain, dispatch, user }) => {
       initialValue: IsUpdate ? UpdateDate.materialName : "",
     },
 
-
-    {
-      title: "商品编码",
-      dataIndex: "materialType",
-      valueType: "text",
-      align: "center",
-      width: 200,
-      // hideInSearch: true,
-      hideInForm: true,
-      initialValue: IsUpdate ? UpdateDate.materialType : "",
-    },
 
 
 
